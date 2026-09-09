@@ -348,6 +348,32 @@
     .flash{height:280px}
   }
 
+  /* ---------- Progress & history ---------- */
+  .resume{border:1.5px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:14px 16px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .resume b{display:block;font-size:1rem}
+  .resume span{font-size:.86rem;color:var(--muted)}
+  .resume .btns{display:flex;gap:8px}
+  .choice:disabled{opacity:.45;cursor:not-allowed}
+  .hist-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+  .hist-chart{border:1px solid var(--line);border-radius:12px;padding:12px 12px 6px;background:#fafcff;margin-bottom:16px}
+  .hist-chart svg{width:100%;height:170px;display:block}
+  .hist-chart .cap{font-size:.74rem;color:var(--muted-2);display:flex;justify-content:space-between;margin-top:4px}
+  .hist-list{display:flex;flex-direction:column;gap:8px}
+  .hist-row{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:.88rem}
+  .hist-row .hl{color:var(--muted);font-size:.78rem;display:block}
+  .hist-row .hp{font-weight:700;font-variant-numeric:tabular-nums;font-size:1.05rem}
+  .hist-row .hp.g{color:var(--correct)} .hist-row .hp.m{color:var(--flag)} .hist-row .hp.l{color:var(--wrong)}
+  .mini{display:flex;gap:4px;margin-top:5px}
+  .mini i{width:26px;height:6px;border-radius:3px;background:#dfe6ef;display:block;position:relative;overflow:hidden}
+  .mini i b{position:absolute;left:0;top:0;bottom:0;background:var(--accent)}
+  .hist-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .hist-actions .btn{padding:11px 16px;font-size:.92rem}
+  .hist-empty{text-align:center;color:var(--muted);padding:34px 10px}
+  html[data-theme="dark"] .hist-chart{background:#15213a}
+  html[data-theme="dark"] .mini i{background:#243049}
+  @media (max-width:400px){.ver{display:none}}
+  @media (max-width:640px){.tab{padding:6px 7px;font-size:.76rem}.hist-actions .btn{flex:1;min-width:120px}}
+
   /* ---------- Responsive ---------- */
   @media (max-width:640px){
     .facts{grid-template-columns:repeat(2,1fr)}
@@ -369,12 +395,13 @@
 <header class="bar" id="topbar">
   <div class="bar-inner">
     <div class="brand">
-      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v7.0</span>
+      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v7.1</span>
     </div>
     <nav class="tabs" id="mainNav" aria-label="Sections">
       <button class="tab on" data-nav="exam" onclick="goTo('exam')">Exam</button>
       <button class="tab" data-nav="lessons" onclick="goTo('lessons')">Lessons</button>
       <button class="tab" data-nav="cards" onclick="goTo('cards')">Cards</button>
+      <button class="tab" data-nav="history" onclick="goTo('history')">History</button>
     </nav>
     <div class="bar-right">
       <div class="bar-meta hidden" id="barMeta">
@@ -393,6 +420,10 @@
   <!-- ============ START SCREEN ============ -->
   <section id="startScreen">
     <div class="card">
+      <div id="resumeBanner" class="resume hidden">
+        <div><b id="resumeTitle"></b><span id="resumeSub"></span></div>
+        <div class="btns"><button class="btn" onclick="resumeExam()">Resume</button><button class="btn ghost" onclick="discardProgress()">Discard</button></div>
+      </div>
       <div class="hero">
         <div class="eyebrow">Certified Information Security Manager</div>
         <h1>Practice Exam</h1>
@@ -434,6 +465,10 @@
           <button class="choice" data-set="D" onclick="pickSet(this,'D')">
             <div class="t">Mock D — <span data-mocksize>50</span> questions</div>
             <div class="d">Fixed set — no overlap with A, B, or C</div>
+          </button>
+          <button class="choice" data-set="missed" id="setMissed" onclick="pickSet(this,'missed')">
+            <div class="t">Retry missed — <span data-missedcount>0</span> questions</div>
+            <div class="d">Everything you've gotten wrong and not yet cleared</div>
           </button>
           <button class="choice" data-set="drill" onclick="pickSet(this,'drill')">
             <div class="t">Domain drill</div>
@@ -483,9 +518,10 @@
       </div>
       <p class="disclaimer">Unofficial, independent study aid — not affiliated with, endorsed by, or sourced from ISACA. All questions are original and are not real exam items. CISM is a registered trademark of ISACA. The real CISM uses a scaled 200–800 score (450 to pass), so the percentage here is a study signal, not an official score. Aim for ~70%+ overall and in every domain before test day.</p>
       <div class="verfoot">
-        <div class="verline"><b>Version <span id="verNum">7.0</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
+        <div class="verline"><b>Version <span id="verNum">7.1</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
         <button class="linkbtn" onclick="toggleChangelog()">Version history</button>
         <div id="changelog" class="changelog hidden">
+          <div><b>v7.1 — September 9, 2026</b>Progress is now remembered. An interrupted exam autosaves (answers, flags, position, clock) and offers Resume on return. Every finished attempt is logged to a new History section with a score trend chart (overall or per domain), a target line, and per-attempt domain bars. Questions you miss accumulate in a "Retry missed" set until you get them right. Export and import progress as a file. All stored in the browser only.</div>
           <div><b>v7.0 — September 9, 2026</b>Section navigation (Exam · Lessons · Cards) in the header, hidden during a live exam. Dark theme toggle that follows the device preference and is remembered. New Index Cards section: 31 bottom-line cards that pop open to a quick-read summary, and 90 flip-to-reveal flashcards (short answer and true/false) with got-it tracking, domain filters, shuffle, and hide-known. Keyboard: space flips, arrows navigate, G/A mark.</div>
           <div><b>v6.1 — September 9, 2026</b>Deployment release: served as index.html for GitHub Pages, page metadata and favicon added, unofficial-status disclaimer added, version history tidied. No question or lesson changes.</div>
           <div><b>v6.0 — September 9, 2026</b>Bank extended to 264 questions, adding a minority of technical control-selection items in the style the exam actually uses. One item corrected (the criterion for a successful DR test). Mock and drill sizes are now computed from the bank. Lesson 5 adds "Where the shortcuts fail" — a dozen credited answers that contradict common prep heuristics; Lessons 3 and 4 add directly tested facts.</div>
@@ -973,6 +1009,26 @@
           <div class="deck-empty hidden" id="deckEmpty">Every card in this set is marked known. Uncheck "hide" or reset progress.</div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ HISTORY SCREEN ============ -->
+  <section id="historyScreen" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+        <h2 style="margin:0;font-family:var(--serif);font-weight:600;font-size:1.4rem">History</h2>
+        <div class="filters" id="histMetric" style="margin:0"></div>
+      </div>
+      <div class="hist-summary" id="histSummary"></div>
+      <div class="hist-chart" id="histChart"></div>
+      <div class="hist-list" id="histList"></div>
+      <div class="hist-actions">
+        <button class="btn" id="missedBtn" onclick="startMissedDrill()">Retry missed questions</button>
+        <button class="btn ghost" onclick="exportProgress()">Export</button>
+        <label class="btn ghost" style="cursor:pointer;text-align:center">Import<input type="file" accept="application/json,.json" style="display:none" onchange="importProgress(this)"></label>
+        <button class="btn ghost" onclick="clearHistory()">Clear history</button>
+      </div>
+      <p class="disclaimer" style="margin-top:14px">Stored only in this browser. Export to keep a copy or move to another device.</p>
     </div>
   </section>
 
@@ -2449,12 +2505,13 @@ function weightedSample(n){
 /* Shuffle each question's answer options so the correct letter varies every run */
 function prep(q){
   const idx=shuffle([0,1,2,3]);
-  return {d:q.d, q:q.q, o:idx.map(i=>q.o[i]), a:idx.indexOf(q.a), e:q.e, r:q.r?idx.map(i=>q.r[i]):null};
+  return {d:q.d, q:q.q, o:idx.map(i=>q.o[i]), a:idx.indexOf(q.a), e:q.e, r:q.r?idx.map(i=>q.r[i]):null, id:q.id};
 }
 
 function buildSelection(){
   if(cfg.set==='full')  return weightedSample(150).map(prep);   // real exam: 150 items, blueprint-weighted
   if(cfg.set==='quick') return weightedSample(20).map(prep);
+  if(cfg.set==='missed') return shuffle(BANK.filter(q=>WEAK[q.id])).map(prep);
   if(cfg.set==='drill') return shuffle(BANK.filter(q=>q.d===cfg.drill)).map(prep);
   return shuffle(buildSets()[cfg.set]).map(prep);
 }
@@ -2464,6 +2521,7 @@ function examSeconds(n){ return n*96; }
 
 function startExam(){
   const qs = buildSelection();
+  if(!qs.length){ alert('No questions in this set yet.'); return; }
   state = {
     qs,
     idx:0,
@@ -2473,7 +2531,8 @@ function startExam(){
     finished:false,
     timeLeft: cfg.mode==="exam" ? examSeconds(qs.length) : null, // 96s/question = real exam pace; full set = 4:00:00
     timer:null,
-    startedAt:Date.now()
+    startedAt:Date.now(),
+    set:cfg.set, drill:cfg.drill
   };
   document.getElementById('startScreen').classList.add('hidden');
   document.getElementById('examScreen').classList.remove('hidden');
@@ -2490,6 +2549,7 @@ function startTimer(){
   state.timer=setInterval(()=>{
     state.timeLeft--;
     updateTimer();
+    if(state.timeLeft%10===0) persistProgress();
     if(state.timeLeft<=0){clearInterval(state.timer);finish(true);}
   },1000);
 }
@@ -2549,6 +2609,7 @@ function renderQuestion(){
   document.getElementById('prevBtn').disabled = state.idx===0;
   document.getElementById('nextBtn').textContent = state.idx===total-1 ? (state.mode==='exam'?'Finish':'See results') : 'Next';
   window.scrollTo({top:0,behavior:'smooth'});
+  persistProgress();
 }
 
 function choose(i){
@@ -2620,6 +2681,8 @@ function finish(auto){
     if(state.answers[i]===q.a){correct++;dom[q.d].c++;}
   });
   state.correct=correct; state.dom=dom;
+  state.elapsed = Math.round((Date.now()-state.startedAt)/1000);
+  recordAttempt(auto);
 
   document.getElementById('examScreen').classList.add('hidden');
   document.getElementById('actionbar').classList.add('hidden');
@@ -2659,7 +2722,7 @@ function finish(auto){
 
   const mm=Math.floor(state.elapsed/60), ss=state.elapsed%60;
   document.getElementById('metaLine').innerHTML=
-    `<span>Time used: ${mm}m ${ss}s</span><span>Mode: ${state.mode==='exam'?'Exam (timed)':'Practice'}</span><span>v${APP_VERSION}</span>${auto?'<span style="color:var(--wrong)">Time expired</span>':''}`;
+    `<span>Time used: ${mm}m ${ss}s</span><span>Mode: ${state.mode==='exam'?'Exam (timed)':'Practice'}</span><span>v${APP_VERSION}</span>${auto?'<span style="color:var(--wrong)">Time expired</span>':''}<span><a href="#" class="lessonlink" onclick="goTo('history');return false">Saved to history →</a></span>`;
 
   window.scrollTo(0,0);
 }
@@ -2734,6 +2797,7 @@ function renderReviewList(){
 }
 
 function restart(){
+  document.getElementById('historyScreen').classList.add('hidden');
   document.getElementById('cardsScreen').classList.add('hidden');
   document.getElementById('lessonsScreen').classList.add('hidden');
   document.getElementById('resultsScreen').classList.add('hidden');
@@ -2742,6 +2806,7 @@ function restart(){
   document.getElementById('timer').classList.remove('hidden');
   state=null;
   setTab('exam');
+  renderResumeBanner(); updateMissedCount();
   window.scrollTo(0,0);
 }
 
@@ -2753,6 +2818,7 @@ function showLessons(i,from){
   document.getElementById('startScreen').classList.add('hidden');
   document.getElementById('resultsScreen').classList.add('hidden');
   document.getElementById('cardsScreen').classList.add('hidden');
+  document.getElementById('historyScreen').classList.add('hidden');
   document.getElementById('lessonsScreen').classList.remove('hidden');
   showLesson(i||0);
   setTab('lessons');
@@ -2806,14 +2872,16 @@ function toggleTheme(){
 })();
 
 /* ---------- Section navigation ---------- */
-const SCREENS=['startScreen','lessonsScreen','cardsScreen','resultsScreen','reviewScreen'];
+const SCREENS=['startScreen','lessonsScreen','cardsScreen','historyScreen','resultsScreen','reviewScreen'];
 function setTab(sec){document.querySelectorAll('#mainNav .tab').forEach(b=>b.classList.toggle('on',b.getAttribute('data-nav')===sec));}
 function goTo(sec){
   if(state && !state.finished) return;               // never leave a live exam via nav
   SCREENS.forEach(id=>document.getElementById(id).classList.add('hidden'));
-  const target = sec==='lessons' ? 'lessonsScreen' : sec==='cards' ? 'cardsScreen' : (state&&state.finished ? 'resultsScreen' : 'startScreen');
+  const target = sec==='lessons' ? 'lessonsScreen' : sec==='cards' ? 'cardsScreen' : sec==='history' ? 'historyScreen' : (state&&state.finished ? 'resultsScreen' : 'startScreen');
   document.getElementById(target).classList.remove('hidden');
   if(sec==='cards') renderCards();
+  if(sec==='history') renderHistory();
+  if(sec==='exam') { renderResumeBanner(); updateMissedCount(); }
   if(sec==='lessons') lessonsFrom='start';
   setTab(sec); window.scrollTo(0,0);
 }
@@ -2910,6 +2978,146 @@ document.addEventListener('keydown',e=>{
   if(e.key.toLowerCase()==='a') markCard(false);
 });
 
+/* ---------- Progress: ids, autosave, history, weak set ---------- */
+function hashId(s){let h=5381;for(let i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))|0;}return 'q'+(h>>>0).toString(36);}
+BANK.forEach(q=>{q.id=hashId(q.q);});
+safeStore.del=function(k){try{localStorage.removeItem(k);}catch(e){} delete this.mem[k];};
+
+let HISTORY=[], WEAK={};
+(function loadProgress(){
+  try{const h=safeStore.get('cism.history'); if(h) HISTORY=JSON.parse(h)||[];}catch(e){HISTORY=[];}
+  try{const w=safeStore.get('cism.weak'); if(w) WEAK=JSON.parse(w)||{};}catch(e){WEAK={};}
+})();
+function saveProgress(){ safeStore.set('cism.history',JSON.stringify(HISTORY)); safeStore.set('cism.weak',JSON.stringify(WEAK)); }
+function setLabel(set,drill){
+  if(set==='full') return 'Full simulation';
+  if(set==='quick') return 'Quick 20';
+  if(set==='missed') return 'Retry missed';
+  if(set==='drill') return 'Drill: '+(DOMAINS[drill]?DOMAINS[drill].short:drill);
+  return 'Mock '+set;
+}
+function fmtTime(s){const m=Math.floor(s/60),x=s%60;return m+':'+String(x).padStart(2,'0');}
+function fmtDate(ts){const d=new Date(ts);return d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});}
+
+/* autosave */
+function persistProgress(){
+  if(!state||state.finished) return;
+  try{
+    safeStore.set('cism.inprogress',JSON.stringify({qs:state.qs,idx:state.idx,answers:state.answers,flags:state.flags,mode:state.mode,
+      timeLeft:state.timeLeft,elapsed:Date.now()-state.startedAt,set:state.set,drill:state.drill,saved:Date.now()}));
+  }catch(e){}
+}
+function renderResumeBanner(){
+  const b=document.getElementById('resumeBanner'); const raw=safeStore.get('cism.inprogress');
+  if(!raw){b.classList.add('hidden');return;}
+  try{
+    const s=JSON.parse(raw); const answered=s.answers.filter(a=>a!==null).length;
+    document.getElementById('resumeTitle').textContent='Resume '+setLabel(s.set,s.drill);
+    document.getElementById('resumeSub').textContent=answered+' of '+s.qs.length+' answered'+(s.mode==='exam'?' · '+fmtTime(s.timeLeft)+' left':' · practice mode')+' · saved '+fmtDate(s.saved);
+    b.classList.remove('hidden');
+  }catch(e){ b.classList.add('hidden'); }
+}
+function resumeExam(){
+  const raw=safeStore.get('cism.inprogress'); if(!raw) return;
+  let s; try{s=JSON.parse(raw);}catch(e){return;}
+  state={qs:s.qs,idx:Math.min(s.idx,s.qs.length-1),answers:s.answers,flags:s.flags,mode:s.mode,finished:false,
+    timeLeft:s.mode==='exam'?Math.max(1,s.timeLeft):null,timer:null,startedAt:Date.now()-(s.elapsed||0),set:s.set,drill:s.drill};
+  SCREENS.forEach(id=>document.getElementById(id).classList.add('hidden'));
+  document.getElementById('examScreen').classList.remove('hidden');
+  document.getElementById('actionbar').classList.remove('hidden');
+  document.getElementById('barMeta').classList.remove('hidden');
+  document.getElementById('mainNav').classList.add('hidden');
+  const t=document.getElementById('timer');
+  if(state.mode==='exam'){ t.classList.remove('hidden'); startTimer(); } else { t.classList.add('hidden'); }
+  renderQuestion(); window.scrollTo(0,0);
+}
+function discardProgress(){ if(confirm('Discard the saved exam in progress?')){ safeStore.del('cism.inprogress'); renderResumeBanner(); } }
+
+/* record a finished attempt */
+function recordAttempt(auto){
+  const missed=[];
+  state.qs.forEach((q,i)=>{
+    if(state.answers[i]!==q.a){ missed.push(q.id); WEAK[q.id]=(WEAK[q.id]||0)+1; }
+    else if(WEAK[q.id]) delete WEAK[q.id];
+  });
+  HISTORY.push({ts:Date.now(),set:state.set,drill:state.drill,label:setLabel(state.set,state.drill),mode:state.mode,n:state.qs.length,
+    correct:state.correct,pct:Math.round(state.correct/state.qs.length*100),dom:state.dom,missed,elapsed:state.elapsed,expired:!!auto,v:APP_VERSION});
+  if(HISTORY.length>300) HISTORY=HISTORY.slice(-300);
+  saveProgress(); safeStore.del('cism.inprogress'); updateMissedCount();
+}
+function missedCount(){ return BANK.filter(q=>WEAK[q.id]).length; }
+function updateMissedCount(){
+  const n=missedCount();
+  document.querySelectorAll('[data-missedcount]').forEach(el=>el.textContent=n);
+  const btn=document.getElementById('setMissed'); if(btn){ btn.disabled = n===0; if(n===0 && cfg.set==='missed'){ cfg.set='full'; document.querySelectorAll('[data-set]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-set')==='full')); } }
+  const mb=document.getElementById('missedBtn'); if(mb){ mb.textContent='Retry missed questions ('+n+')'; mb.disabled = n===0; }
+}
+function startMissedDrill(){ if(!missedCount()) return; cfg.set='missed'; cfg.mode='practice'; document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-mode')==='practice')); document.querySelectorAll('[data-set]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-set')==='missed')); goTo('exam'); startExam(); }
+
+/* history screen */
+let histMetric='all';
+function renderHistory(){
+  const mbox=document.getElementById('histMetric'); mbox.innerHTML='';
+  [['all','Overall'],['gov','Gov'],['risk','Risk'],['prog','Program'],['inc','Incident']].forEach(([k,l])=>{
+    const b=document.createElement('button'); b.className='chip'+(histMetric===k?' on':''); b.textContent=l; b.onclick=()=>{histMetric=k;renderHistory();}; mbox.appendChild(b);
+  });
+  const val=h=>histMetric==='all'?h.pct:(h.dom&&h.dom[histMetric]&&h.dom[histMetric].t?Math.round(h.dom[histMetric].c/h.dom[histMetric].t*100):null);
+  const sum=document.getElementById('histSummary'), chart=document.getElementById('histChart'), list=document.getElementById('histList');
+  if(!HISTORY.length){
+    sum.innerHTML=''; chart.innerHTML='<div class="hist-empty">No attempts yet. Finish any mock, drill, or simulation and it will appear here.</div>'; list.innerHTML=''; updateMissedCount(); return;
+  }
+  const sims=HISTORY.filter(h=>h.set==='full'); const best=sims.length?Math.max(...sims.map(h=>h.pct)):null;
+  const latest=HISTORY[HISTORY.length-1];
+  sum.innerHTML=`<div class="fact"><b>${HISTORY.length}</b><span>Attempts</span></div>
+    <div class="fact"><b>${latest.pct}%</b><span>Latest</span></div>
+    <div class="fact"><b>${best===null?'—':best+'%'}</b><span>Best full sim</span></div>`;
+  // chart
+  const pts=HISTORY.map(h=>val(h)); const W=600,H=170,L=34,R=10,T=12,B=26;
+  const n=pts.length; const x=i=>n===1?W/2:L+(W-L-R)*i/(n-1); const y=v=>T+(H-T-B)*(1-v/100);
+  let svg=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Score trend">`;
+  [0,25,50,75,100].forEach(g=>{svg+=`<line x1="${L}" x2="${W-R}" y1="${y(g)}" y2="${y(g)}" stroke="currentColor" stroke-opacity=".12"/><text x="${L-6}" y="${y(g)+4}" font-size="10" text-anchor="end" fill="currentColor" fill-opacity=".55">${g}</text>`;});
+  svg+=`<line x1="${L}" x2="${W-R}" y1="${y(70)}" y2="${y(70)}" stroke="#15803d" stroke-dasharray="4 4" stroke-opacity=".7"/><text x="${W-R}" y="${y(70)-4}" font-size="10" text-anchor="end" fill="#15803d">target 70%</text>`;
+  const poly=pts.map((v,i)=>v===null?null:`${x(i)},${y(v)}`).filter(Boolean).join(' ');
+  if(poly) svg+=`<polyline points="${poly}" fill="none" stroke="#1d4ed8" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+  pts.forEach((v,i)=>{ if(v===null) return; const h=HISTORY[i]; svg+=`<circle cx="${x(i)}" cy="${y(v)}" r="4.5" fill="${h.mode==='exam'?'#1d4ed8':'#f59e0b'}" stroke="white" stroke-width="1.5"><title>${h.label} · ${h.mode} · ${v}%</title></circle>`; });
+  svg+='</svg>';
+  chart.innerHTML=svg+`<div class="cap"><span>${fmtDate(HISTORY[0].ts)}</span><span>● exam mode &nbsp; ● practice mode</span><span>${fmtDate(latest.ts)}</span></div>`;
+  chart.querySelector('.cap span:nth-child(2)').innerHTML='<span style="color:#1d4ed8">●</span> exam &nbsp; <span style="color:#f59e0b">●</span> practice';
+  // list
+  list.innerHTML='';
+  HISTORY.slice().reverse().forEach(h=>{
+    const band=h.pct>=70?'g':(h.pct>=60?'m':'l');
+    const mini=['gov','risk','prog','inc'].map(d=>{const dd=h.dom&&h.dom[d];const p=dd&&dd.t?Math.round(dd.c/dd.t*100):0;return `<i title="${DOMAINS[d].short} ${p}%"><b style="width:${p}%"></b></i>`;}).join('');
+    const row=document.createElement('div'); row.className='hist-row';
+    row.innerHTML=`<div><div>${h.label} · ${h.mode==='exam'?'Exam':'Practice'}${h.expired?' · time expired':''}</div><span class="hl">${fmtDate(h.ts)} · ${h.correct}/${h.n} · missed ${h.missed?h.missed.length:0}</span><div class="mini">${mini}</div></div><div class="hp ${band}">${h.pct}%</div>`;
+    list.appendChild(row);
+  });
+  updateMissedCount();
+}
+function exportProgress(){
+  const payload={app:'cism-practice',version:APP_VERSION,exported:new Date().toISOString(),history:HISTORY,weak:WEAK,known:[...known],theme:document.documentElement.getAttribute('data-theme')};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cism-progress-'+new Date().toISOString().slice(0,10)+'.json'; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+}
+function importProgress(input){
+  const f=input.files&&input.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    try{
+      const p=JSON.parse(rd.result); if(p.app!=='cism-practice') throw new Error('not a progress file');
+      const seen=new Set(HISTORY.map(h=>h.ts)); let added=0;
+      (p.history||[]).forEach(h=>{ if(!seen.has(h.ts)){HISTORY.push(h);added++;} });
+      HISTORY.sort((a,b)=>a.ts-b.ts);
+      Object.entries(p.weak||{}).forEach(([k,v])=>{WEAK[k]=Math.max(WEAK[k]||0,v);});
+      (p.known||[]).forEach(i=>known.add(i)); saveKnown();
+      saveProgress(); renderHistory(); alert('Imported: '+added+' new attempts merged.');
+    }catch(e){ alert('Could not import that file.'); }
+    input.value='';
+  };
+  rd.readAsText(f);
+}
+function clearHistory(){ if(confirm('Delete all saved attempts and the missed-questions list? Flashcard marks are kept.')){ HISTORY=[]; WEAK={}; saveProgress(); renderHistory(); } }
+
 /* ---------- Per-option rationales ---------- */
 function rationaleHtml(q){
   if(!q.r) return '';
@@ -2917,7 +3125,7 @@ function rationaleHtml(q){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION="7.0", APP_BUILD="2026-09-09";
+const APP_VERSION="7.1", APP_BUILD="2026-09-09";
 function initVersion(){
   const pages=document.querySelectorAll('.lesson-page').length;
   document.getElementById('verNum').textContent=APP_VERSION;
@@ -2928,6 +3136,7 @@ function initVersion(){
   document.querySelectorAll('[data-mocksize]').forEach(el=>el.textContent=sets.A.length);
   document.querySelectorAll('[data-banksize]').forEach(el=>el.textContent=BANK.length);
   document.querySelectorAll('[data-drillcount]').forEach(el=>{el.textContent=BANK.filter(q=>q.d===el.getAttribute('data-drillcount')).length;});
+  renderResumeBanner(); updateMissedCount();
 }
 function toggleChangelog(){document.getElementById('changelog').classList.toggle('hidden');}
 initVersion();

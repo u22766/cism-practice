@@ -12,6 +12,7 @@ An unofficial, self-contained practice exam for the ISACA® Certified Informatio
 - **Results by domain** mapped to exam weight, with one-tap links into the relevant lesson.
 - **Seven lessons:** the management mindset, one per domain, exam technique (including "where the shortcuts fail"), and the 2024 manual updates.
 - **Index cards:** 31 bottom-line cards that pop open to a quick-read summary, and 90 flip-to-reveal flashcards (short answer and true/false) with got-it tracking, domain filters, shuffle, and hide-known.
+- **Progress that persists:** an interrupted exam autosaves and offers Resume; every attempt is logged to a History view with a score-trend chart and per-domain bars; missed questions accumulate in a "Retry missed" set until cleared; export/import as JSON.
 - **Dark theme** toggle in the header — follows your device preference and is remembered.
 - Answer options shuffle every run. Keyboard: 1–4 or A–D to answer, ←/→ to navigate, F to flag; on flashcards, space flips, ←/→ move, G/A mark got-it/again.
 
