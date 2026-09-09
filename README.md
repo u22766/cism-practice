@@ -11,7 +11,9 @@ An unofficial, self-contained practice exam for the ISACA® Certified Informatio
 - **Modes:** full 150-question simulation on a 4-hour clock at real exam pacing (96 s/question), four non-overlapping fixed mocks (A–D), a 20-question quick set, and per-domain drills. Exam mode scores at the end; practice mode explains each answer immediately.
 - **Results by domain** mapped to exam weight, with one-tap links into the relevant lesson.
 - **Seven lessons:** the management mindset, one per domain, exam technique (including "where the shortcuts fail"), and the 2024 manual updates.
-- Answer options shuffle every run. Keyboard: 1–4 or A–D to answer, ←/→ to navigate, F to flag.
+- **Index cards:** 31 bottom-line cards that pop open to a quick-read summary, and 90 flip-to-reveal flashcards (short answer and true/false) with got-it tracking, domain filters, shuffle, and hide-known.
+- **Dark theme** toggle in the header — follows your device preference and is remembered.
+- Answer options shuffle every run. Keyboard: 1–4 or A–D to answer, ←/→ to navigate, F to flag; on flashcards, space flips, ←/→ move, G/A mark got-it/again.
 
 ## Deploying
 

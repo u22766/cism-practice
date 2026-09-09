@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CISM Practice Exam</title>
-<meta name="description" content="Unofficial CISM practice exam: 264 original scenario questions with per-option rationales, timed simulation, domain drills, and lessons. Runs entirely in the browser.">
+<meta name="description" content="Unofficial CISM practice exam: 264 original scenario questions with per-option rationales, timed simulation, domain drills, lessons, and flip-to-reveal index cards. Dark theme included. Runs entirely in the browser.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0f172a">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f172a'/%3E%3Ctext x='32' y='41' font-family='Georgia,serif' font-size='26' fill='%23ffffff' text-anchor='middle'%3ECISM%3C/text%3E%3C/svg%3E">
@@ -267,6 +267,87 @@
   .changelog{text-align:left;margin-top:8px;display:flex;flex-direction:column;gap:9px;font-size:.8rem;color:#31405a}
   .changelog b{color:var(--ink);display:block;margin-bottom:2px}
 
+  /* ---------- Navigation & theme ---------- */
+  .tabs{display:flex;gap:4px;background:#182338;border:1px solid #2b3a54;border-radius:9px;padding:3px}
+  .tab{border:none;background:transparent;color:#9fb0c6;font-weight:600;font-size:.82rem;padding:6px 11px;border-radius:7px}
+  .tab.on{background:#e8eef6;color:#0f172a}
+  .bar-right{display:flex;align-items:center;gap:10px}
+  .theme-btn{width:34px;height:34px;border-radius:9px;border:1px solid #2b3a54;background:#182338;color:#dbe6f5;font-size:1rem;display:flex;align-items:center;justify-content:center}
+  .theme-btn:hover{filter:brightness(1.15)}
+  .hero-actions{display:flex;gap:10px;margin-top:10px}
+  .hero-actions .btn{flex:1;margin-top:0}
+
+  html[data-theme="dark"]{
+    --ink:#e6edf7; --ink-2:#cbd5e5; --surface:#121a2b; --bg:#0b1220; --line:#243049;
+    --muted:#9fb0c6; --muted-2:#7a8aa3; --accent:#5b8def; --accent-soft:#1a2740;
+    --correct:#4ade80; --correct-soft:#12301f; --wrong:#f87171; --wrong-soft:#3a1a1a;
+    --flag:#fbbf24; --flag-soft:#3a2b10; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);
+  }
+  html[data-theme="dark"] header.bar{background:#0b1220;border-bottom-color:#243049}
+  html[data-theme="dark"] .fact,html[data-theme="dark"] .choice,html[data-theme="dark"] .option,html[data-theme="dark"] .icbtn,
+  html[data-theme="dark"] .gcell,html[data-theme="dark"] .rev-item,html[data-theme="dark"] .term,html[data-theme="dark"] .chip,
+  html[data-theme="dark"] .lchip,html[data-theme="dark"] .bluf,html[data-theme="dark"] .navpanel{background:#172238;border-color:var(--line)}
+  html[data-theme="dark"] .option:hover,html[data-theme="dark"] .choice:hover{border-color:#4a6aa8;background:#1b2740}
+  html[data-theme="dark"] .explain,html[data-theme="dark"] .rex,html[data-theme="dark"] .callout.principle,html[data-theme="dark"] .ro.correct{background:#15213a}
+  html[data-theme="dark"] .ro.chosen-wrong{background:var(--wrong-soft)}
+  html[data-theme="dark"] .track{background:#1b2740}
+  html[data-theme="dark"] .actionbar{background:rgba(18,26,43,.96);border-top-color:var(--line)}
+  html[data-theme="dark"] .btn.ghost{background:#172238;color:var(--ink);border-color:var(--line)}
+  html[data-theme="dark"] .btn.ghost:hover{background:#1e2c48}
+  html[data-theme="dark"] .lesson-page p,html[data-theme="dark"] .lesson-page ul,html[data-theme="dark"] .lesson-page ol,
+  html[data-theme="dark"] .rl,html[data-theme="dark"] .callout,html[data-theme="dark"] .changelog{color:var(--ink-2)}
+  html[data-theme="dark"] .chip.on,html[data-theme="dark"] .lchip.on{background:var(--ink);color:#0f172a;border-color:var(--ink)}
+  html[data-theme="dark"] .option .key,html[data-theme="dark"] .rl b{border-color:#3a4a66;color:var(--muted)}
+  html[data-theme="dark"] .gcell.answered{background:var(--accent-soft);border-color:#2f4f8f;color:#9dbcf5}
+  html[data-theme="dark"] .verdictpill.pass{background:var(--correct-soft)} html[data-theme="dark"] .verdictpill.low{background:var(--wrong-soft)}
+  html[data-theme="dark"] .flash-face{background:#172238;border-color:var(--line)}
+  html[data-theme="dark"] .flash-face.back{background:#15213a}
+  html[data-theme="dark"] .modal-card{background:var(--surface)}
+  .chip.on,.lchip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+
+  /* ---------- Index cards ---------- */
+  .cards-tabs{display:flex;gap:8px;margin:0 0 14px}
+  .bluf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .bluf{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:14px 15px;display:flex;flex-direction:column;gap:6px;min-height:92px;transition:border-color .15s,transform .15s}
+  .bluf:hover{border-color:#9db4d8;transform:translateY(-1px)}
+  .bluf .bd{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:700}
+  .bluf .bt{font-family:var(--serif);font-size:1.02rem;line-height:1.3;color:var(--ink)}
+  .bluf .bh{font-size:.74rem;color:var(--accent);font-weight:600;margin-top:auto}
+  .modal-scrim{position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:60;display:flex;align-items:center;justify-content:center;padding:18px}
+  .modal-card{background:#fff;border-radius:14px;max-width:560px;width:100%;max-height:85vh;overflow:auto;padding:22px 22px 18px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+  .modal-card .bd{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:700}
+  .modal-card h3{font-family:var(--serif);font-weight:600;font-size:1.35rem;margin:6px 0 12px;border:none;padding:0}
+  .modal-card ul{margin:0 0 14px;padding-left:20px;font-size:.96rem;color:var(--ink-2)}
+  .modal-card li{margin-bottom:8px}
+  .modal-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+  .deck{max-width:560px;margin:0 auto}
+  .deck-meta{display:flex;justify-content:space-between;align-items:center;font-size:.82rem;color:var(--muted);margin-bottom:10px;flex-wrap:wrap;gap:8px}
+  .flash{perspective:1200px;cursor:pointer;height:260px}
+  .flash-inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+  .flash.flipped .flash-inner{transform:rotateY(180deg)}
+  .flash-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1.5px solid var(--line);border-radius:14px;background:#fff;padding:20px 22px;display:flex;flex-direction:column;justify-content:center;gap:10px;box-shadow:var(--shadow)}
+  .flash-face.back{transform:rotateY(180deg);background:#f6f9ff}
+  .ftype{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:700}
+  .fq{font-family:var(--serif);font-size:1.15rem;line-height:1.4}
+  .fa{font-size:1.08rem;font-weight:700;color:var(--accent)}
+  .fa.tf-true{color:var(--correct)} .fa.tf-false{color:var(--wrong)}
+  .fw{font-size:.9rem;color:var(--muted)}
+  .fhint{font-size:.74rem;color:var(--muted-2);margin-top:auto}
+  .deck-actions{display:flex;gap:10px;margin-top:14px}
+  .deck-actions .btn{flex:1}
+  .btn.ok{background:var(--correct)} .btn.warn{background:var(--flag)}
+  .deck-nav{display:flex;justify-content:space-between;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .deck-nav .icbtn{font-size:.84rem}
+  .deck-opt{font-size:.84rem;color:var(--muted);display:flex;align-items:center;gap:6px;margin-top:12px;justify-content:center}
+  .deck-empty{text-align:center;color:var(--muted);padding:40px 10px}
+  @media (max-width:640px){
+    .bluf-grid{grid-template-columns:1fr}
+    .tab{padding:6px 8px;font-size:.78rem}
+    .bar-inner{gap:8px}
+    .flash{height:280px}
+  }
+
   /* ---------- Responsive ---------- */
   @media (max-width:640px){
     .facts{grid-template-columns:repeat(2,1fr)}
@@ -288,11 +369,19 @@
 <header class="bar" id="topbar">
   <div class="bar-inner">
     <div class="brand">
-      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v6.1</span>
+      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v7.0</span>
     </div>
-    <div class="bar-meta" id="barMeta" style="visibility:hidden">
-      <span class="counter" id="counter">Question 1 of 50</span>
-      <span class="timer" id="timer">240:00</span>
+    <nav class="tabs" id="mainNav" aria-label="Sections">
+      <button class="tab on" data-nav="exam" onclick="goTo('exam')">Exam</button>
+      <button class="tab" data-nav="lessons" onclick="goTo('lessons')">Lessons</button>
+      <button class="tab" data-nav="cards" onclick="goTo('cards')">Cards</button>
+    </nav>
+    <div class="bar-right">
+      <div class="bar-meta hidden" id="barMeta">
+        <span class="counter" id="counter">Question 1 of 50</span>
+        <span class="timer" id="timer">240:00</span>
+      </div>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark theme" title="Toggle dark theme">☾</button>
     </div>
   </div>
   <div class="progress"><i id="progbar"></i></div>
@@ -307,7 +396,7 @@
       <div class="hero">
         <div class="eyebrow">Certified Information Security Manager</div>
         <h1>Practice Exam</h1>
-        <p class="lede">A 264-question bank written to ISACA item conventions — short stems, balanced options, all four choices rationalized — weighted to the real four-domain blueprint and updated for the 2024 manual — four non-overlapping 50-question mocks, domain drills, and a full-length 150-question timed simulation. The goal isn't recall — it's training the manager's judgment over the practitioner's reflex.</p>
+        <p class="lede">A 264-question bank written to ISACA item conventions — short stems, balanced options, all four choices rationalized — weighted to the real four-domain blueprint and updated for the 2024 manual — four non-overlapping 50-question mocks, domain drills, and a full-length 150-question timed simulation — plus lessons and flip-to-reveal index cards. The goal isn't recall — it's training the manager's judgment over the practitioner's reflex.</p>
       </div>
 
       <div class="rule"></div>
@@ -384,7 +473,7 @@
       </div>
 
       <button class="btn wide" onclick="startExam()">Start exam</button>
-      <button class="btn ghost wide" style="margin-top:10px" onclick="showLessons(0)">Open the lessons</button>
+      <div class="hero-actions"><button class="btn ghost" onclick="goTo('lessons')">Lessons</button><button class="btn ghost" onclick="goTo('cards')">Index cards</button></div>
 
       <div class="domain-legend">
         <span><b>Governance</b> 17%</span>
@@ -394,9 +483,10 @@
       </div>
       <p class="disclaimer">Unofficial, independent study aid — not affiliated with, endorsed by, or sourced from ISACA. All questions are original and are not real exam items. CISM is a registered trademark of ISACA. The real CISM uses a scaled 200–800 score (450 to pass), so the percentage here is a study signal, not an official score. Aim for ~70%+ overall and in every domain before test day.</p>
       <div class="verfoot">
-        <div class="verline"><b>Version <span id="verNum">6.1</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
+        <div class="verline"><b>Version <span id="verNum">7.0</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
         <button class="linkbtn" onclick="toggleChangelog()">Version history</button>
         <div id="changelog" class="changelog hidden">
+          <div><b>v7.0 — September 9, 2026</b>Section navigation (Exam · Lessons · Cards) in the header, hidden during a live exam. Dark theme toggle that follows the device preference and is remembered. New Index Cards section: 31 bottom-line cards that pop open to a quick-read summary, and 90 flip-to-reveal flashcards (short answer and true/false) with got-it tracking, domain filters, shuffle, and hide-known. Keyboard: space flips, arrows navigate, G/A mark.</div>
           <div><b>v6.1 — September 9, 2026</b>Deployment release: served as index.html for GitHub Pages, page metadata and favicon added, unofficial-status disclaimer added, version history tidied. No question or lesson changes.</div>
           <div><b>v6.0 — September 9, 2026</b>Bank extended to 264 questions, adding a minority of technical control-selection items in the style the exam actually uses. One item corrected (the criterion for a successful DR test). Mock and drill sizes are now computed from the bank. Lesson 5 adds "Where the shortcuts fail" — a dozen credited answers that contradict common prep heuristics; Lessons 3 and 4 add directly tested facts.</div>
           <div><b>v5.0 — September 9, 2026</b>Entire 200-question bank rewritten to ISACA item conventions: one-sentence stems with a single capitalized qualifier, short parallel length-balanced options, all-plausible distractors, sentence-completion formatting, and consistent terminology. Every item now rationalizes all four options, shown after answering in practice mode and in answer review. Lesson 5 gains an anatomy-of-an-item section. Mock sets and domain counts unchanged.</div>
@@ -835,6 +925,57 @@
     </div>
   </section>
 
+    <!-- ============ CARDS SCREEN ============ -->
+  <section id="cardsScreen" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+        <h2 style="margin:0;font-family:var(--serif);font-weight:600;font-size:1.4rem">Index cards</h2>
+        <div class="cards-tabs" style="margin:0">
+          <button class="chip on" id="tabBluf" onclick="setCardMode('bluf')">Bottom line</button>
+          <button class="chip" id="tabFlash" onclick="setCardMode('flash')">Flashcards</button>
+        </div>
+      </div>
+      <div class="filters" id="cardDomains"></div>
+
+      <div id="blufView">
+        <div class="bluf-grid" id="blufGrid"></div>
+      </div>
+
+      <div id="flashView" class="hidden">
+        <div class="deck">
+          <div class="deck-meta"><span id="deckPos">1 / 90</span><span id="deckDom"></span><span id="deckKnown">Known 0</span></div>
+          <div class="flash" id="flashCard" onclick="flipCard()">
+            <div class="flash-inner">
+              <div class="flash-face front">
+                <span class="ftype" id="fType">Short answer</span>
+                <div class="fq" id="fQ"></div>
+                <span class="fhint">Tap to flip · space</span>
+              </div>
+              <div class="flash-face back">
+                <span class="ftype">Answer</span>
+                <div class="fa" id="fA"></div>
+                <div class="fw" id="fW"></div>
+                <span class="fhint">Tap to flip back</span>
+              </div>
+            </div>
+          </div>
+          <div class="deck-actions">
+            <button class="btn warn" onclick="markCard(false)">Again</button>
+            <button class="btn ok" onclick="markCard(true)">Got it</button>
+          </div>
+          <div class="deck-nav">
+            <button class="icbtn" onclick="deckStep(-1)">‹ Prev</button>
+            <button class="icbtn" onclick="shuffleDeck()">Shuffle</button>
+            <button class="icbtn" onclick="resetKnown()">Reset progress</button>
+            <button class="icbtn" onclick="deckStep(1)">Next ›</button>
+          </div>
+          <label class="deck-opt"><input type="checkbox" id="hideKnown" onchange="rebuildDeck()"> Hide cards I know</label>
+          <div class="deck-empty hidden" id="deckEmpty">Every card in this set is marked known. Uncheck "hide" or reset progress.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ QUESTION SCREEN ============ -->
   <section id="examScreen" class="hidden">
     <div class="card">
@@ -882,6 +1023,19 @@
 
 </div>
 </main>
+
+<div id="blufModal" class="modal-scrim hidden" onclick="if(event.target===this)closeBluf()">
+  <div class="modal-card">
+    <div class="bd" id="mDom"></div>
+    <h3 id="mTitle"></h3>
+    <ul id="mPoints"></ul>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="stepBluf(-1)">‹ Previous</button>
+      <button class="btn ghost" onclick="closeBluf()">Close</button>
+      <button class="btn ghost" onclick="stepBluf(1)">Next ›</button>
+    </div>
+  </div>
+</div>
 
 <!-- ============ ACTION BAR ============ -->
 <div class="actionbar hidden" id="actionbar">
@@ -2324,7 +2478,8 @@ function startExam(){
   document.getElementById('startScreen').classList.add('hidden');
   document.getElementById('examScreen').classList.remove('hidden');
   document.getElementById('actionbar').classList.remove('hidden');
-  document.getElementById('barMeta').style.visibility='visible';
+  document.getElementById('barMeta').classList.remove('hidden');
+  document.getElementById('mainNav').classList.add('hidden');
   if(state.mode==="exam"){ startTimer(); } else { document.getElementById('timer').classList.add('hidden'); }
   renderQuestion();
   window.scrollTo(0,0);
@@ -2468,7 +2623,9 @@ function finish(auto){
 
   document.getElementById('examScreen').classList.add('hidden');
   document.getElementById('actionbar').classList.add('hidden');
-  document.getElementById('barMeta').style.visibility='hidden';
+  document.getElementById('barMeta').classList.add('hidden');
+  document.getElementById('mainNav').classList.remove('hidden');
+  setTab('exam');
   document.getElementById('resultsScreen').classList.remove('hidden');
 
   const pct=Math.round(correct/state.qs.length*100);
@@ -2577,12 +2734,14 @@ function renderReviewList(){
 }
 
 function restart(){
+  document.getElementById('cardsScreen').classList.add('hidden');
   document.getElementById('lessonsScreen').classList.add('hidden');
   document.getElementById('resultsScreen').classList.add('hidden');
   document.getElementById('reviewScreen').classList.add('hidden');
   document.getElementById('startScreen').classList.remove('hidden');
   document.getElementById('timer').classList.remove('hidden');
   state=null;
+  setTab('exam');
   window.scrollTo(0,0);
 }
 
@@ -2593,8 +2752,10 @@ function showLessons(i,from){
   lessonsFrom = from || 'start';
   document.getElementById('startScreen').classList.add('hidden');
   document.getElementById('resultsScreen').classList.add('hidden');
+  document.getElementById('cardsScreen').classList.add('hidden');
   document.getElementById('lessonsScreen').classList.remove('hidden');
   showLesson(i||0);
+  setTab('lessons');
 }
 function showLesson(i){
   document.querySelectorAll('.lesson-page').forEach(p=>p.classList.remove('on'));
@@ -2605,6 +2766,7 @@ function showLesson(i){
 function leaveLessons(){
   document.getElementById('lessonsScreen').classList.add('hidden');
   document.getElementById(lessonsFrom==='results'?'resultsScreen':'startScreen').classList.remove('hidden');
+  setTab('exam');
   window.scrollTo(0,0);
 }
 function drillFromLesson(d){
@@ -2616,6 +2778,138 @@ function drillFromLesson(d){
   leaveLessons();
 }
 
+/* ---------- Index card data ---------- */
+const BLUF=[{"d":"mind","t":"You are the manager, not the technician","p":["Default sequence: assess → communicate → prioritize → document → act.","You advise, recommend, and escalate. The owner decides.","If your answer jumps to the technical fix, it is usually wrong."]},{"d":"mind","t":"Five questions for every scenario","p":["What is the business objective?","Who owns the decision?","What is the first management step?","What is the cost–benefit logic?","What process should be followed?"]},{"d":"mind","t":"Read the qualifier first","p":["FIRST, BEST, MOST, PRIMARY, GREATEST change the answer.","Several options may be things you would eventually do — only one is credited.","Colon-form stems: options complete the sentence."]},{"d":"mind","t":"Where the shortcuts fail","p":["Role effectiveness → existing proficiencies, not management support.","Security early in a project → feasibility, not cost.","Awareness metric → number of reported incidents.","Classification → consequences of compromise, not risk.","Highest response priority → life safety."]},{"d":"mind","t":"Answer-selection heuristics","p":["The broadest correct answer wins (business objectives ⊃ legal obligations).","Absolutes — always, never, all — are usually wrong.","If any part of an option is wrong, the whole option is wrong.","Two near-identical options → neither; two opposites → one of them."]},{"d":"gov","t":"Business strategy drives governance","p":["Strategy → policy → program → budgets → procedures. Each derives from the one above.","Legal and regulatory requirements are constraints, not the driver.","First step in developing strategy: review business objectives."]},{"d":"gov","t":"Accountability sits at the top","p":["Board and senior management are ultimately accountable; it cannot be delegated.","The manager develops the strategy; senior management approves it.","Data owners decide and confirm access to their data."]},{"d":"gov","t":"Policy first","p":["Governance implementation FIRST requires approved policy.","Policies are based on a threat profile — proportionate protection.","Standards: measurable requirements. Procedures: unambiguous, meet standards. Guidelines: advisory."]},{"d":"gov","t":"The six governance outcomes","p":["Strategic alignment · Risk management · Value delivery","Resource management · Performance measurement · Assurance process integration","Value delivery = investment optimized to support objectives."]},{"d":"gov","t":"Win commitment with outcomes, not fear","p":["Show how security supports desired business outcomes.","A business case, not attack statistics, wins funding.","Commitment shows as resources and participation, not signatures.","What most inhibits governance: lack of high-level sponsorship."]},{"d":"gov","t":"Measure at the right altitude","p":["Board: risk trends relative to appetite, in business terms.","Governance metrics are strategic — expense against projected outcomes.","KGI = goal achieved · KPI = process performance · KRI = risk rising."]},{"d":"risk","t":"Manage to acceptable, not minimal","p":["Objective: risk at an acceptable level — not the lowest possible.","Acceptability is set by organizational requirements; appetite by senior management.","A risk already within appetite is accepted and monitored."]},{"d":"risk","t":"Assess, then hand the decision to the owner","p":["High risk found → report to the risk owner FIRST.","The business owner accepts residual risk; security never does.","Risk beyond appetite and unfunded → escalate with a business impact analysis."]},{"d":"risk","t":"Vocabulary precision","p":["Threat = actor/event · Vulnerability = weakness · Risk = the combination · Impact = consequence.","Inherent = before controls · Residual = after controls.","Appetite = strategic willingness · Tolerance = acceptable variation.","Disruption from DDoS = operational risk."]},{"d":"risk","t":"Assessment = identify + analyze + evaluate","p":["Analysis addresses size AND likelihood of loss.","Not complete until evaluated against appetite and tolerance.","Residual risk is determined by a risk assessment.","Best process for existing risk level: a security review."]},{"d":"risk","t":"Cost–benefit with total cost of ownership","p":["A control should not cost more than the exposure it addresses.","Compare with life-cycle cost, not purchase price.","Vulnerabilities are evaluated for threat, impact, and cost of mitigation."]},{"d":"risk","t":"Risk changes — monitor it","p":["Continuous monitoring and KRIs catch change between assessments.","When risk changes, standards and procedures change; policies should not need to.","Reassess on significant change. Treat regulation as another risk."]},{"d":"prog","t":"Executive commitment is the #1 success factor","p":["Ahead of policies, communication, and training.","The perennial challenges: management support, funding, staffing.","A technical, tactically driven program signals weak management components."]},{"d":"prog","t":"The foundation chain","p":["Inventory → classification → owners → baselines → controls → metrics.","Prerequisite to classification: impact assessment.","Classification reflects consequences of compromise, not risk.","DLP starts with classifying data, not buying a tool."]},{"d":"prog","t":"Technology implements controls — it is not one","p":["Preventive · detective · corrective · deterrent · compensating.","A countermeasure is targeted at a specific threat; a general control is broader.","Effectiveness is proven by testing against the objective.","Preventive control objectives derive from risk levels aligned with appetite."]},{"d":"prog","t":"Outcomes over outputs","p":["Awareness effectiveness: number of reported incidents (rising is good).","100% completion with rising incidents = training isn't working.","Define the decisions metrics support before choosing metrics.","Establish program metrics in the design phase."]},{"d":"prog","t":"People controls","p":["Least privilege limits impact of compromise.","Recertification cures privilege creep; segregation of duties stops one-person fraud.","Automatic expiry removes contractor access; RBAC prevents internal modification.","Screening depth matches role sensitivity."]},{"d":"prog","t":"Third parties","p":["Requirements go in the RFP and contract from the start.","The SLA is the most encompassing contractual element.","Independent audit reports give assurance; accountability is retained.","Never let an outsourced service become a single point of failure."]},{"d":"prog","t":"Technical picks the exam expects","p":["IDS for internet traffic → screened subnet; most important consideration → tuning.","Network DoS → packet filtering.","OS weaknesses → patch management.","Baseline controls: RBAC, logging, automated patching (not mirroring)."]},{"d":"inc","t":"Confirm → classify → contain → eradicate → recover → learn","p":["A reported breach is confirmed before anything else.","Active, spreading damage: contain now.","Eradicate before recovering, or you reinfect."]},{"d":"inc","t":"Readiness beats heroics","p":["Roles, escalation, and communication procedures are the plan's core.","Severity criteria are predefined and live in the manual.","Delegate authority to act — needing an unreachable executive's approval is the flaw.","Cross-functional team: legal, HR, communications, business."]},{"d":"inc","t":"Severity = business impact","p":["Involve managers from affected operational areas.","Strategic triage is by business impact; triage exists to prioritize limited resources.","Life safety first — before continuity, recovery, or messaging."]},{"d":"inc","t":"Recovery objectives","p":["RTO = time to restore · RPO = max data loss · SDO = minimum service level · AIW/MTO = max tolerable outage.","RTO must fit within the AIW. A stricter RPO can make the RTO unattainable.","Site tier is chosen by RTO against cost; alternate site must not share the primary's hazards."]},{"d":"inc","t":"Decisions belong up the chain","p":["Disclosure and ransom: senior management with legal counsel.","Regulatory notification: engage legal first.","Insider incidents: HR and legal before acting.","A designated spokesperson handles media."]},{"d":"inc","t":"Evidence discipline","p":["Chain of custody whenever evidence may be used legally.","Forensic copy = bit-by-bit image.","Administrators confirm and scope — and alter nothing.","Root compromise → rebuild from original media."]},{"d":"inc","t":"Learn or repeat","p":["Post-incident review exists to improve the process; blameless; actions tracked to closure.","Most common DR plan failure: stale operational information.","A DR test succeeds when critical business processes are duplicated — not merely when the RTO is met."]}];
+const CARDS=[{"d":"mind","k":"tf","q":"The information security manager accepts residual risk on behalf of the business.","a":"False","w":"The business or process owner accepts risk; security advises."},{"d":"mind","k":"qa","q":"A high risk is identified. What is the default first management step?","a":"Assess it, then report to the risk owner for a treatment decision.","w":"Implementing a control first bypasses the owner's decision."},{"d":"mind","k":"tf","q":"When damage is actively spreading, containment comes before analysis.","a":"True","w":"This is the deliberate exception to assess-before-act."},{"d":"mind","k":"qa","q":"Which words in a stem change the credited answer?","a":"FIRST, BEST, MOST, PRIMARY, GREATEST.","w":"Several options may be valid; only one fits the qualifier."},{"d":"mind","k":"tf","q":"The longest, most complete-sounding option is usually correct.","a":"False","w":"Options are length-balanced; length is not a signal."},{"d":"mind","k":"qa","q":"Two options remain. How do you choose?","a":"The one naming the mechanism that actually produces the qualifier's result — the management answer.","w":"Precision beats generic safety."},{"d":"gov","k":"qa","q":"Information security governance is primarily driven by?","a":"Business strategy.","w":"Regulation and technology are constraints, not the driver."},{"d":"gov","k":"qa","q":"FIRST step in developing a security strategy?","a":"Review the business objectives.","w":"Strategy exists to support the business."},{"d":"gov","k":"tf","q":"Regulatory requirements are the primary driver of security governance.","a":"False","w":"They are a constraint governance must address; business strategy drives it."},{"d":"gov","k":"qa","q":"Implementing governance FIRST requires?","a":"Approved security policies.","w":"Policy is the vehicle for management intent; awareness, teams, and architecture follow."},{"d":"gov","k":"qa","q":"Who approves the risk appetite?","a":"Senior management / the board.","w":"A strategic decision, not a security one."},{"d":"gov","k":"qa","q":"Who is ultimately accountable for protecting information assets?","a":"The board and senior management.","w":"Accountability cannot be delegated to the CISO."},{"d":"gov","k":"qa","q":"The manager's PRIMARY governance responsibility?","a":"Developing the security strategy.","w":"Senior management approves it."},{"d":"gov","k":"tf","q":"The security strategy is the basis for the security architecture.","a":"False","w":"Policies are the basis for architecture; strategy comes before policy."},{"d":"gov","k":"qa","q":"Purpose of an information security strategy?","a":"Express the program's goals and the plan to achieve them.","w":"Too high-level for control configuration or user mandates."},{"d":"gov","k":"qa","q":"MOST important benefit of effective governance?","a":"Keeping business disruption within acceptable levels.","w":"Compliance, prioritization, and ROI are secondary."},{"d":"gov","k":"qa","q":"Policy · standard · procedure · guideline — in one line each?","a":"Intent · measurable requirement · step-by-step · advisory.","w":"A 14-character password rule is a standard."},{"d":"gov","k":"qa","q":"MOST important consideration when developing policies?","a":"They are based on a threat profile.","w":"Keeps protection proportionate to what actually threatens the business."},{"d":"gov","k":"qa","q":"MOST important requirement for gaining management commitment?","a":"Demonstrate support for desired business outcomes.","w":"More persuasive than loss scenarios or legal due care."},{"d":"gov","k":"qa","q":"What MOST inhibits governance implementation?","a":"Lack of high-level sponsorship.","w":"Budget and priority conflicts are consequences of it."},{"d":"gov","k":"qa","q":"BEST evidence of senior management commitment?","a":"Allocation of adequate resources and active participation.","w":"A signature on a policy is symbolic."},{"d":"gov","k":"qa","q":"What MOST makes assignment of security roles effective?","a":"The assignments match existing proficiencies.","w":"Not management support — capability determines effectiveness."},{"d":"gov","k":"qa","q":"Who reviews and confirms a system's approved-user list?","a":"The data owner.","w":"The manager coordinates; administrators provision."},{"d":"gov","k":"qa","q":"What belongs in a security report to the board?","a":"Risk trends relative to appetite, tied to business objectives.","w":"Vulnerability counts and tool inventories are operational."},{"d":"gov","k":"qa","q":"Name the six governance outcomes.","a":"Strategic alignment, risk management, value delivery, resource management, performance measurement, assurance process integration.","w":"Optimized investment = value delivery."},{"d":"gov","k":"tf","q":"KGIs measure process performance; KPIs measure goal achievement.","a":"False","w":"Reversed: KGIs = goals achieved; KPIs = process performance."},{"d":"risk","k":"qa","q":"Overall objective of risk management?","a":"Manage risk to an acceptable level.","w":"Not eliminate, not lowest possible."},{"d":"risk","k":"tf","q":"Risk should be reduced to the lowest possible level.","a":"False","w":"That is costly and restrictive; acceptable is the target."},{"d":"risk","k":"qa","q":"A missing critical patch is a threat, vulnerability, risk, or impact?","a":"Vulnerability.","w":"A weakness that a threat can exploit."},{"d":"risk","k":"qa","q":"Disruption from a DDoS attack is which type of risk?","a":"Operational risk.","w":"Risk arising from operations; not systemic or intrinsic."},{"d":"risk","k":"qa","q":"Residual risk is determined by?","a":"A risk assessment.","w":"Vulnerability or threat analysis alone cannot determine risk."},{"d":"risk","k":"qa","q":"BEST process for assessing the existing level of risk?","a":"A security review.","w":"Vulnerability assessment is only one part of it."},{"d":"risk","k":"qa","q":"When is a risk assessment complete?","a":"After identification, analysis, and evaluation against appetite and tolerance.","w":"Analysis without evaluation is unfinished."},{"d":"risk","k":"tf","q":"Risk analysis should weight likelihood more heavily than the size of loss.","a":"False","w":"Both elements must be considered."},{"d":"risk","k":"qa","q":"Discovered vulnerabilities should be evaluated for?","a":"Threat, impact, and cost of mitigation.","w":"No credible threat or little impact may mean no action."},{"d":"risk","k":"qa","q":"Who accepts residual risk?","a":"The business / process owner.","w":"Not the security manager, not audit."},{"d":"risk","k":"qa","q":"Whether risk has been reduced to an acceptable level is determined by?","a":"Organizational requirements.","w":"A management decision, not standards or IS requirements."},{"d":"risk","k":"qa","q":"Residual risk is within appetite. Next step?","a":"Formally accept and monitor it.","w":"More controls waste resources."},{"d":"risk","k":"qa","q":"A unit refuses to fund a control for risk beyond appetite. You should?","a":"Escalate with a business impact analysis.","w":"Neither force the control nor accept the risk yourself."},{"d":"risk","k":"qa","q":"How does the program address changes in risk?","a":"Continuous monitoring processes.","w":"Baselines, classification, and policies don't detect change."},{"d":"risk","k":"tf","q":"Policies should be changed whenever risk changes.","a":"False","w":"Standards and procedures change; policy is high-level intent."},{"d":"risk","k":"qa","q":"What MOST likely triggers a review of a security standard?","a":"Results of periodic risk assessments.","w":"Not changes in procedures or department heads."},{"d":"risk","k":"qa","q":"Information classification is based on?","a":"The consequences of compromise — sensitivity and criticality.","w":"Not on risk."},{"d":"risk","k":"qa","q":"How should regulatory compliance be treated?","a":"As another risk to be managed.","w":"Priority is a management decision based on enforcement, sanctions, and cost."},{"d":"risk","k":"qa","q":"What does cyber insurance NOT transfer?","a":"Reputational impact and accountability.","w":"Only part of the financial impact is transferred."},{"d":"risk","k":"qa","q":"What can an indemnity agreement do?","a":"Reduce financial impact through compensation.","w":"Legal responsibility cannot be transferred."},{"d":"risk","k":"qa","q":"When should a new third party be risk-assessed?","a":"Before the contract is signed.","w":"Leverage disappears after signing."},{"d":"risk","k":"qa","q":"Compare a control's cost against risk using?","a":"Total cost of ownership over its life cycle.","w":"Purchase price omits operation, maintenance, retirement."},{"d":"prog","k":"qa","q":"MOST important factor for a successful security program?","a":"Executive management commitment.","w":"Policies and communication fail without it."},{"d":"prog","k":"qa","q":"The three perennial program challenges?","a":"Management support, funding, staffing.","w":"All are management problems."},{"d":"prog","k":"qa","q":"MOST important prerequisite to asset classification?","a":"Impact assessment.","w":"It establishes criticality and sensitivity."},{"d":"prog","k":"qa","q":"FIRST step in a data loss prevention initiative?","a":"Classify the data.","w":"You can only protect what you have identified."},{"d":"prog","k":"tf","q":"Technology is itself a control.","a":"False","w":"Technology implements controls; it must be configured, operated, and verified."},{"d":"prog","k":"qa","q":"Restoring from backup after corruption is which control type?","a":"Corrective.","w":"Preventive stops, detective finds, deterrent discourages."},{"d":"prog","k":"qa","q":"A SIEM falls into which control-technology category?","a":"Management support technology.","w":"Native = built-in; supplemental = add-on such as IDS."},{"d":"prog","k":"qa","q":"Countermeasure versus general control?","a":"A countermeasure is targeted at a specific threat; a general control is broader and costlier.","w":"A budget-constrained specific threat wants a countermeasure."},{"d":"prog","k":"qa","q":"How is control effectiveness determined?","a":"By testing the control against its objective.","w":"Existence and documentation prove nothing."},{"d":"prog","k":"qa","q":"Preventive control objectives should be based on?","a":"Risk levels aligned with the risk appetite.","w":"Not industry standards or monitoring tools."},{"d":"prog","k":"qa","q":"BEST metric for awareness-training effectiveness?","a":"The number of reported incidents.","w":"An increase shows staff are paying attention."},{"d":"prog","k":"qa","q":"What is defined FIRST in a metrics program?","a":"The decisions the metrics must support.","w":"Tools, frequency, and format follow."},{"d":"prog","k":"qa","q":"In which phase are program metrics established?","a":"The design phase.","w":"Initiation is too early; testing is too late."},{"d":"prog","k":"qa","q":"Metrics that support governance are which type?","a":"Strategic — expense tracked against projected outcomes.","w":"Operational and tactical metrics serve other levels."},{"d":"prog","k":"qa","q":"BEST control against privilege creep?","a":"Periodic access recertification by owners.","w":"Passwords and encryption don't remove entitlements."},{"d":"prog","k":"qa","q":"Most reliable way to remove contractor access when no longer needed?","a":"Predetermined automatic expiration dates.","w":"Manager notifications cannot be relied on."},{"d":"prog","k":"qa","q":"MOST effective at preventing internal users from modifying sensitive data?","a":"Role-based access control.","w":"Logs are detective; background checks are predictive."},{"d":"prog","k":"qa","q":"MOST effective at preventing operating-system weaknesses?","a":"Patch management.","w":"Change and configuration management control change, not code flaws."},{"d":"prog","k":"qa","q":"Where should an IDS for internet traffic be placed?","a":"On a screened subnet.","w":"Outside the firewall it alerts on traffic that never gets in."},{"d":"prog","k":"qa","q":"MOST important consideration when implementing an IDS?","a":"Tuning.","w":"Untuned: false positives or missed attacks."},{"d":"prog","k":"qa","q":"MOST important contractual element when outsourcing security administration?","a":"The service level agreement.","w":"It encompasses termination, liability, and penalties."},{"d":"prog","k":"qa","q":"Records retention should be based on?","a":"Regulatory, legal, and business requirements.","w":"Storage capacity is secondary."},{"d":"inc","k":"qa","q":"A database breach is reported. FIRST step?","a":"Confirm the incident.","w":"Notification, containment, and law enforcement follow confirmation."},{"d":"inc","k":"qa","q":"Order of steps after containment?","a":"Eradicate → recover → review.","w":"Recovering before eradicating reinfects."},{"d":"inc","k":"qa","q":"PRIMARY reason for triage?","a":"To prioritize limited resources.","w":"Triage does not detect or prevent incidents."},{"d":"inc","k":"qa","q":"MOST useful input for determining incident severity?","a":"Managers from the affected operational areas.","w":"They understand the impact better than the response team."},{"d":"inc","k":"qa","q":"Highest priority when responding to any incident?","a":"Life safety.","w":"Before continuity, recovery, or messaging."},{"d":"inc","k":"qa","q":"MOST important quality of an incident handler?","a":"Ability to cope with stress.","w":"Procedures may not exist for a novel incident."},{"d":"inc","k":"qa","q":"MOST significant challenge developing an incident management plan?","a":"Lack of management support and organizational consensus.","w":"Technical and metric challenges are solvable."},{"d":"inc","k":"qa","q":"How does incident management PRIMARILY add value?","a":"By optimizing risk management efforts.","w":"It balances prevention, containment, and restoration."},{"d":"inc","k":"qa","q":"A server is being remotely controlled. Which action contains it?","a":"Disconnect it from the network and block the controlling address.","w":"Analysis and escalation do not remove the adversary."},{"d":"inc","k":"qa","q":"An intruder gained root. BEST assurance of integrity?","a":"Rebuild the system from original media.","w":"Root-level changes may be impossible to find."},{"d":"inc","k":"qa","q":"Legally most defensible forensic copy?","a":"A bit-by-bit image.","w":"File copies miss slack space and deleted data."},{"d":"inc","k":"qa","q":"RTO · RPO · SDO · AIW — one phrase each?","a":"Time to restore · max data loss · minimum service level · max tolerable outage.","w":"The SDO helps define the RTO, not the reverse."},{"d":"inc","k":"tf","q":"The RTO must be no longer than the acceptable interruption window.","a":"True","w":"Recovery must finish before losses become unacceptable."},{"d":"inc","k":"tf","q":"Changing the RPO cannot affect whether the RTO is attainable.","a":"False","w":"A stricter RPO lengthens data restoration and can break the RTO."},{"d":"inc","k":"qa","q":"Hot, warm, or cold site is chosen by?","a":"The recovery time objective balanced against cost.","w":"Faster recovery costs more."},{"d":"inc","k":"qa","q":"Build an alternate facility or rent a hot site — decided by?","a":"Cost, and the site not sharing the primary's environmental risk.","w":"Not loss expectancy or daily loss cost."},{"d":"inc","k":"qa","q":"What belongs in the incident response team manual?","a":"Severity criteria — things that stay stable.","w":"Phone lists and backup tables change too often."},{"d":"inc","k":"qa","q":"Most common failure of disaster recovery plans?","a":"Stale operational information.","w":"Hence regular review of plan content, not just exercises."},{"d":"inc","k":"qa","q":"When is a DR test successful?","a":"When critical business processes are duplicated.","w":"Meeting the RTO alone is not the measure."},{"d":"inc","k":"qa","q":"Ultimate goal of a post-incident review?","a":"To improve the response process.","w":"Not evidence, not blame, not merely a management report."}];
+
+/* ---------- Storage (safe: works with or without localStorage) ---------- */
+const safeStore={
+  mem:{},
+  get(k){try{return localStorage.getItem(k);}catch(e){return this.mem[k]??null;}},
+  set(k,v){try{localStorage.setItem(k,v);}catch(e){this.mem[k]=v;}}
+};
+
+/* ---------- Theme ---------- */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  const b=document.getElementById('themeBtn'); if(b) b.textContent = t==='dark' ? '☀' : '☾';
+  const meta=document.querySelector('meta[name="theme-color"]'); if(meta) meta.setAttribute('content', t==='dark'?'#0b1220':'#0f172a');
+}
+function toggleTheme(){
+  const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  safeStore.set('cism.theme',t); applyTheme(t);
+}
+(function initTheme(){
+  const saved=safeStore.get('cism.theme');
+  const prefersDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(saved||(prefersDark?'dark':'light'));
+})();
+
+/* ---------- Section navigation ---------- */
+const SCREENS=['startScreen','lessonsScreen','cardsScreen','resultsScreen','reviewScreen'];
+function setTab(sec){document.querySelectorAll('#mainNav .tab').forEach(b=>b.classList.toggle('on',b.getAttribute('data-nav')===sec));}
+function goTo(sec){
+  if(state && !state.finished) return;               // never leave a live exam via nav
+  SCREENS.forEach(id=>document.getElementById(id).classList.add('hidden'));
+  const target = sec==='lessons' ? 'lessonsScreen' : sec==='cards' ? 'cardsScreen' : (state&&state.finished ? 'resultsScreen' : 'startScreen');
+  document.getElementById(target).classList.remove('hidden');
+  if(sec==='cards') renderCards();
+  if(sec==='lessons') lessonsFrom='start';
+  setTab(sec); window.scrollTo(0,0);
+}
+
+/* ---------- Index cards: shared ---------- */
+const CARD_DOMS={mind:"Mindset",gov:"Governance",risk:"Risk Management",prog:"Security Program",inc:"Incident Management"};
+let cardMode='bluf', cardDom='all';
+function setCardMode(m){
+  cardMode=m;
+  document.getElementById('tabBluf').classList.toggle('on',m==='bluf');
+  document.getElementById('tabFlash').classList.toggle('on',m==='flash');
+  document.getElementById('blufView').classList.toggle('hidden',m!=='bluf');
+  document.getElementById('flashView').classList.toggle('hidden',m!=='flash');
+  renderCards();
+}
+function renderCards(){
+  const box=document.getElementById('cardDomains'); box.innerHTML='';
+  [['all','All']].concat(Object.entries(CARD_DOMS)).forEach(([k,lbl])=>{
+    const b=document.createElement('button'); b.className='chip'+(cardDom===k?' on':''); b.textContent=lbl;
+    b.onclick=()=>{cardDom=k; renderCards();}; box.appendChild(b);
+  });
+  if(cardMode==='bluf') renderBluf(); else rebuildDeck();
+}
+
+/* ---------- BLUF cards ---------- */
+let blufList=[], blufIdx=0;
+function renderBluf(){
+  blufList=BLUF.map((c,i)=>({...c,i})).filter(c=>cardDom==='all'||c.d===cardDom);
+  const g=document.getElementById('blufGrid'); g.innerHTML='';
+  blufList.forEach((c,pos)=>{
+    const b=document.createElement('button'); b.className='bluf';
+    b.innerHTML=`<span class="bd">${CARD_DOMS[c.d]}</span><span class="bt">${c.t}</span><span class="bh">${c.p.length} points · open</span>`;
+    b.onclick=()=>openBluf(pos); g.appendChild(b);
+  });
+}
+function openBluf(pos){
+  blufIdx=pos; const c=blufList[pos];
+  document.getElementById('mDom').textContent=CARD_DOMS[c.d];
+  document.getElementById('mTitle').textContent=c.t;
+  document.getElementById('mPoints').innerHTML=c.p.map(p=>'<li>'+p+'</li>').join('');
+  document.getElementById('blufModal').classList.remove('hidden');
+}
+function stepBluf(n){ openBluf((blufIdx+n+blufList.length)%blufList.length); }
+function closeBluf(){ document.getElementById('blufModal').classList.add('hidden'); }
+
+/* ---------- Flashcards ---------- */
+let deck=[], deckIdx=0, known=new Set();
+(function loadKnown(){ try{ const s=safeStore.get('cism.known'); if(s) known=new Set(JSON.parse(s)); }catch(e){} })();
+function saveKnown(){ safeStore.set('cism.known', JSON.stringify([...known])); }
+function rebuildDeck(){
+  const hide=document.getElementById('hideKnown').checked;
+  deck=CARDS.map((c,i)=>({...c,i})).filter(c=>(cardDom==='all'||c.d===cardDom)&&(!hide||!known.has(c.i)));
+  deckIdx=0; showCard();
+}
+function showCard(){
+  const empty=document.getElementById('deckEmpty'), fc=document.getElementById('flashCard');
+  fc.classList.remove('flipped');
+  if(!deck.length){ empty.classList.remove('hidden'); fc.classList.add('hidden'); document.getElementById('deckPos').textContent='0 / 0'; return; }
+  empty.classList.add('hidden'); fc.classList.remove('hidden');
+  const c=deck[deckIdx];
+  document.getElementById('fType').textContent = c.k==='tf' ? 'True or false?' : 'Short answer';
+  document.getElementById('fQ').textContent=c.q;
+  const fa=document.getElementById('fA'); fa.textContent=c.a;
+  fa.className='fa'+(c.k==='tf'?(c.a==='True'?' tf-true':' tf-false'):'');
+  document.getElementById('fW').textContent=c.w||'';
+  document.getElementById('deckPos').textContent=(deckIdx+1)+' / '+deck.length;
+  document.getElementById('deckDom').textContent=CARD_DOMS[c.d]+(known.has(c.i)?' · known':'');
+  const scope=CARDS.filter(c=>cardDom==='all'||c.d===cardDom);
+  document.getElementById('deckKnown').textContent='Known '+scope.filter(c=>known.has(CARDS.indexOf(c))).length+' / '+scope.length;
+}
+function flipCard(){ document.getElementById('flashCard').classList.toggle('flipped'); }
+function deckStep(n){ if(!deck.length) return; deckIdx=(deckIdx+n+deck.length)%deck.length; showCard(); }
+function markCard(got){
+  if(!deck.length) return;
+  const c=deck[deckIdx];
+  if(got) known.add(c.i); else known.delete(c.i);
+  saveKnown();
+  if(document.getElementById('hideKnown').checked && got){ rebuildDeck(); deckIdx=Math.min(deckIdx,Math.max(0,deck.length-1)); showCard(); }
+  else deckStep(1);
+}
+function shuffleDeck(){ deck=shuffle(deck); deckIdx=0; showCard(); }
+function resetKnown(){ if(confirm('Clear all "got it" marks for flashcards?')){ known=new Set(); saveKnown(); rebuildDeck(); } }
+
+/* keyboard for cards */
+document.addEventListener('keydown',e=>{
+  if(!document.getElementById('blufModal').classList.contains('hidden')){
+    if(e.key==='Escape') closeBluf(); if(e.key==='ArrowRight') stepBluf(1); if(e.key==='ArrowLeft') stepBluf(-1); return;
+  }
+  if(document.getElementById('cardsScreen').classList.contains('hidden') || cardMode!=='flash') return;
+  if(e.key===' '){ e.preventDefault(); flipCard(); }
+  if(e.key==='ArrowRight') deckStep(1);
+  if(e.key==='ArrowLeft') deckStep(-1);
+  if(e.key.toLowerCase()==='g') markCard(true);
+  if(e.key.toLowerCase()==='a') markCard(false);
+});
+
 /* ---------- Per-option rationales ---------- */
 function rationaleHtml(q){
   if(!q.r) return '';
@@ -2623,7 +2917,7 @@ function rationaleHtml(q){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION="6.1", APP_BUILD="2026-09-09";
+const APP_VERSION="7.0", APP_BUILD="2026-09-09";
 function initVersion(){
   const pages=document.querySelectorAll('.lesson-page').length;
   document.getElementById('verNum').textContent=APP_VERSION;
