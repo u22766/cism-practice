@@ -1,0 +1,632 @@
+[
+ {
+  "d": "mind",
+  "k": "tf",
+  "q": "The information security manager accepts residual risk on behalf of the business.",
+  "a": "False",
+  "w": "The business or process owner accepts risk; security advises."
+ },
+ {
+  "d": "mind",
+  "k": "qa",
+  "q": "A high risk is identified. What is the default first management step?",
+  "a": "Assess it, then report to the risk owner for a treatment decision.",
+  "w": "Implementing a control first bypasses the owner's decision."
+ },
+ {
+  "d": "mind",
+  "k": "tf",
+  "q": "When damage is actively spreading, containment comes before analysis.",
+  "a": "True",
+  "w": "This is the deliberate exception to assess-before-act."
+ },
+ {
+  "d": "mind",
+  "k": "qa",
+  "q": "Which words in a stem change the credited answer?",
+  "a": "FIRST, BEST, MOST, PRIMARY, GREATEST.",
+  "w": "Several options may be valid; only one fits the qualifier."
+ },
+ {
+  "d": "mind",
+  "k": "tf",
+  "q": "The longest, most complete-sounding option is usually correct.",
+  "a": "False",
+  "w": "Options are length-balanced; length is not a signal."
+ },
+ {
+  "d": "mind",
+  "k": "qa",
+  "q": "Two options remain. How do you choose?",
+  "a": "The one naming the mechanism that actually produces the qualifier's result — the management answer.",
+  "w": "Precision beats generic safety."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "Information security governance is primarily driven by?",
+  "a": "Business strategy.",
+  "w": "Regulation and technology are constraints, not the driver."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "FIRST step in developing a security strategy?",
+  "a": "Review the business objectives.",
+  "w": "Strategy exists to support the business."
+ },
+ {
+  "d": "gov",
+  "k": "tf",
+  "q": "Regulatory requirements are the primary driver of security governance.",
+  "a": "False",
+  "w": "They are a constraint governance must address; business strategy drives it."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "Implementing governance FIRST requires?",
+  "a": "Approved security policies.",
+  "w": "Policy is the vehicle for management intent; awareness, teams, and architecture follow."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "Who approves the risk appetite?",
+  "a": "Senior management / the board.",
+  "w": "A strategic decision, not a security one."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "Who is ultimately accountable for protecting information assets?",
+  "a": "The board and senior management.",
+  "w": "Accountability cannot be delegated to the CISO."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "The manager's PRIMARY governance responsibility?",
+  "a": "Developing the security strategy.",
+  "w": "Senior management approves it."
+ },
+ {
+  "d": "gov",
+  "k": "tf",
+  "q": "The security strategy is the basis for the security architecture.",
+  "a": "False",
+  "w": "Policies are the basis for architecture; strategy comes before policy."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "Purpose of an information security strategy?",
+  "a": "Express the program's goals and the plan to achieve them.",
+  "w": "Too high-level for control configuration or user mandates."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "MOST important benefit of effective governance?",
+  "a": "Keeping business disruption within acceptable levels.",
+  "w": "Compliance, prioritization, and ROI are secondary."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "Policy · standard · procedure · guideline — in one line each?",
+  "a": "Intent · measurable requirement · step-by-step · advisory.",
+  "w": "A 14-character password rule is a standard."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "MOST important consideration when developing policies?",
+  "a": "They are based on a threat profile.",
+  "w": "Keeps protection proportionate to what actually threatens the business."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "MOST important requirement for gaining management commitment?",
+  "a": "Demonstrate support for desired business outcomes.",
+  "w": "More persuasive than loss scenarios or legal due care."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "What MOST inhibits governance implementation?",
+  "a": "Lack of high-level sponsorship.",
+  "w": "Budget and priority conflicts are consequences of it."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "BEST evidence of senior management commitment?",
+  "a": "Allocation of adequate resources and active participation.",
+  "w": "A signature on a policy is symbolic."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "What MOST makes assignment of security roles effective?",
+  "a": "The assignments match existing proficiencies.",
+  "w": "Not management support — capability determines effectiveness."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "Who reviews and confirms a system's approved-user list?",
+  "a": "The data owner.",
+  "w": "The manager coordinates; administrators provision."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "What belongs in a security report to the board?",
+  "a": "Risk trends relative to appetite, tied to business objectives.",
+  "w": "Vulnerability counts and tool inventories are operational."
+ },
+ {
+  "d": "gov",
+  "k": "qa",
+  "q": "Name the six governance outcomes.",
+  "a": "Strategic alignment, risk management, value delivery, resource management, performance measurement, assurance process integration.",
+  "w": "Optimized investment = value delivery."
+ },
+ {
+  "d": "gov",
+  "k": "tf",
+  "q": "KGIs measure process performance; KPIs measure goal achievement.",
+  "a": "False",
+  "w": "Reversed: KGIs = goals achieved; KPIs = process performance."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "Overall objective of risk management?",
+  "a": "Manage risk to an acceptable level.",
+  "w": "Not eliminate, not lowest possible."
+ },
+ {
+  "d": "risk",
+  "k": "tf",
+  "q": "Risk should be reduced to the lowest possible level.",
+  "a": "False",
+  "w": "That is costly and restrictive; acceptable is the target."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "A missing critical patch is a threat, vulnerability, risk, or impact?",
+  "a": "Vulnerability.",
+  "w": "A weakness that a threat can exploit."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "Disruption from a DDoS attack is which type of risk?",
+  "a": "Operational risk.",
+  "w": "Risk arising from operations; not systemic or intrinsic."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "Residual risk is determined by?",
+  "a": "A risk assessment.",
+  "w": "Vulnerability or threat analysis alone cannot determine risk."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "BEST process for assessing the existing level of risk?",
+  "a": "A security review.",
+  "w": "Vulnerability assessment is only one part of it."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "When is a risk assessment complete?",
+  "a": "After identification, analysis, and evaluation against appetite and tolerance.",
+  "w": "Analysis without evaluation is unfinished."
+ },
+ {
+  "d": "risk",
+  "k": "tf",
+  "q": "Risk analysis should weight likelihood more heavily than the size of loss.",
+  "a": "False",
+  "w": "Both elements must be considered."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "Discovered vulnerabilities should be evaluated for?",
+  "a": "Threat, impact, and cost of mitigation.",
+  "w": "No credible threat or little impact may mean no action."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "Who accepts residual risk?",
+  "a": "The business / process owner.",
+  "w": "Not the security manager, not audit."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "Whether risk has been reduced to an acceptable level is determined by?",
+  "a": "Organizational requirements.",
+  "w": "A management decision, not standards or IS requirements."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "Residual risk is within appetite. Next step?",
+  "a": "Formally accept and monitor it.",
+  "w": "More controls waste resources."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "A unit refuses to fund a control for risk beyond appetite. You should?",
+  "a": "Escalate with a business impact analysis.",
+  "w": "Neither force the control nor accept the risk yourself."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "How does the program address changes in risk?",
+  "a": "Continuous monitoring processes.",
+  "w": "Baselines, classification, and policies don't detect change."
+ },
+ {
+  "d": "risk",
+  "k": "tf",
+  "q": "Policies should be changed whenever risk changes.",
+  "a": "False",
+  "w": "Standards and procedures change; policy is high-level intent."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "What MOST likely triggers a review of a security standard?",
+  "a": "Results of periodic risk assessments.",
+  "w": "Not changes in procedures or department heads."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "Information classification is based on?",
+  "a": "The consequences of compromise — sensitivity and criticality.",
+  "w": "Not on risk."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "How should regulatory compliance be treated?",
+  "a": "As another risk to be managed.",
+  "w": "Priority is a management decision based on enforcement, sanctions, and cost."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "What does cyber insurance NOT transfer?",
+  "a": "Reputational impact and accountability.",
+  "w": "Only part of the financial impact is transferred."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "What can an indemnity agreement do?",
+  "a": "Reduce financial impact through compensation.",
+  "w": "Legal responsibility cannot be transferred."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "When should a new third party be risk-assessed?",
+  "a": "Before the contract is signed.",
+  "w": "Leverage disappears after signing."
+ },
+ {
+  "d": "risk",
+  "k": "qa",
+  "q": "Compare a control's cost against risk using?",
+  "a": "Total cost of ownership over its life cycle.",
+  "w": "Purchase price omits operation, maintenance, retirement."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "MOST important factor for a successful security program?",
+  "a": "Executive management commitment.",
+  "w": "Policies and communication fail without it."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "The three perennial program challenges?",
+  "a": "Management support, funding, staffing.",
+  "w": "All are management problems."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "MOST important prerequisite to asset classification?",
+  "a": "Impact assessment.",
+  "w": "It establishes criticality and sensitivity."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "FIRST step in a data loss prevention initiative?",
+  "a": "Classify the data.",
+  "w": "You can only protect what you have identified."
+ },
+ {
+  "d": "prog",
+  "k": "tf",
+  "q": "Technology is itself a control.",
+  "a": "False",
+  "w": "Technology implements controls; it must be configured, operated, and verified."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "Restoring from backup after corruption is which control type?",
+  "a": "Corrective.",
+  "w": "Preventive stops, detective finds, deterrent discourages."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "A SIEM falls into which control-technology category?",
+  "a": "Management support technology.",
+  "w": "Native = built-in; supplemental = add-on such as IDS."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "Countermeasure versus general control?",
+  "a": "A countermeasure is targeted at a specific threat; a general control is broader and costlier.",
+  "w": "A budget-constrained specific threat wants a countermeasure."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "How is control effectiveness determined?",
+  "a": "By testing the control against its objective.",
+  "w": "Existence and documentation prove nothing."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "Preventive control objectives should be based on?",
+  "a": "Risk levels aligned with the risk appetite.",
+  "w": "Not industry standards or monitoring tools."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "BEST metric for awareness-training effectiveness?",
+  "a": "The number of reported incidents.",
+  "w": "An increase shows staff are paying attention."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "What is defined FIRST in a metrics program?",
+  "a": "The decisions the metrics must support.",
+  "w": "Tools, frequency, and format follow."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "In which phase are program metrics established?",
+  "a": "The design phase.",
+  "w": "Initiation is too early; testing is too late."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "Metrics that support governance are which type?",
+  "a": "Strategic — expense tracked against projected outcomes.",
+  "w": "Operational and tactical metrics serve other levels."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "BEST control against privilege creep?",
+  "a": "Periodic access recertification by owners.",
+  "w": "Passwords and encryption don't remove entitlements."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "Most reliable way to remove contractor access when no longer needed?",
+  "a": "Predetermined automatic expiration dates.",
+  "w": "Manager notifications cannot be relied on."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "MOST effective at preventing internal users from modifying sensitive data?",
+  "a": "Role-based access control.",
+  "w": "Logs are detective; background checks are predictive."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "MOST effective at preventing operating-system weaknesses?",
+  "a": "Patch management.",
+  "w": "Change and configuration management control change, not code flaws."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "Where should an IDS for internet traffic be placed?",
+  "a": "On a screened subnet.",
+  "w": "Outside the firewall it alerts on traffic that never gets in."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "MOST important consideration when implementing an IDS?",
+  "a": "Tuning.",
+  "w": "Untuned: false positives or missed attacks."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "MOST important contractual element when outsourcing security administration?",
+  "a": "The service level agreement.",
+  "w": "It encompasses termination, liability, and penalties."
+ },
+ {
+  "d": "prog",
+  "k": "qa",
+  "q": "Records retention should be based on?",
+  "a": "Regulatory, legal, and business requirements.",
+  "w": "Storage capacity is secondary."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "A database breach is reported. FIRST step?",
+  "a": "Confirm the incident.",
+  "w": "Notification, containment, and law enforcement follow confirmation."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "Order of steps after containment?",
+  "a": "Eradicate → recover → review.",
+  "w": "Recovering before eradicating reinfects."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "PRIMARY reason for triage?",
+  "a": "To prioritize limited resources.",
+  "w": "Triage does not detect or prevent incidents."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "MOST useful input for determining incident severity?",
+  "a": "Managers from the affected operational areas.",
+  "w": "They understand the impact better than the response team."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "Highest priority when responding to any incident?",
+  "a": "Life safety.",
+  "w": "Before continuity, recovery, or messaging."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "MOST important quality of an incident handler?",
+  "a": "Ability to cope with stress.",
+  "w": "Procedures may not exist for a novel incident."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "MOST significant challenge developing an incident management plan?",
+  "a": "Lack of management support and organizational consensus.",
+  "w": "Technical and metric challenges are solvable."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "How does incident management PRIMARILY add value?",
+  "a": "By optimizing risk management efforts.",
+  "w": "It balances prevention, containment, and restoration."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "A server is being remotely controlled. Which action contains it?",
+  "a": "Disconnect it from the network and block the controlling address.",
+  "w": "Analysis and escalation do not remove the adversary."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "An intruder gained root. BEST assurance of integrity?",
+  "a": "Rebuild the system from original media.",
+  "w": "Root-level changes may be impossible to find."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "Legally most defensible forensic copy?",
+  "a": "A bit-by-bit image.",
+  "w": "File copies miss slack space and deleted data."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "RTO · RPO · SDO · AIW — one phrase each?",
+  "a": "Time to restore · max data loss · minimum service level · max tolerable outage.",
+  "w": "The SDO helps define the RTO, not the reverse."
+ },
+ {
+  "d": "inc",
+  "k": "tf",
+  "q": "The RTO must be no longer than the acceptable interruption window.",
+  "a": "True",
+  "w": "Recovery must finish before losses become unacceptable."
+ },
+ {
+  "d": "inc",
+  "k": "tf",
+  "q": "Changing the RPO cannot affect whether the RTO is attainable.",
+  "a": "False",
+  "w": "A stricter RPO lengthens data restoration and can break the RTO."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "Hot, warm, or cold site is chosen by?",
+  "a": "The recovery time objective balanced against cost.",
+  "w": "Faster recovery costs more."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "Build an alternate facility or rent a hot site — decided by?",
+  "a": "Cost, and the site not sharing the primary's environmental risk.",
+  "w": "Not loss expectancy or daily loss cost."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "What belongs in the incident response team manual?",
+  "a": "Severity criteria — things that stay stable.",
+  "w": "Phone lists and backup tables change too often."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "Most common failure of disaster recovery plans?",
+  "a": "Stale operational information.",
+  "w": "Hence regular review of plan content, not just exercises."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "When is a DR test successful?",
+  "a": "When critical business processes are duplicated.",
+  "w": "Meeting the RTO alone is not the measure."
+ },
+ {
+  "d": "inc",
+  "k": "qa",
+  "q": "Ultimate goal of a post-incident review?",
+  "a": "To improve the response process.",
+  "w": "Not evidence, not blame, not merely a management report."
+ }
+]

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CISM Practice Exam</title>
+<meta name="description" content="Unofficial CISM practice exam: 363 original scenario questions with per-option rationales, timed simulation, domain drills, lessons, and flip-to-reveal index cards. Dark theme included. Runs entirely in the browser.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0f172a">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CISM">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f172a'/%3E%3Ctext x='32' y='41' font-family='Georgia,serif' font-size='26' fill='%23ffffff' text-anchor='middle'%3ECISM%3C/text%3E%3C/svg%3E">
+<style>/*__STYLES__*/</style>
+</head>
+<body>
+
+<header class="bar" id="topbar">
+  <div class="bar-inner">
+    <div class="brand">
+      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v8.0</span>
+    </div>
+    <nav class="tabs" id="mainNav" aria-label="Sections">
+      <button class="tab on" data-nav="exam" onclick="goTo('exam')">Exam</button>
+      <button class="tab" data-nav="lessons" onclick="goTo('lessons')">Lessons</button>
+      <button class="tab" data-nav="cards" onclick="goTo('cards')">Cards</button>
+      <button class="tab" data-nav="history" onclick="goTo('history')">History</button>
+    </nav>
+    <div class="bar-right">
+      <div class="bar-meta hidden" id="barMeta">
+        <span class="counter" id="counter">Question 1 of 50</span>
+        <span class="timer" id="timer">240:00</span>
+      </div>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark theme" title="Toggle dark theme">☾</button>
+    </div>
+  </div>
+  <div class="progress"><i id="progbar"></i></div>
+</header>
+
+<main>
+<div class="wrap">
+
+  <!-- ============ START SCREEN ============ -->
+  <section id="startScreen">
+    <div class="card">
+      <div id="resumeBanner" class="resume hidden">
+        <div><b id="resumeTitle"></b><span id="resumeSub"></span></div>
+        <div class="btns"><button class="btn" onclick="resumeExam()">Resume</button><button class="btn ghost" onclick="discardProgress()">Discard</button></div>
+      </div>
+      <div class="hero">
+        <div class="eyebrow">Certified Information Security Manager</div>
+        <h1>Practice Exam</h1>
+        <p class="lede">A 363-question bank written to ISACA item conventions — short stems, balanced options, all four choices rationalized — weighted to the real four-domain blueprint and updated for the 2024 manual — four non-overlapping 50-question mocks, domain drills, and a full-length 150-question timed simulation — plus lessons and flip-to-reveal index cards. The goal isn't recall — it's training the manager's judgment over the practitioner's reflex.</p>
+      </div>
+
+      <div class="rule"></div>
+
+      <div class="facts" aria-label="Real exam format">
+        <div class="fact"><b>150</b><span>Real exam Qs</span></div>
+        <div class="fact"><b>4 hrs</b><span>Real time limit</span></div>
+        <div class="fact"><b>450</b><span>Pass (of 800)</span></div>
+        <div class="fact"><b>4</b><span>Domains</span></div>
+      </div>
+
+      <div class="setup">
+        <h2>Question set</h2>
+        <div class="opts-row">
+          <button class="choice on" data-set="full" onclick="pickSet(this,'full')">
+            <div class="t">Full simulation — 150 questions</div>
+            <div class="d">The real format on a 4-hour clock; weighted draw from all <span data-banksize>200</span></div>
+          </button>
+          <button class="choice" data-set="quick" onclick="pickSet(this,'quick')">
+            <div class="t">Quick set — 20 questions</div>
+            <div class="d">Random weighted sample from the full bank</div>
+          </button>
+          <button class="choice" data-set="A" onclick="pickSet(this,'A')">
+            <div class="t">Mock A — <span data-mocksize>50</span> questions</div>
+            <div class="d">Fixed set, weighted to the blueprint</div>
+          </button>
+          <button class="choice" data-set="B" onclick="pickSet(this,'B')">
+            <div class="t">Mock B — <span data-mocksize>50</span> questions</div>
+            <div class="d">Fixed set — no overlap with A</div>
+          </button>
+          <button class="choice" data-set="C" onclick="pickSet(this,'C')">
+            <div class="t">Mock C — <span data-mocksize>50</span> questions</div>
+            <div class="d">Fixed set — no overlap with A or B</div>
+          </button>
+          <button class="choice" data-set="D" onclick="pickSet(this,'D')">
+            <div class="t">Mock D — <span data-mocksize>50</span> questions</div>
+            <div class="d">Fixed set — no overlap with A, B, or C</div>
+          </button>
+          <button class="choice" data-set="missed" id="setMissed" onclick="pickSet(this,'missed')">
+            <div class="t">Retry missed &amp; guessed — <span data-missedcount>0</span></div>
+            <div class="d">Wrong answers and lucky guesses, until you clear them</div>
+          </button>
+          <button class="choice" data-set="drill" onclick="pickSet(this,'drill')">
+            <div class="t">Domain drill</div>
+            <div class="d">Every question from one domain, back to back</div>
+          </button>
+        </div>
+        <div class="opts-row" id="drillRow" style="margin-top:12px;display:none">
+          <button class="choice" data-drill="gov" onclick="pickDrill(this,'gov')">
+            <div class="t">Governance</div>
+            <div class="d"><span data-drillcount="gov">35</span> questions · 17% of the real exam</div>
+          </button>
+          <button class="choice" data-drill="risk" onclick="pickDrill(this,'risk')">
+            <div class="t">Risk Management</div>
+            <div class="d"><span data-drillcount="risk">42</span> questions · 20% of the real exam</div>
+          </button>
+          <button class="choice on" data-drill="prog" onclick="pickDrill(this,'prog')">
+            <div class="t">Security Program</div>
+            <div class="d"><span data-drillcount="prog">64</span> questions · 33% of the real exam</div>
+          </button>
+          <button class="choice" data-drill="inc" onclick="pickDrill(this,'inc')">
+            <div class="t">Incident Management</div>
+            <div class="d"><span data-drillcount="inc">59</span> questions · 30% of the real exam</div>
+          </button>
+        </div>
+
+        <h2>Mode</h2>
+        <div class="opts-row">
+          <button class="choice on" data-mode="exam" onclick="pickMode(this,'exam')">
+            <div class="t">Exam mode</div>
+            <div class="d">Timed. Flag &amp; navigate freely. Results at the end.</div>
+          </button>
+          <button class="choice" data-mode="practice" onclick="pickMode(this,'practice')">
+            <div class="t">Practice mode</div>
+            <div class="d">Untimed. Explanation right after each answer.</div>
+          </button>
+        </div>
+      </div>
+
+      <button class="btn wide" onclick="startExam()">Start exam</button>
+      <div class="hero-actions"><button class="btn ghost" onclick="goTo('lessons')">Lessons</button><button class="btn ghost" onclick="goTo('cards')">Index cards</button></div>
+
+      <div class="domain-legend">
+        <span><b>Governance</b> 17%</span>
+        <span><b>Risk Management</b> 20%</span>
+        <span><b>Security Program</b> 33%</span>
+        <span><b>Incident Management</b> 30%</span>
+      </div>
+      <p class="disclaimer">Unofficial, independent study aid — not affiliated with, endorsed by, or sourced from ISACA. All questions are original and are not real exam items. CISM is a registered trademark of ISACA. The real CISM uses a scaled 200–800 score (450 to pass), so the percentage here is a study signal, not an official score. Aim for ~70%+ overall and in every domain before test day.</p>
+      <div class="verfoot">
+        <div class="verline"><b>Version <span id="verNum">8.0</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
+        <button class="linkbtn" onclick="toggleChangelog()">Version history</button>
+        <div id="changelog" class="changelog hidden">
+          <div><b>v8.0 — September 10, 2026</b>Bank extended to 363. Mocks and the simulation are now built concept-aware, so a set never contains two questions on the same idea. New per question: an "I'm guessing" toggle (right-while-guessing answers join the retry set as lucky guesses) and timing (average seconds by domain, slow-question filter in review). Flag any question for author review and export the list. Flashcards move to spaced repetition — boxes at 1, 3, 7, 14, 30 days with a due-only default. Installable as an app and works offline.</div>
+          <div><b>v7.1 — September 9, 2026</b>Progress is now remembered. An interrupted exam autosaves (answers, flags, position, clock) and offers Resume on return. Every finished attempt is logged to a new History section with a score trend chart (overall or per domain), a target line, and per-attempt domain bars. Questions you miss accumulate in a "Retry missed" set until you get them right. Export and import progress as a file. All stored in the browser only.</div>
+          <div><b>v7.0 — September 9, 2026</b>Section navigation (Exam · Lessons · Cards) in the header, hidden during a live exam. Dark theme toggle that follows the device preference and is remembered. New Index Cards section: 31 bottom-line cards that pop open to a quick-read summary, and 90 flip-to-reveal flashcards (short answer and true/false) with got-it tracking, domain filters, shuffle, and hide-known. Keyboard: space flips, arrows navigate, G/A mark.</div>
+          <div><b>v6.1 — September 9, 2026</b>Deployment release: served as index.html for GitHub Pages, page metadata and favicon added, unofficial-status disclaimer added, version history tidied. No question or lesson changes.</div>
+          <div><b>v6.0 — September 9, 2026</b>Bank extended to 264 questions, adding a minority of technical control-selection items in the style the exam actually uses. One item corrected (the criterion for a successful DR test). Mock and drill sizes are now computed from the bank. Lesson 5 adds "Where the shortcuts fail" — a dozen credited answers that contradict common prep heuristics; Lessons 3 and 4 add directly tested facts.</div>
+          <div><b>v5.0 — September 9, 2026</b>Entire 200-question bank rewritten to ISACA item conventions: one-sentence stems with a single capitalized qualifier, short parallel length-balanced options, all-plausible distractors, sentence-completion formatting, and consistent terminology. Every item now rationalizes all four options, shown after answering in practice mode and in answer review. Lesson 5 gains an anatomy-of-an-item section. Mock sets and domain counts unchanged.</div>
+          <div><b>v4.0 — September 8, 2026</b>Bank expanded to 200 questions, adding the 2024 Review Manual topics: AI ethics and decision-making bias, Digital Trust Ecosystem Framework, threat intelligence and modeling, shadow IT, AI-enabled supply chain. Mock D added; full simulation is now a weighted 150-question draw. Lessons 1–4 deepened (governance hierarchy, six outcomes, control taxonomy, recovery terms, test progression); answer-selection heuristics and an outdated-materials warning added to Lesson 5; new Lesson 6 on the 2024 changes. Version stamp and history added.</div>
+          <div><b>v3.0</b>Lessons section added — the mindset, one lesson per domain, and exam technique — with one-tap drill launchers and lesson links beside weak domains on the results screen.</div>
+          <div><b>v2.0</b>Bank expanded to 150 questions. Mocks A–C (non-overlapping), full 150-question simulation at real 96-second pacing, quick 20-question set, domain drills, per-run answer-option shuffling, and domain filters in answer review.</div>
+          <div><b>v1.0</b>Initial release: 50 questions, exam and practice modes, timer, flag-for-review, question navigator, and domain-weighted results.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LESSONS SCREEN ============ -->
+  <section id="lessonsScreen" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <h2 style="margin:0;font-family:var(--serif);font-weight:600;font-size:1.4rem">Lessons</h2>
+        <button class="btn ghost" onclick="leaveLessons()">Back</button>
+      </div>
+      <div class="lesson-nav">
+        <button class="lchip on" data-lesson="0" onclick="showLesson(0)">0 · Mindset</button>
+        <button class="lchip" data-lesson="1" onclick="showLesson(1)">1 · Governance</button>
+        <button class="lchip" data-lesson="2" onclick="showLesson(2)">2 · Risk</button>
+        <button class="lchip" data-lesson="3" onclick="showLesson(3)">3 · Program</button>
+        <button class="lchip" data-lesson="4" onclick="showLesson(4)">4 · Incident</button>
+        <button class="lchip" data-lesson="5" onclick="showLesson(5)">5 · Exam technique</button>
+        <button class="lchip" data-lesson="6" onclick="showLesson(6)">6 · 2024 updates</button>
+      </div>
+
+      <!-- ======== Lesson 0: Mindset ======== -->
+      <div class="lesson-page on" id="lesson-0">
+        <div class="lesson-head"><h2>The CISM Mindset</h2><span class="wpill">Read this first</span></div>
+        <p>CISM does not test whether you can do security work. It tests whether, given a scenario, you make the decision an <em>information security manager</em> would make. Questions are deliberately written so two answers look technically defensible — and the credited one is always the governance-minded, business-aligned choice.</p>
+
+        <h3>The five questions to ask on every scenario</h3>
+        <ol>
+          <li><strong>What is the business objective?</strong> Revenue, uptime, compliance, trust — security exists to protect these.</li>
+          <li><strong>Who owns the decision?</strong> Board, senior management, asset owner, steering committee. Rarely you personally.</li>
+          <li><strong>What is the first management step?</strong> The default sequence is <em>assess → communicate → prioritize → document → act</em>.</li>
+          <li><strong>What is the cost–benefit logic?</strong> Control cost versus expected loss and business impact.</li>
+          <li><strong>What process is supposed to be followed?</strong> Policy, IR plan, BIA, change control, contract, SLA.</li>
+        </ol>
+        <div class="callout principle"><span class="cl">Principle</span>If your chosen answer skips steps 1–4 and jumps straight to implementing the technical thing, it is usually wrong.</div>
+
+        <h3>Reading the answer options</h3>
+        <ul>
+          <li>Options containing <em>align with business objectives</em>, <em>risk assessment first</em>, <em>business case</em>, <em>senior management approval</em>, or <em>escalate to the risk owner</em> are frequently correct.</li>
+          <li>Options where you act unilaterally, fix something immediately without assessment, or make a decision that belongs to the business are frequently wrong — even when they are technically sound.</li>
+          <li>Watch the qualifier: <strong>FIRST</strong>, <strong>BEST</strong>, <strong>MOST</strong>, <strong>PRIMARY</strong>. Several options may be things you would eventually do; only one is the credited first or best.</li>
+        </ul>
+
+        <h3>The one deliberate exception</h3>
+        <p>When the scenario states that damage is <em>actively spreading right now</em> — ransomware encrypting files, a worm propagating — containment comes before analysis. Stop the bleeding, then investigate. The exam rewards judgment, not a memorized rule, so read whether the threat is active or historical.</p>
+
+        <div class="callout trap"><span class="cl">Traps for CISSP holders</span>
+        The fix-it reflex (remediate before the owner decides) · assuming you are the decision-maker (the asset owner accepts risk, not security) · deploying controls without a business case · answering in ISC² vocabulary instead of ISACA's · treating governance questions as technology questions.</div>
+      </div>
+
+      <!-- ======== Lesson 1: Governance ======== -->
+      <div class="lesson-page" id="lesson-1">
+        <div class="lesson-head"><h2>Information Security Governance</h2><span class="wpill">Domain 1 · 17%</span></div>
+        <p>Governance is about <strong>direction, authority, and accountability</strong> — never about controls. If a Domain 1 question tempts you with a technical answer, it is almost certainly wrong.</p>
+
+        <h3>Governance vs. management</h3>
+        <p>Governance <em>directs, monitors, and evaluates</em>: it sets risk appetite, approves strategy, and checks that outcomes match intent. Management <em>plans, builds, and runs</em>: it executes the program within that direction. Keep the layers straight — many questions test exactly this boundary.</p>
+
+        <h3>Strategy</h3>
+        <ul>
+          <li>The <strong>primary input</strong> to the security strategy is the organization's business objectives and strategy. Threats, benchmarks, and technology inform execution, not direction.</li>
+          <li>Strategy is reviewed <strong>periodically and on significant change</strong> — a merger, a new market, a new regulation each trigger realignment.</li>
+          <li>In multiple jurisdictions, <strong>legal and regulatory requirements</strong> are a dominant strategy driver: they are non-negotiable boundaries.</li>
+        </ul>
+
+        <h3>Structures and accountability</h3>
+        <ul>
+          <li>The <strong>board and senior management</strong> are ultimately accountable for information security and approve risk appetite. Accountability cannot be delegated to the CISO.</li>
+          <li>A <strong>steering committee</strong> aligns security with business needs and prioritizes across stakeholders.</li>
+          <li>A <strong>security charter</strong> formally establishes the program's mandate, authority, and scope with senior endorsement.</li>
+          <li>The CISO reporting <strong>outside IT</strong> preserves independence from delivery pressure; <strong>internal audit stays independent of security</strong> to avoid self-review.</li>
+          <li>The best evidence of senior commitment is <strong>resources and active participation</strong> — not signatures on documents.</li>
+        </ul>
+
+        <h3>The document hierarchy</h3>
+        <div class="terms">
+          <div class="term"><b>Policy</b><span>High-level statement of management intent. Mandatory.</span></div>
+          <div class="term"><b>Standard</b><span>Mandatory, measurable specifics that support policy (e.g., 14-character minimum passwords).</span></div>
+          <div class="term"><b>Procedure</b><span>Step-by-step instructions for performing a task.</span></div>
+          <div class="term"><b>Guideline</b><span>Advisory good practice. Not mandatory.</span></div>
+        </div>
+        <p>Policy <strong>exceptions</strong> are risk decisions: assessed, approved at the right level, time-bound, documented, and reviewed at expiry. Expired-but-active exceptions are a governance failure.</p>
+
+        <h3>Reporting upward</h3>
+        <p>Boards want <strong>trends in risk posture relative to appetite, tied to business objectives</strong> — not vulnerability counts or tool inventories. A balanced scorecard links security measures to strategy across multiple perspectives.</p>
+
+                <h3>The governance hierarchy</h3>
+        <p>Direction flows top-down; feedback flows bottom-up. Strategy is <em>formulated</em> in the top five layers and <em>implemented</em> in the bottom three. The exam tests that each layer derives from the one above — policy from strategy, never from tools or existing procedures.</p>
+        <div class="terms">
+          <div class="term"><b>1 · Vision → 2 · Mission</b><span>Top-level management. Why the organization exists and what it aims to become.</span></div>
+          <div class="term"><b>3 · Objectives → 4 · Strategy → 5 · Policy</b><span>Middle management. Objectives set targets; strategy is the route; policy states management's intent for how security will support it.</span></div>
+          <div class="term"><b>6 · Program → 7 · Budgets → 8 · Procedures</b><span>Lower-level management. Implementation: the program executes strategy, budgets fund it, procedures tell people exactly what to do.</span></div>
+          <div class="term"><b>Why "policy FIRST"</b><span>Governance implementation requires approved policy before awareness, response teams, or architecture — those all exist to fulfill policy.</span></div>
+        </div>
+
+        <h3>The six governance outcomes</h3>
+        <p>Know these as a set: <strong>strategic alignment</strong>, <strong>risk management</strong>, <strong>value delivery</strong> (investment optimized to support objectives), <strong>resource management</strong>, <strong>performance measurement</strong>, and <strong>assurance process integration</strong> (audit, compliance, ERM, and security converging to close gaps and remove duplication). Questions describe a situation and ask which outcome it demonstrates.</p>
+
+        <h3>Measures, structures, and decisions</h3>
+        <ul>
+          <li><strong>KGI vs. KPI:</strong> a key goal indicator shows whether a strategic goal was achieved (outcome); a key performance indicator shows how well the process is performing toward it (tactical). <strong>KRI</strong> warns that risk is rising.</li>
+          <li><strong>Centralized security management</strong> gives consistency and stronger policy adherence at lower administrative cost; <strong>decentralized</strong> gives closer alignment with business-unit needs and faster local response. Trade-off questions pick one attribute.</li>
+          <li><strong>Strategy constraints</strong> to recognize: legal, physical, ethical, cultural, cost, and personnel (resistance to change).</li>
+          <li><strong>Decision pitfalls</strong> named in the manual: overconfidence, optimism, anchoring, status quo bias, mental accounting, false consensus — and, since 2024, <strong>automation bias</strong> toward AI outputs. AI-generated analysis is an input the manager validates, not a decision the manager delegates.</li>
+          <li><strong>Ethics now includes AI:</strong> governance of AI means defined principles, oversight, transparency, and a human who stays accountable for AI-driven decisions.</li>
+        </ul>
+        <div class="callout principle"><span class="cl">Framework currency</span>The current manual references COBIT 2019 and ISO/IEC 27001:2022, and replaced the Business Model for Information Security (BMIS) with the Digital Trust Ecosystem Framework (DTEF). Older guides still cite COBIT 5, ISO 27001:2013, and BMIS — the concepts carry over, the names do not.</div>
+
+<div class="callout trap"><span class="cl">Trap</span>When a governance question offers "deploy technology," "hire staff," or "run a test" as the FIRST step of anything strategic — the credited answer is establishing alignment, structure, or accountability instead.</div>
+        <div class="drill-cta"><button class="btn ghost" onclick="drillFromLesson('gov')">Drill Governance →</button></div>
+      </div>
+
+      <!-- ======== Lesson 2: Risk ======== -->
+      <div class="lesson-page" id="lesson-2">
+        <div class="lesson-head"><h2>Information Security Risk Management</h2><span class="wpill">Domain 2 · 20%</span></div>
+        <p>Domain 2 rewards two things: <strong>precise vocabulary</strong> and knowing <strong>who decides what</strong>. Security identifies, analyzes, and recommends. The business decides.</p>
+
+        <h3>Vocabulary precision</h3>
+        <div class="terms">
+          <div class="term"><b>Threat</b><span>An actor or event that could cause harm.</span></div>
+          <div class="term"><b>Vulnerability</b><span>A weakness that a threat can exploit (e.g., a missing patch).</span></div>
+          <div class="term"><b>Risk</b><span>The potential for loss when threat, vulnerability, and impact combine.</span></div>
+          <div class="term"><b>Inherent risk</b><span>Risk level before any controls are applied.</span></div>
+          <div class="term"><b>Residual risk</b><span>Risk remaining after controls. Compared against appetite.</span></div>
+          <div class="term"><b>Risk appetite</b><span>Strategic: how much risk the organization is willing to take in pursuit of objectives. Approved by the board.</span></div>
+          <div class="term"><b>Risk tolerance</b><span>Tactical: the acceptable variation around appetite for a specific objective or metric.</span></div>
+          <div class="term"><b>KRI</b><span>Key risk indicator — a forward-looking early warning that exposure is rising.</span></div>
+        </div>
+
+        <h3>The process</h3>
+        <ol>
+          <li><strong>Identify</strong> risks; record them in the risk register with owners, treatments, and status.</li>
+          <li><strong>Analyze</strong>: qualitative (ratings — fast, works without hard data) or quantitative (financial — supports cost-benefit; ALE = SLE × ARO).</li>
+          <li><strong>Treat</strong>: mitigate, transfer, avoid, or accept. Treatment continues until residual risk is within appetite.</li>
+          <li><strong>Monitor</strong>: KRIs with thresholds between assessments; reassess periodically <em>and</em> on significant change.</li>
+        </ol>
+
+        <h3>Ownership — the exam's favorite theme</h3>
+        <ul>
+          <li>The <strong>risk owner</strong> (business/asset owner) accepts residual risk and decides treatment. Never security, never the CISO.</li>
+          <li>The <strong>control owner</strong> keeps a specific control operating effectively day to day.</li>
+          <li>When a business unit leaves a risk beyond appetite untreated, the manager <strong>escalates with a business impact analysis</strong> — not force, not silent acceptance.</li>
+          <li>Accepted risk is documented with <strong>rationale, approving authority, and a review date</strong>.</li>
+        </ul>
+
+        <h3>Judgment rules</h3>
+        <ul>
+          <li><strong>Cost-benefit</strong>: a control should not cost more than the exposure it addresses. If it does, find an alternative or recommend acceptance.</li>
+          <li><strong>Assess before acting</strong>: shadow IT, BYOD, new regulations, new technology — the first step is always a risk or gap assessment, then a decision with the business.</li>
+          <li><strong>Insurance transfers money, not accountability</strong>: reputational damage and ultimate responsibility stay with the organization.</li>
+          <li><strong>Third parties are assessed before the contract is signed</strong>, while leverage still exists.</li>
+          <li><strong>Aggregate</strong> several small risks on the same critical asset — together they may exceed acceptable levels.</li>
+        </ul>
+
+                <h3>Threat intelligence and threat modeling (added 2024)</h3>
+        <ul>
+          <li><strong>Threat intelligence</strong> is a risk-management input for the manager: it keeps likelihood estimates and prioritization grounded in the real, current threat landscape. Automated blocking in the SOC is a by-product, not the purpose.</li>
+          <li><strong>Threat modeling</strong> systematically identifies threats and attack paths against a system — done early in design so controls are built in rather than bolted on.</li>
+          <li><strong>Threat categories</strong> to recognize: natural, unintentional, intentional physical, intentional non-physical (fraud, espionage, malware, social engineering, denial of service).</li>
+        </ul>
+
+        <h3>Emerging threats (added 2024)</h3>
+        <ul>
+          <li><strong>Shadow IT:</strong> assess exposure first; the durable fix is understanding the unmet need and offering sanctioned alternatives with discovery and policy — blocking alone drives it underground.</li>
+          <li><strong>AI in use:</strong> acceptable-use rules tied to data classification (what may be entered), plus human review of outputs.</li>
+          <li><strong>AI-enabled attacks:</strong> deepfake voice and hyper-targeted phishing defeat email filters; the effective control is procedural — out-of-band verification for sensitive requests — backed by awareness.</li>
+        </ul>
+
+        <h3>More risk vocabulary the exam expects</h3>
+        <div class="terms">
+          <div class="term"><b>Aggregate risk</b><span>Many individually minor exposures on one asset combining into a significant one.</span></div>
+          <div class="term"><b>Cascading risk</b><span>One failure triggering a chain reaction through dependencies.</span></div>
+          <div class="term"><b>Semi-quantitative analysis</b><span>Numeric scales applied to qualitative ratings — ranking without full financial data.</span></div>
+          <div class="term"><b>Total cost of ownership</b><span>Full life-cycle cost of a control (operation, maintenance, retirement), not purchase price, in every cost-benefit comparison.</span></div>
+          <div class="term"><b>Treatment terms</b><span>Current ISACA wording: mitigate, accept, avoid, transfer/share. Older guides say terminate, transfer, mitigate, tolerate — same four ideas.</span></div>
+          <div class="term"><b>Residual-risk acceptance depends on</b><span>Regulation, policy, asset sensitivity and criticality, acceptable impact, assessment uncertainty, and cost-effectiveness of further treatment.</span></div>
+        </div>
+        <ul>
+          <li><strong>Identification methods:</strong> team brainstorming builds commitment; structured techniques (flowcharting, system analysis) suit defined processes; scenario and what-if analysis suits strategic, not-yet-defined risks.</li>
+          <li><strong>Impact is the bottom line</strong> of risk; it is often easier to reduce potential impact than to reduce the vulnerability itself.</li>
+          <li><strong>Privacy regulation</strong> is primarily about identifiable personal data. <strong>Outsourced security services</strong> must never become a single point of failure — keep oversight, contingency, and an exit path. Key SLA clauses: right to audit, right to review processes, defined SOPs, right to assess vendor skills, advance notice of staffing changes.</li>
+        </ul>
+
+<div class="callout trap"><span class="cl">Trap</span>"Implement the control immediately" is the practitioner answer. The manager's sequence is assess → inform the owner → let the owner decide — even when the risk is high.</div>
+        <div class="drill-cta"><button class="btn ghost" onclick="drillFromLesson('risk')">Drill Risk Management →</button></div>
+      </div>
+
+      <!-- ======== Lesson 3: Program ======== -->
+      <div class="lesson-page" id="lesson-3">
+        <div class="lesson-head"><h2>Information Security Program</h2><span class="wpill">Domain 3 · 33% — the largest</span></div>
+        <p>Domain 3 makes <strong>program management itself</strong> the subject: turning strategy into a running machine of controls, people, metrics, and money. It is the biggest domain and, for most CISSP holders, the least familiar territory.</p>
+
+        <h3>The foundation chain</h3>
+        <p>Everything builds in order: <strong>asset inventory</strong> (you cannot protect what you do not know exists) → <strong>classification</strong> (protection proportionate to value and sensitivity) → <strong>ownership</strong> (accountability for access and classification decisions) → <strong>standards and baselines</strong> (consistent secure state, drift detection) → <strong>controls</strong> → <strong>metrics</strong>. Questions about "what comes first" almost always walk this chain — DLP starts with classification, not tooling.</p>
+
+        <h3>Controls and money</h3>
+        <ul>
+          <li>Controls are selected because they <strong>address an identified risk cost-effectively</strong> — not because the technology is new or the vendor is famous.</li>
+          <li>Control effectiveness is established by <strong>testing against the objective</strong>, never by the control merely existing.</li>
+          <li>Funding is won with a <strong>business case</strong> tying spend to risk reduction and business value.</li>
+          <li>With constrained resources, prioritize by <strong>risk reduction and business value</strong>; cover gaps with automation and managed services. Accountability for outsourced functions is always retained.</li>
+        </ul>
+
+        <h3>Metrics</h3>
+        <ul>
+          <li>Define <strong>what decisions the metrics must support</strong> before choosing any metric or dashboard.</li>
+          <li><strong>KPI</strong> = how well the program performs (percentage patched within SLA). <strong>KRI</strong> = early warning that risk is growing (overdue critical vulnerabilities climbing).</li>
+          <li><strong>Outcomes beat outputs</strong>: 100% training completion with rising user-caused incidents means the training failed, not the users.</li>
+        </ul>
+
+        <h3>People controls</h3>
+        <ul>
+          <li><strong>Least privilege</strong> limits the impact of compromise; <strong>periodic access recertification</strong> by owners cures privilege creep; <strong>segregation of duties</strong> prevents one person committing and concealing fraud.</li>
+          <li>Termination = <strong>timely revocation of all access</strong>. Screening depth matches <strong>role sensitivity</strong>.</li>
+          <li>Awareness is <strong>role-based</strong> (developers get secure coding); phishing simulations <strong>measure and improve</strong>, never punish; effectiveness is measured by <strong>behavior change</strong>.</li>
+          <li>Insider-threat work always involves <strong>HR and legal</strong>.</li>
+        </ul>
+
+        <h3>Third parties and the SDLC</h3>
+        <ul>
+          <li>Security requirements go into the <strong>RFP and contract from the start</strong> — with a breach-notification clause and right to audit. SOC 2 reports give independent assurance but never replace your own risk assessment.</li>
+          <li>In SaaS, the customer always retains <strong>data, access, and configuration</strong> responsibility. Watch for <strong>fourth parties</strong> — your vendors' vendors.</li>
+          <li>Security enters the SDLC at <strong>requirements</strong>; in DevOps it is <strong>automated into the pipeline</strong> with early design involvement, not bolted on as a manual gate.</li>
+        </ul>
+
+                <h3>Controls, precisely</h3>
+        <ul>
+          <li><strong>Technology is not a control — technology implements controls.</strong> A purchased firewall satisfies nothing until it is configured, operated, and monitored to enforce the requirement, and its effectiveness verified.</li>
+          <li><strong>Control categories:</strong> preventive, detective, corrective (restore after the fact — e.g., backup restoration), deterrent (discourage), and compensating (alternative means to the same objective when the primary control cannot be applied — documented as an exception).</li>
+          <li><strong>Control technology categories:</strong> <em>native</em> (built into business systems, run by IT), <em>supplemental</em> (add-ons such as network intrusion detection), <em>management support</em> (SIEM, compliance scanners, event analysis — often run by security itself).</li>
+        </ul>
+
+        <div class="callout principle"><span class="cl">Expect some technical items</span>CISM does ask a minority of control-selection questions with technical answers — IDS on a screened subnet, packet filtering against denial of service, patch management for OS weaknesses, role-based access to prevent internal modification, automatic expiry for contractor accounts, tuning as the key IDS consideration. The manager still reasons from risk, but the credited option is the specific technical control. A <strong>countermeasure</strong> is a targeted control for a specific threat; a general control (such as enterprise MFA) is broader and costlier — the qualifier tells you which is wanted.</div>
+        <h3>Running the program</h3>
+        <ul>
+          <li><strong>Program objectives:</strong> execute the strategy cost-effectively, maximize support of business functions, minimize business disruption.</li>
+          <li><strong>Program components:</strong> <em>operational</em> (ongoing SOPs and administration), <em>management</em> (policy reviews, standards development, oversight — less frequent, senior-owned), <em>administrative</em> (finance, HR), <em>educational</em> (awareness, training).</li>
+          <li><strong>A sound business case</strong> is adaptable, consistent, business-oriented, comprehensive, understandable, measurable, transparent, and accountable. Features without quantified benefits cannot be compared or evaluated.</li>
+          <li><strong>Budgets</strong> include staff time, contractors, equipment, space, testing, documentation, ongoing maintenance, and contingency — maintenance is the element most often underestimated.</li>
+          <li><strong>The three perennial challenges:</strong> management support, funding, staffing. A program that is highly technical and tactically driven with few documented management processes is showing weak management components.</li>
+          <li><strong>Roles and responsibilities matrix</strong> makes accountability explicit and removes gaps and overlaps. <strong>Records retention</strong> is driven by legal and regulatory requirements first.</li>
+          <li><strong>Architecture</strong> is an articulation of policy — business-focused, layered from contextual to physical, broader than technology (SABSA, COBIT, ISO/IEC 27001 support it). <strong>Classification</strong> works when it has few, clearly defined levels with explicit handling rules assigned by owners.</li>
+          <li><strong>AI-enabled supply chain (added 2024):</strong> when a provider introduces AI into processing your data, extend the third-party risk assessment to data handling, model transparency, and accountability, and update the contract.</li>
+        </ul>
+
+<div class="callout trap"><span class="cl">Trap</span>"Deploy the tool" is never the first step of any program initiative. Classification before DLP, requirements before procurement, objectives before metrics, business case before budget.</div>
+        <div class="drill-cta"><button class="btn ghost" onclick="drillFromLesson('prog')">Drill Security Program →</button></div>
+      </div>
+
+      <!-- ======== Lesson 4: Incident ======== -->
+      <div class="lesson-page" id="lesson-4">
+        <div class="lesson-head"><h2>Incident Management</h2><span class="wpill">Domain 4 · 30%</span></div>
+        <p>CISM tests incident management as a <strong>management function</strong>: readiness, coordination, communication, and learning. The technical response happens inside a structure the manager built beforehand.</p>
+
+        <h3>Readiness — built before anything burns</h3>
+        <ul>
+          <li>The IR plan's most important content: <strong>roles, responsibilities, escalation paths, and communication procedures</strong>.</li>
+          <li><strong>Classification criteria and escalation thresholds are predefined</strong>, based on business impact — severity is never invented mid-crisis.</li>
+          <li>The team is <strong>cross-functional</strong>: legal, HR, communications, and business representatives alongside security. <strong>Playbooks</strong> speed common scenarios; a <strong>forensics retainer</strong> buys instant specialist capacity.</li>
+          <li>Plans are proven by <strong>testing</strong>: tabletops rehearse decisions cheaply; full interruption tests are realistic but risky and need senior approval. Backups are validated only by <strong>test restorations</strong>.</li>
+        </ul>
+
+        <h3>BIA, RTO, RPO</h3>
+        <div class="terms">
+          <div class="term"><b>BIA</b><span>Identifies critical processes and sets their recovery priorities and objectives. The foundation of continuity planning.</span></div>
+          <div class="term"><b>RTO</b><span>Target time to restore a process after disruption. Drives site strategy: hot site for hours, cold site for days.</span></div>
+          <div class="term"><b>RPO</b><span>Maximum tolerable data loss. Drives backup/replication frequency: a 1-hour RPO means at least hourly backups.</span></div>
+          <div class="term"><b>Recovery order</b><span>Determined by BIA criticality — most critical first, never easiest first.</span></div>
+        </div>
+
+        <h3>The response flow</h3>
+        <ol>
+          <li><strong>Detect and triage</strong>: validate and prioritize so resources go where impact is.</li>
+          <li><strong>Assess and classify</strong> per the plan — the default FIRST step for a detected incident.</li>
+          <li><strong>Contain</strong>, weighing the business cost of containment against the risk of spread. When damage is actively spreading, containment jumps to the front.</li>
+          <li><strong>Eradicate and verify</strong> the root cause is gone — recovering first reinfects clean systems.</li>
+          <li><strong>Recover</strong> in BIA order; preserve evidence before restoring anything that may matter legally.</li>
+          <li><strong>Post-incident review</strong>: blameless, all stakeholders, and — most important — <strong>corrective actions assigned, tracked, and folded back into the plan</strong>.</li>
+        </ol>
+
+        <h3>Communication and decisions</h3>
+        <ul>
+          <li>Regulatory notification: <strong>engage legal counsel first</strong> to determine obligations and timelines.</li>
+          <li>Public disclosure and <strong>ransom payment are senior management decisions</strong> with legal advice — never the response team's call.</li>
+          <li>External statements come from a <strong>designated spokesperson</strong> per the communication plan; internal comms are need-to-know.</li>
+          <li>Insider incidents: coordinate with <strong>HR and legal before acting</strong> against anyone.</li>
+          <li><strong>Chain of custody</strong> whenever evidence may reach legal proceedings; contemporaneous documentation throughout.</li>
+          <li>Invoke <strong>BCP at predefined thresholds</strong>; crisis management sits above incident management for organization-threatening events.</li>
+        </ul>
+
+                <h3>Structure of incident management</h3>
+        <ul>
+          <li><strong>Incident handling</strong> = detection and reporting → triage → analysis → <strong>response</strong>. Response is the <em>last</em> stage; it plans and executes mitigation and recovery.</li>
+          <li><strong>Triage on two levels:</strong> tactical (predefined criteria) and strategic (business impact).</li>
+          <li><strong>Teams:</strong> the incident management team (IMT) is led by the security manager, who is also the interface to the security steering group; the incident response team (IRT) is led by an incident response manager. Models: centralized, distributed, coordinating, outsourced — matched to the organization's structure.</li>
+          <li><strong>Goals:</strong> detect quickly, diagnose accurately, manage properly, contain and minimize damage, restore services, determine root cause, prevent recurrence, document and report.</li>
+        </ul>
+
+        <h3>Recovery terms beyond RTO and RPO</h3>
+        <div class="terms">
+          <div class="term"><b>SDO — service delivery objective</b><span>Minimum service level that must be restored after an event to meet business requirements.</span></div>
+          <div class="term"><b>AIW / MTO — acceptable interruption window, maximum tolerable outage</b><span>The longest the business can survive without a function. RTO must be no longer than the AIW.</span></div>
+          <div class="term"><b>Recovery sites</b><span>Hot, warm, cold, mobile, duplicate, mirrored (real-time replication for near-zero RTO/RPO). Choose by RTO/RPO/SDO, proximity, shared hazards, cost.</span></div>
+          <div class="term"><b>Reciprocal agreements</b><span>Cheap but fragile: capacity and compatibility are not guaranteed when needed, and hard to enforce.</span></div>
+        </div>
+
+        <h3>Facts the exam tests directly</h3>
+        <ul>
+          <li><strong>Recovery teams:</strong> emergency action (deals with the emergency), damage assessment (assesses extent of damage), emergency management (coordinates and makes key decisions), security (monitors and resolves security issues), relocation (moves operations to the alternate site).</li>
+          <li><strong>Confirm before you contain.</strong> A reported breach is validated first; notification, containment, and law-enforcement contact all follow confirmation.</li>
+          <li><strong>Root compromise → rebuild from original media.</strong> You cannot find every change an attacker with superuser access made.</li>
+          <li><strong>Forensic image = bit-by-bit copy.</strong> File copies miss slack space and deleted data.</li>
+          <li><strong>RPO can make RTO unattainable</strong> — a stricter data-loss target lengthens data restoration time. The SDO helps define the RTO, not the reverse; the RTO precedes the MTO.</li>
+          <li><strong>Most common DR plan failure:</strong> stale operational information — hence regular review of plan content, not only exercises.</li>
+          <li><strong>Build vs. rent a hot site:</strong> decided on cost and on the site not sharing the primary's environmental risk.</li>
+        </ul>
+        <h3>Plans, tests, and readiness details</h3>
+        <ul>
+          <li><strong>Test progression:</strong> tabletop walk-through → tabletop with mock scenario → infrastructure and communications → critical applications → end-user involvement → full restoration with unfamiliar personnel → surprise tests. Assurance and cost rise together. An <strong>independent observer</strong> gives objective evaluation; test at least annually and track every recommendation to closure.</li>
+          <li><strong>Declaration criteria</strong> predefined so managers can invoke recovery without debate. <strong>Call tree</strong> updated on every personnel change and reviewed at least quarterly — vendors, recovery sites, insurers, regulators, law enforcement.</li>
+          <li><strong>Administrators' first response:</strong> confirm and scope the incident, take no action that could alter or contaminate evidence.</li>
+          <li><strong>Insurance:</strong> business interruption (lost income), equipment and facilities, media reconstruction, extra expense, errors and omissions, fidelity.</li>
+          <li><strong>Common plan failures:</strong> lack of management buy-in, mismatch to organizational structure, team turnover, no communication process, an overly complex plan.</li>
+        </ul>
+
+<div class="callout trap"><span class="cl">Trap</span>The eradicate-first reflex. Default: follow the plan, assess, classify. Exception: active, spreading damage → contain now. The exam tests whether you can tell which scenario you are in.</div>
+        <div class="drill-cta"><button class="btn ghost" onclick="drillFromLesson('inc')">Drill Incident Management →</button></div>
+      </div>
+
+      <!-- ======== Lesson 5: Exam technique ======== -->
+      <div class="lesson-page" id="lesson-5">
+        <div class="lesson-head"><h2>Exam Technique &amp; Logistics</h2><span class="wpill">Before test day</span></div>
+
+        <h3>The format</h3>
+        <ul>
+          <li><strong>150 questions, 4 hours</strong> — 96 seconds per question at even pace (this app times you at exactly that).</li>
+          <li>Scaled score <strong>200–800, 450 to pass</strong>. Not a raw percentage; questions are weighted by difficulty.</li>
+          <li>Some items are <strong>unscored pilot questions</strong> and you cannot tell which — treat every question as real.</li>
+          <li>Passing the exam is not certification: you also need <strong>5 years of security management experience across at least 3 of the 4 domains</strong> (waivers exist), plus the application. You may sit the exam first.</li>
+        </ul>
+
+        <h3>A method for every question</h3>
+        <ol>
+          <li><strong>Find the qualifier</strong> — FIRST, BEST, MOST, PRIMARY, GREATEST. It changes the correct answer.</li>
+          <li><strong>Identify the role and the moment</strong>: you are the security manager; is this before assessment, before a decision, mid-incident, or after resolution?</li>
+          <li><strong>Eliminate two</strong> — most questions have two clearly weaker options.</li>
+          <li><strong>Between the final two</strong>, choose the more managerial, business-aligned option: the one that assesses, aligns, escalates to the right owner, or follows the defined process.</li>
+          <li><strong>Name why the loser loses</strong> before committing. If you cannot, flag it and move on.</li>
+        </ol>
+
+        <h3>Pacing</h3>
+        <ul>
+          <li>90–96 seconds per question. If you are stuck at two minutes, <strong>flag and move</strong> — momentum matters more than any single item.</li>
+          <li>Budget a final pass for flagged questions. First instincts are right more often than panicked revisions; change an answer only when you can articulate the reason.</li>
+        </ul>
+
+                <h3>Anatomy of an ISACA item</h3>
+        <p>Real items are short. The stem is usually one sentence carrying one capitalized qualifier — <strong>MOST, BEST, FIRST, PRIMARY, GREATEST</strong>. The four options are brief, grammatically parallel, and similar in length; all four describe legitimate activities, so none can be eliminated as absurd. When a stem ends with a colon, the options complete the sentence in lowercase and end with a period. The task is never "which is right" but "which is best given the qualifier" — and the credited answer is the management answer, not the technical one. This bank follows those conventions exactly, and every question rationalizes all four options, the way the official ISACA question database explains its answers.</p>
+        <h3>Answer-selection heuristics</h3>
+        <ul>
+          <li><strong>Prefer the most comprehensive answer.</strong> "Meet business objectives" beats "meet legal obligations" — the broader answer contains the narrower one. ISACA plants "juicy" narrow distractors deliberately.</li>
+          <li><strong>Trigger words that often mark the credited answer:</strong> integrated, holistic, continuous, aligned, business objectives, risk-based, measure effectiveness.</li>
+          <li><strong>Action verbs matter.</strong> "Implement and measure effectiveness" outranks "monitor," "establish," or "implement" alone — effectiveness is the outcome the exam rewards.</li>
+          <li><strong>Absolutes are suspect.</strong> Options with "always," "never," "all," or "eliminate" are usually wrong.</li>
+          <li><strong>If any part of an option is wrong, the whole option is wrong.</strong> Eliminate it.</li>
+          <li><strong>Two opposite options:</strong> one of them is often correct. <strong>Two near-identical options:</strong> usually neither is.</li>
+          <li><strong>It is almost a reading-comprehension exam.</strong> Stems are short; the whole question can turn on one word. Read for the qualifier and the trigger word before reading the options.</li>
+          <li><strong>Experience is a liability when it disagrees with ISACA.</strong> The credited answer is the ISACA management answer. Notice when your practitioner instinct is pulling you toward the technically satisfying option and let the management answer win.</li>
+        </ul>
+        <div class="callout trap"><span class="cl">Beware outdated materials</span>Many third-party study guides still in circulation were written to the pre-2022 outline, where the domains were weighted roughly 24% governance, 33% risk, 25% program, 18% incident. The current exam is 17 / 20 / 33 / 30. If you allocate study time by the old numbers you will over-study risk and badly under-study incident management, which nearly doubled. Use the old guides for concepts; use the current weights for time. Also: brain-dump sites promising "actual exam questions" carry disputed answers and their use breaches ISACA's candidate agreement — practice questions should train judgment, not memorize items.</div>
+
+<h3>Where the shortcuts fail</h3>
+        <p>"Pick the management answer" gets you most of the way. But the exam regularly credits a specific, mechanism-level answer over the generic one. Each of these will feel wrong the first time:</p>
+        <ul>
+          <li>What makes role assignments effective? <strong>Existing proficiencies</strong> — not senior management support.</li>
+          <li>PRIMARY reason to address security at project start? <strong>It may affect feasibility</strong> — not "it costs more later."</li>
+          <li>BEST metric for awareness training? The number of <strong>reported incidents</strong> — a rise means people are paying attention.</li>
+          <li>Classification is based on <strong>consequences of compromise</strong> — not on risk.</li>
+          <li>Compliance with many regulations? <strong>Involve the impacted departments and treat regulation as another risk</strong> — not "rely on counsel."</li>
+          <li>Most important quality of an incident handler? <strong>Coping with stress</strong> — not following procedures, which may not exist for a novel incident.</li>
+          <li>A successful DR test is one where <strong>critical business processes are duplicated</strong> — not one that meets the RTO.</li>
+          <li>BEST process for assessing existing risk level? A <strong>security review</strong> — not a vulnerability assessment.</li>
+          <li>When risk changes, <strong>standards and procedures</strong> change; policies should not need to.</li>
+          <li>Gaining management commitment? <strong>Show how security supports desired outcomes</strong> — not losses and fear.</li>
+          <li>Highest priority in any response? <strong>Life safety</strong>, before continuity, recovery, or messaging.</li>
+          <li>The manual contains <strong>severity criteria</strong> — stable things; not phone lists or backup tables that change weekly.</li>
+        </ul>
+        <div class="callout principle"><span class="cl">The pattern</span>ISACA credits the answer that names the actual mechanism, and it punishes the answer that is merely the safest-sounding. Read for what the qualifier is really asking, then pick the option that most precisely causes that result.</div>
+        <h3>Readiness signal</h3>
+        <p>Aim for <strong>~70%+ overall and in every domain</strong> on full timed mocks before test day. A weak domain bar on your results screen tells you exactly where to spend the next session — read that domain's lesson, then run its drill.</p>
+
+        <div class="callout principle"><span class="cl">The one-line summary</span>On every question ask: what would a security manager accountable to the business do first — not what would I, the engineer, do?</div>
+      </div>
+
+      <!-- ======== Lesson 6: 2024 updates ======== -->
+      <div class="lesson-page" id="lesson-6">
+        <div class="lesson-head"><h2>What ISACA Changed in 2024</h2><span class="wpill">Current manual &amp; question pool</span></div>
+        <p>In late 2024 ISACA revised the 16th-edition Review Manual and reworked the official question database: every existing item was reviewed and reclassified, and <strong>91 new items</strong> were added on emerging technology, bringing the pool to 1,138. The domain weights did not change — but the content you can be asked about did. This is the checklist of what was added, so none of it is a surprise on exam day.</p>
+
+        <h3>Domain 1 — Governance</h3>
+        <ul>
+          <li><strong>Ethics and AI:</strong> governance of AI-driven decisions — principles, oversight, transparency, human accountability.</li>
+          <li><strong>AI and decision-making:</strong> added to the list of decision pitfalls and biases; treat AI output as input to be validated.</li>
+          <li><strong>Digital Trust Ecosystem Framework (DTEF)</strong> replaced the Business Model for Information Security (BMIS).</li>
+          <li>ISO/IEC 27000 series updated to <strong>ISO/IEC 27001:2022</strong>.</li>
+        </ul>
+
+        <h3>Domain 2 — Risk Management</h3>
+        <ul>
+          <li>New sections on <strong>threat intelligence</strong> and <strong>threat modeling</strong>.</li>
+          <li>Emerging threats now cover <strong>shadow IT</strong> and <strong>AI and network security</strong> — both AI as an attack tool and AI-based defenses evaluated like any control: by business case and tested effectiveness.</li>
+        </ul>
+
+        <h3>Domain 3 — Security Program</h3>
+        <ul>
+          <li>A worked <strong>information classification example</strong> (few levels, clear handling rules, owner-assigned).</li>
+          <li>Outsourcing challenges now include <strong>AI-enabled supply chain management</strong> — extend vendor risk assessment and contracts to cover AI use.</li>
+        </ul>
+
+        <h3>Domain 4 — Incident Management</h3>
+        <ul>
+          <li>No new topic sections — but the refreshed question pool includes emerging-technology scenarios (AI, blockchain) framed through incident readiness and response. Apply the same management logic: predefined criteria, cross-functional roles, business-impact triage.</li>
+        </ul>
+
+        <div class="callout principle"><span class="cl">How to use this</span>Every new topic still answers to the same mindset: assess before acting, keep a human accountable, tie controls to classification and risk, and manage third parties through assessment and contract. If an AI or emerging-tech question appears, do not reach for a technical answer — reach for the governance one.</div>
+      </div>
+
+    </div>
+  </section>
+
+    <!-- ============ CARDS SCREEN ============ -->
+  <section id="cardsScreen" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+        <h2 style="margin:0;font-family:var(--serif);font-weight:600;font-size:1.4rem">Index cards</h2>
+        <div class="cards-tabs" style="margin:0">
+          <button class="chip on" id="tabBluf" onclick="setCardMode('bluf')">Bottom line</button>
+          <button class="chip" id="tabFlash" onclick="setCardMode('flash')">Flashcards</button>
+        </div>
+      </div>
+      <div class="filters" id="cardDomains"></div>
+
+      <div id="blufView">
+        <div class="bluf-grid" id="blufGrid"></div>
+      </div>
+
+      <div id="flashView" class="hidden">
+        <div class="deck">
+          <div class="deck-meta"><span id="deckPos">1 / 90</span><span id="deckDom"></span><span id="deckKnown">Known 0</span></div>
+          <div class="flash" id="flashCard" onclick="flipCard()">
+            <div class="flash-inner">
+              <div class="flash-face front">
+                <span class="ftype" id="fType">Short answer</span>
+                <div class="fq" id="fQ"></div>
+                <span class="fhint">Tap to flip · space</span>
+              </div>
+              <div class="flash-face back">
+                <span class="ftype">Answer</span>
+                <div class="fa" id="fA"></div>
+                <div class="fw" id="fW"></div>
+                <span class="fhint">Tap to flip back</span>
+              </div>
+            </div>
+          </div>
+          <div class="deck-actions">
+            <button class="btn warn" onclick="markCard(false)">Again (back to box 1)</button>
+            <button class="btn ok" onclick="markCard(true)">Got it</button>
+          </div>
+          <div class="deck-nav">
+            <button class="icbtn" onclick="deckStep(-1)">‹ Prev</button>
+            <button class="icbtn" onclick="shuffleDeck()">Shuffle</button>
+            <button class="icbtn" onclick="resetKnown()">Reset progress</button>
+            <button class="icbtn" onclick="deckStep(1)">Next ›</button>
+          </div>
+          <label class="deck-opt"><input type="checkbox" id="hideKnown" checked onchange="rebuildDeck()"> Due cards only (spaced repetition)</label>
+          <div class="deck-empty hidden" id="deckEmpty">Nothing due in this set right now. Uncheck "due cards only" to review ahead, or come back tomorrow.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HISTORY SCREEN ============ -->
+  <section id="historyScreen" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+        <h2 style="margin:0;font-family:var(--serif);font-weight:600;font-size:1.4rem">History</h2>
+        <div class="filters" id="histMetric" style="margin:0"></div>
+      </div>
+      <div class="hist-summary" id="histSummary"></div>
+      <div class="hist-chart" id="histChart"></div>
+      <div class="hist-list" id="histList"></div>
+      <div class="hist-actions">
+        <button class="btn" id="missedBtn" onclick="startMissedDrill()">Retry missed questions</button>
+        <button class="btn ghost" onclick="exportProgress()">Export</button>
+        <button class="btn ghost" onclick="exportFlags()">Flagged (<span id="flagCount">0</span>)</button>
+        <label class="btn ghost" style="cursor:pointer;text-align:center">Import<input type="file" accept="application/json,.json" style="display:none" onchange="importProgress(this)"></label>
+        <button class="btn ghost" onclick="clearHistory()">Clear history</button>
+      </div>
+      <p class="disclaimer" style="margin-top:14px">Stored only in this browser. Export to keep a copy or move to another device.</p>
+    </div>
+  </section>
+
+  <!-- ============ QUESTION SCREEN ============ -->
+  <section id="examScreen" class="hidden">
+    <div class="card">
+      <div class="qtag" id="qtag">Question 1</div>
+      <p class="qtext" id="qtext"></p>
+      <div class="options" id="options"></div>
+      <label class="guess" id="guessWrap"><input type="checkbox" id="guessBox" onchange="setGuess(this.checked)"> I'm guessing on this one</label>
+      <div class="explain hidden" id="explain"></div>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS SCREEN ============ -->
+  <section id="resultsScreen" class="hidden">
+    <div class="card">
+      <div class="scorewrap">
+        <div class="eyebrow" style="text-transform:uppercase;letter-spacing:.2em;font-size:.72rem;color:var(--muted-2)">Your result</div>
+        <div class="big" id="scorePct">0%</div>
+        <div class="frac" id="scoreFrac">0 of 0 correct</div>
+        <div id="verdictPill"></div>
+      </div>
+
+      <div class="rule"></div>
+      <h2 style="font-size:.82rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 4px">Performance by domain <span style="text-transform:none;letter-spacing:0;font-weight:400">— mapped to real exam weight</span></h2>
+      <div class="dombars" id="dombars"></div>
+
+      <div class="meta-line" id="metaLine"></div>
+
+      <div class="results-actions">
+        <button class="btn" onclick="showReview('all')">Review answers</button>
+        <button class="btn ghost" onclick="restart()">Back to start</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEW ANSWERS SCREEN ============ -->
+  <section id="reviewScreen" class="hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+        <h2 style="margin:0;font-family:var(--serif);font-weight:600;font-size:1.4rem">Answer review</h2>
+        <button class="btn ghost" onclick="backToResults()">Back to results</button>
+      </div>
+      <div class="filters" id="filters"></div>
+      <div id="reviewList"></div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<div id="blufModal" class="modal-scrim hidden" onclick="if(event.target===this)closeBluf()">
+  <div class="modal-card">
+    <div class="bd" id="mDom"></div>
+    <h3 id="mTitle"></h3>
+    <ul id="mPoints"></ul>
+    <div class="modal-foot">
+      <button class="btn ghost" onclick="stepBluf(-1)">‹ Previous</button>
+      <button class="btn ghost" onclick="closeBluf()">Close</button>
+      <button class="btn ghost" onclick="stepBluf(1)">Next ›</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ACTION BAR ============ -->
+<div class="actionbar hidden" id="actionbar">
+  <div class="actionbar-inner">
+    <div class="left">
+      <button class="icbtn" id="prevBtn" onclick="prevQ()">Previous</button>
+    </div>
+    <div class="right">
+      <button class="icbtn" id="flagBtn" onclick="toggleFlag()"><span class="flagdot"></span> Flag</button>
+      <button class="icbtn" id="navBtn" onclick="openNav()">Review</button>
+      <button class="btn" id="nextBtn" onclick="nextQ()">Next</button>
+    </div>
+  </div>
+</div>
+
+<script>
+//__SCRIPT__
+</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}</script>
+</body>
+</html>

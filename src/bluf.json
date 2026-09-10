@@ -1,0 +1,298 @@
+[
+ {
+  "d": "mind",
+  "t": "You are the manager, not the technician",
+  "p": [
+   "Default sequence: assess → communicate → prioritize → document → act.",
+   "You advise, recommend, and escalate. The owner decides.",
+   "If your answer jumps to the technical fix, it is usually wrong."
+  ]
+ },
+ {
+  "d": "mind",
+  "t": "Five questions for every scenario",
+  "p": [
+   "What is the business objective?",
+   "Who owns the decision?",
+   "What is the first management step?",
+   "What is the cost–benefit logic?",
+   "What process should be followed?"
+  ]
+ },
+ {
+  "d": "mind",
+  "t": "Read the qualifier first",
+  "p": [
+   "FIRST, BEST, MOST, PRIMARY, GREATEST change the answer.",
+   "Several options may be things you would eventually do — only one is credited.",
+   "Colon-form stems: options complete the sentence."
+  ]
+ },
+ {
+  "d": "mind",
+  "t": "Where the shortcuts fail",
+  "p": [
+   "Role effectiveness → existing proficiencies, not management support.",
+   "Security early in a project → feasibility, not cost.",
+   "Awareness metric → number of reported incidents.",
+   "Classification → consequences of compromise, not risk.",
+   "Highest response priority → life safety."
+  ]
+ },
+ {
+  "d": "mind",
+  "t": "Answer-selection heuristics",
+  "p": [
+   "The broadest correct answer wins (business objectives ⊃ legal obligations).",
+   "Absolutes — always, never, all — are usually wrong.",
+   "If any part of an option is wrong, the whole option is wrong.",
+   "Two near-identical options → neither; two opposites → one of them."
+  ]
+ },
+ {
+  "d": "gov",
+  "t": "Business strategy drives governance",
+  "p": [
+   "Strategy → policy → program → budgets → procedures. Each derives from the one above.",
+   "Legal and regulatory requirements are constraints, not the driver.",
+   "First step in developing strategy: review business objectives."
+  ]
+ },
+ {
+  "d": "gov",
+  "t": "Accountability sits at the top",
+  "p": [
+   "Board and senior management are ultimately accountable; it cannot be delegated.",
+   "The manager develops the strategy; senior management approves it.",
+   "Data owners decide and confirm access to their data."
+  ]
+ },
+ {
+  "d": "gov",
+  "t": "Policy first",
+  "p": [
+   "Governance implementation FIRST requires approved policy.",
+   "Policies are based on a threat profile — proportionate protection.",
+   "Standards: measurable requirements. Procedures: unambiguous, meet standards. Guidelines: advisory."
+  ]
+ },
+ {
+  "d": "gov",
+  "t": "The six governance outcomes",
+  "p": [
+   "Strategic alignment · Risk management · Value delivery",
+   "Resource management · Performance measurement · Assurance process integration",
+   "Value delivery = investment optimized to support objectives."
+  ]
+ },
+ {
+  "d": "gov",
+  "t": "Win commitment with outcomes, not fear",
+  "p": [
+   "Show how security supports desired business outcomes.",
+   "A business case, not attack statistics, wins funding.",
+   "Commitment shows as resources and participation, not signatures.",
+   "What most inhibits governance: lack of high-level sponsorship."
+  ]
+ },
+ {
+  "d": "gov",
+  "t": "Measure at the right altitude",
+  "p": [
+   "Board: risk trends relative to appetite, in business terms.",
+   "Governance metrics are strategic — expense against projected outcomes.",
+   "KGI = goal achieved · KPI = process performance · KRI = risk rising."
+  ]
+ },
+ {
+  "d": "risk",
+  "t": "Manage to acceptable, not minimal",
+  "p": [
+   "Objective: risk at an acceptable level — not the lowest possible.",
+   "Acceptability is set by organizational requirements; appetite by senior management.",
+   "A risk already within appetite is accepted and monitored."
+  ]
+ },
+ {
+  "d": "risk",
+  "t": "Assess, then hand the decision to the owner",
+  "p": [
+   "High risk found → report to the risk owner FIRST.",
+   "The business owner accepts residual risk; security never does.",
+   "Risk beyond appetite and unfunded → escalate with a business impact analysis."
+  ]
+ },
+ {
+  "d": "risk",
+  "t": "Vocabulary precision",
+  "p": [
+   "Threat = actor/event · Vulnerability = weakness · Risk = the combination · Impact = consequence.",
+   "Inherent = before controls · Residual = after controls.",
+   "Appetite = strategic willingness · Tolerance = acceptable variation.",
+   "Disruption from DDoS = operational risk."
+  ]
+ },
+ {
+  "d": "risk",
+  "t": "Assessment = identify + analyze + evaluate",
+  "p": [
+   "Analysis addresses size AND likelihood of loss.",
+   "Not complete until evaluated against appetite and tolerance.",
+   "Residual risk is determined by a risk assessment.",
+   "Best process for existing risk level: a security review."
+  ]
+ },
+ {
+  "d": "risk",
+  "t": "Cost–benefit with total cost of ownership",
+  "p": [
+   "A control should not cost more than the exposure it addresses.",
+   "Compare with life-cycle cost, not purchase price.",
+   "Vulnerabilities are evaluated for threat, impact, and cost of mitigation."
+  ]
+ },
+ {
+  "d": "risk",
+  "t": "Risk changes — monitor it",
+  "p": [
+   "Continuous monitoring and KRIs catch change between assessments.",
+   "When risk changes, standards and procedures change; policies should not need to.",
+   "Reassess on significant change. Treat regulation as another risk."
+  ]
+ },
+ {
+  "d": "prog",
+  "t": "Executive commitment is the #1 success factor",
+  "p": [
+   "Ahead of policies, communication, and training.",
+   "The perennial challenges: management support, funding, staffing.",
+   "A technical, tactically driven program signals weak management components."
+  ]
+ },
+ {
+  "d": "prog",
+  "t": "The foundation chain",
+  "p": [
+   "Inventory → classification → owners → baselines → controls → metrics.",
+   "Prerequisite to classification: impact assessment.",
+   "Classification reflects consequences of compromise, not risk.",
+   "DLP starts with classifying data, not buying a tool."
+  ]
+ },
+ {
+  "d": "prog",
+  "t": "Technology implements controls — it is not one",
+  "p": [
+   "Preventive · detective · corrective · deterrent · compensating.",
+   "A countermeasure is targeted at a specific threat; a general control is broader.",
+   "Effectiveness is proven by testing against the objective.",
+   "Preventive control objectives derive from risk levels aligned with appetite."
+  ]
+ },
+ {
+  "d": "prog",
+  "t": "Outcomes over outputs",
+  "p": [
+   "Awareness effectiveness: number of reported incidents (rising is good).",
+   "100% completion with rising incidents = training isn't working.",
+   "Define the decisions metrics support before choosing metrics.",
+   "Establish program metrics in the design phase."
+  ]
+ },
+ {
+  "d": "prog",
+  "t": "People controls",
+  "p": [
+   "Least privilege limits impact of compromise.",
+   "Recertification cures privilege creep; segregation of duties stops one-person fraud.",
+   "Automatic expiry removes contractor access; RBAC prevents internal modification.",
+   "Screening depth matches role sensitivity."
+  ]
+ },
+ {
+  "d": "prog",
+  "t": "Third parties",
+  "p": [
+   "Requirements go in the RFP and contract from the start.",
+   "The SLA is the most encompassing contractual element.",
+   "Independent audit reports give assurance; accountability is retained.",
+   "Never let an outsourced service become a single point of failure."
+  ]
+ },
+ {
+  "d": "prog",
+  "t": "Technical picks the exam expects",
+  "p": [
+   "IDS for internet traffic → screened subnet; most important consideration → tuning.",
+   "Network DoS → packet filtering.",
+   "OS weaknesses → patch management.",
+   "Baseline controls: RBAC, logging, automated patching (not mirroring)."
+  ]
+ },
+ {
+  "d": "inc",
+  "t": "Confirm → classify → contain → eradicate → recover → learn",
+  "p": [
+   "A reported breach is confirmed before anything else.",
+   "Active, spreading damage: contain now.",
+   "Eradicate before recovering, or you reinfect."
+  ]
+ },
+ {
+  "d": "inc",
+  "t": "Readiness beats heroics",
+  "p": [
+   "Roles, escalation, and communication procedures are the plan's core.",
+   "Severity criteria are predefined and live in the manual.",
+   "Delegate authority to act — needing an unreachable executive's approval is the flaw.",
+   "Cross-functional team: legal, HR, communications, business."
+  ]
+ },
+ {
+  "d": "inc",
+  "t": "Severity = business impact",
+  "p": [
+   "Involve managers from affected operational areas.",
+   "Strategic triage is by business impact; triage exists to prioritize limited resources.",
+   "Life safety first — before continuity, recovery, or messaging."
+  ]
+ },
+ {
+  "d": "inc",
+  "t": "Recovery objectives",
+  "p": [
+   "RTO = time to restore · RPO = max data loss · SDO = minimum service level · AIW/MTO = max tolerable outage.",
+   "RTO must fit within the AIW. A stricter RPO can make the RTO unattainable.",
+   "Site tier is chosen by RTO against cost; alternate site must not share the primary's hazards."
+  ]
+ },
+ {
+  "d": "inc",
+  "t": "Decisions belong up the chain",
+  "p": [
+   "Disclosure and ransom: senior management with legal counsel.",
+   "Regulatory notification: engage legal first.",
+   "Insider incidents: HR and legal before acting.",
+   "A designated spokesperson handles media."
+  ]
+ },
+ {
+  "d": "inc",
+  "t": "Evidence discipline",
+  "p": [
+   "Chain of custody whenever evidence may be used legally.",
+   "Forensic copy = bit-by-bit image.",
+   "Administrators confirm and scope — and alter nothing.",
+   "Root compromise → rebuild from original media."
+  ]
+ },
+ {
+  "d": "inc",
+  "t": "Learn or repeat",
+  "p": [
+   "Post-incident review exists to improve the process; blameless; actions tracked to closure.",
+   "Most common DR plan failure: stale operational information.",
+   "A DR test succeeds when critical business processes are duplicated — not merely when the RTO is met."
+  ]
+ }
+]
