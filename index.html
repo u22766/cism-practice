@@ -448,6 +448,47 @@
     .filters.sticky{top:52px}
     .exit-btn{padding:7px 9px}
   }
+
+/* ---------- v8.2 cards: launcher + session ---------- */
+  .deck-pick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .deckcard{text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px;transition:border-color .15s,transform .15s}
+  .deckcard:hover{border-color:#9db4d8;transform:translateY(-1px)}
+  html[data-theme="dark"] .deckcard{background:#172238}
+  .deckcard .dk{font-family:var(--serif);font-size:1.375rem;font-weight:600;color:var(--ink)}
+  .deckcard .dt{font-size:.875rem;color:var(--muted);line-height:1.45}
+  .deckcard .dm{font-size:.75rem;color:var(--muted-2);letter-spacing:.04em;text-transform:uppercase;font-weight:700}
+  .deckcard .dgo{margin-top:auto;padding-top:8px;font-weight:700;color:var(--accent);font-size:.875rem}
+  .sess-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+  .sess-title{text-align:center}
+  .sess-title b{display:block;font-family:var(--serif);font-size:1.125rem}
+  .sess-title span{font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+  .sess-dom{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:700;min-width:70px;text-align:right}
+  .sess-prog{height:4px;background:var(--line);border-radius:999px;overflow:hidden;margin-bottom:18px}
+  .sess-prog i{display:block;height:100%;background:var(--accent);transition:width .25s}
+  .sess-stage{min-height:52vh;display:flex;align-items:center;justify-content:center}
+  .bigcard{width:100%;border:1.5px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:var(--shadow);padding:26px 24px}
+  .bigcard .bd{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-2);font-weight:700}
+  .bigcard h3{font-family:var(--serif);font-weight:600;font-size:1.375rem;line-height:1.25;margin:8px 0 16px;border:none;padding:0}
+  .bigcard ul{margin:0;padding-left:20px;font-size:1rem;color:var(--ink-2);line-height:1.55}
+  .bigcard li{margin-bottom:10px}
+  .bigcard li:last-child{margin-bottom:0}
+  .sess-done{text-align:center}
+  .sess-done .deck-actions{margin-top:18px}
+  .sess-actions{display:flex;gap:10px;margin-top:18px}
+  .sess-actions .btn{flex:1;padding:14px}
+  .sess-hint{text-align:center;font-size:.75rem;color:var(--muted-2);margin-top:10px}
+  #cardSession .flash{width:100%}
+  @media (max-width:640px){
+    .deck-pick{grid-template-columns:1fr}
+    .sess-stage{min-height:48vh}
+    .sess-hint{display:none}
+  }
+  /* explanation renderer */
+  .rl .ot{display:block;font-style:normal;font-weight:600;color:var(--ink);margin-bottom:2px}
+  .rl.ok .ot{color:var(--correct)}
+  .rl span{display:block}
+  .ctx{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--accent-soft);font-size:.875rem;color:var(--ink-2);line-height:1.5}
+  .ctx .cl{display:block;font-size:.75rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin-bottom:4px}
 </style>
 </head>
 <body>
@@ -455,7 +496,7 @@
 <header class="bar" id="topbar">
   <div class="bar-inner">
     <div class="brand">
-      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v8.1</span>
+      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v8.3</span>
     </div>
     <nav class="tabs" id="mainNav" aria-label="Sections">
       <button class="tab on" data-nav="exam" onclick="goTo('exam')">Exam</button>
@@ -552,9 +593,11 @@
       </div>
       <p class="disclaimer">Unofficial, independent study aid — not affiliated with, endorsed by, or sourced from ISACA. All questions are original and are not real exam items. CISM is a registered trademark of ISACA. The real CISM uses a scaled 200–800 score (450 to pass), so the percentage here is a study signal, not an official score. Aim for ~70%+ overall and in every domain before test day.</p>
       <div class="verfoot">
-        <div class="verline"><b>Version <span id="verNum">8.1</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
+        <div class="verline"><b>Version <span id="verNum">8.3</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
         <button class="linkbtn" onclick="toggleChangelog()">Version history</button>
         <div id="changelog" class="changelog hidden">
+          <div><b>v8.3 — September 10, 2026</b>ISACA-context explanations completed for all 363 questions. Every item now explains the credited answer and all three distractors in terms of the CISM framework, alongside the per-option rationales.</div>
+          <div><b>v8.2 — September 10, 2026</b>Index cards redesigned as focused sessions: pick a deck and domain, and the card takes over the screen one at a time with a progress bar, swipe and keyboard navigation, and an end-of-session summary. The grid, pop-up, and "points · open" labels are gone. Practice and review explanations restructured — the credited option first with its reasoning, then each distractor, then a new ISACA-context paragraph that explains the credited answer and the three distractors in terms of the CISM framework (first batch of ~90 questions; the rest follow).</div>
           <div><b>v8.1 — September 10, 2026</b>Design pass. Start screen shortened — fact tiles removed, mocks collapsed to a row, sets grouped into Simulate / Mocks / Practice, and Start moved to a sticky bar that's always reachable. Phones get a bottom tab bar. Safe-area padding for installed use on iPhone. Save &amp; exit during any exam (progress kept; resume later). Flashcards grow to fit long answers. Review collapses correct answers to one line and keeps filters pinned. Practice mode marks ✓/✗, not color alone. Lessons get previous/next at the bottom. History shows the latest 20 with show-all. Type sizes normalized to a scale.</div>
           <div><b>v8.0 — September 10, 2026</b>Bank extended to 363. Mocks and the simulation are now built concept-aware, so a set never contains two questions on the same idea. New per question: an "I'm guessing" toggle (right-while-guessing answers join the retry set as lucky guesses) and timing (average seconds by domain, slow-question filter in review). Flag any question for author review and export the list. Flashcards move to spaced repetition — boxes at 1, 3, 7, 14, 30 days with a due-only default. Installable as an app and works offline.</div>
           <div><b>v7.1 — September 9, 2026</b>Progress is now remembered. An interrupted exam autosaves (answers, flags, position, clock) and offers Resume on return. Every finished attempt is logged to a new History section with a score trend chart (overall or per domain), a target line, and per-attempt domain bars. Questions you miss accumulate in a "Retry missed" set until you get them right. Export and import progress as a file. All stored in the browser only.</div>
@@ -1000,54 +1043,85 @@
 
     <!-- ============ CARDS SCREEN ============ -->
   <section id="cardsScreen" class="hidden">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
-        <h2 style="margin:0;font-family:var(--serif);font-weight:600;font-size:1.4rem">Index cards</h2>
-        <div class="cards-tabs" style="margin:0">
-          <button class="chip on" id="tabBluf" onclick="setCardMode('bluf')">Bottom line</button>
-          <button class="chip" id="tabFlash" onclick="setCardMode('flash')">Flashcards</button>
-        </div>
-      </div>
+    <div class="card" id="cardLauncher">
+      <div class="lesson-head" style="margin-top:0"><h2>Index cards</h2><span class="wpill">Focused sessions</span></div>
+      <p style="color:var(--muted);margin:6px 0 16px;font-size:.875rem">Pick a deck and a domain. A session takes over the screen, one card at a time, until you've been through the set.</p>
+
+      <h3 style="font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 8px">Domain</h3>
       <div class="filters" id="cardDomains"></div>
 
-      <div id="blufView">
-        <div class="bluf-grid" id="blufGrid"></div>
+      <div class="deck-pick">
+        <button class="deckcard" onclick="startCardSession('bluf')">
+          <span class="dk">Bottom line</span>
+          <span class="dt">Read-through cards — the essentials of each topic, three to five points a card.</span>
+          <span class="dm" id="blufMeta">31 cards</span>
+          <span class="dgo">Start session ›</span>
+        </button>
+        <button class="deckcard" onclick="startCardSession('flash')">
+          <span class="dk">Flashcards</span>
+          <span class="dt">Short answer and true/false. Flip to reveal, then mark it — spaced repetition schedules the return.</span>
+          <span class="dm" id="flashMeta">90 cards</span>
+          <span class="dgo">Start session ›</span>
+        </button>
       </div>
+      <label class="deck-opt" style="justify-content:flex-start;margin-top:14px"><input type="checkbox" id="hideKnown" checked onchange="renderCards()"> Flashcards: due cards only</label>
+      <div style="margin-top:10px"><button class="linkbtn" onclick="resetKnown()">Reset flashcard progress</button></div>
+    </div>
 
-      <div id="flashView" class="hidden">
-        <div class="deck">
-          <div class="deck-meta"><span id="deckPos">1 / 90</span><span id="deckDom"></span><span id="deckKnown">Known 0</span></div>
-          <div class="flash" id="flashCard" onclick="flipCard()">
-            <div class="flash-inner">
-              <div class="flash-face front">
-                <span class="ftype" id="fType">Short answer</span>
-                <div class="fq" id="fQ"></div>
-                <span class="fhint">Tap to flip · space</span>
-              </div>
-              <div class="flash-face back">
-                <span class="ftype">Answer</span>
-                <div class="fa" id="fA"></div>
-                <div class="fw" id="fW"></div>
-                <span class="fhint">Tap to flip back</span>
-              </div>
+    <!-- focused session -->
+    <div id="cardSession" class="hidden">
+      <div class="sess-top">
+        <button class="icbtn" onclick="endCardSession()">✕ Close</button>
+        <div class="sess-title"><b id="sessName">Bottom line</b><span id="sessPos">1 / 31</span></div>
+        <span class="sess-dom" id="sessDom"></span>
+      </div>
+      <div class="sess-prog"><i id="sessBar"></i></div>
+
+      <div class="sess-stage" id="sessStage">
+        <!-- bottom-line card -->
+        <div class="bigcard hidden" id="blufCard">
+          <span class="bd" id="bcDom"></span>
+          <h3 id="bcTitle"></h3>
+          <ul id="bcPoints"></ul>
+        </div>
+        <!-- flashcard -->
+        <div class="flash hidden" id="flashCard" onclick="flipCard()">
+          <div class="flash-inner">
+            <div class="flash-face front">
+              <span class="ftype" id="fType">Short answer</span>
+              <div class="fq" id="fQ"></div>
+              <span class="fhint">Tap to flip</span>
+            </div>
+            <div class="flash-face back">
+              <span class="ftype">Answer</span>
+              <div class="fa" id="fA"></div>
+              <div class="fw" id="fW"></div>
+              <span class="fhint" id="fSched"></span>
             </div>
           </div>
-          <div class="deck-actions">
-            <button class="btn warn" onclick="markCard(false)">Again (back to box 1)</button>
-            <button class="btn ok" onclick="markCard(true)">Got it</button>
-          </div>
-          <div class="deck-nav">
-            <button class="icbtn" onclick="deckStep(-1)">‹ Prev</button>
-            <button class="icbtn" onclick="shuffleDeck()">Shuffle</button>
-            <button class="icbtn" onclick="resetKnown()">Reset progress</button>
-            <button class="icbtn" onclick="deckStep(1)">Next ›</button>
-          </div>
-          <label class="deck-opt"><input type="checkbox" id="hideKnown" checked onchange="rebuildDeck()"> Due cards only (spaced repetition)</label>
-          <div class="deck-empty hidden" id="deckEmpty">Nothing due in this set right now. Uncheck "due cards only" to review ahead, or come back tomorrow.</div>
+        </div>
+        <!-- end of session -->
+        <div class="bigcard sess-done hidden" id="sessDone">
+          <span class="bd">Session complete</span>
+          <h3 id="doneTitle">31 cards reviewed</h3>
+          <p id="doneSub" style="color:var(--muted)"></p>
+          <div class="deck-actions"><button class="btn ghost" onclick="endCardSession()">Back to decks</button><button class="btn" onclick="restartCardSession()">Go again</button></div>
         </div>
       </div>
+
+      <div class="sess-actions" id="sessActionsBluf">
+        <button class="btn ghost" onclick="sessionStep(-1)">‹ Previous</button>
+        <button class="btn" onclick="sessionStep(1)">Next ›</button>
+      </div>
+      <div class="sess-actions hidden" id="sessActionsFlash">
+        <button class="btn warn" onclick="markCard(false)">Again</button>
+        <button class="btn ok" onclick="markCard(true)">Got it</button>
+      </div>
+      <div class="sess-hint" id="sessHint">Swipe or use ← → · space flips · G got it · A again · Esc closes</div>
     </div>
   </section>
+
+  <!-- ============ HISTORY SCREEN ============ -->
 
   <!-- ============ HISTORY SCREEN ============ -->
   <section id="historyScreen" class="hidden">
@@ -1119,19 +1193,6 @@
 
 </div>
 </main>
-
-<div id="blufModal" class="modal-scrim hidden" onclick="if(event.target===this)closeBluf()">
-  <div class="modal-card">
-    <div class="bd" id="mDom"></div>
-    <h3 id="mTitle"></h3>
-    <ul id="mPoints"></ul>
-    <div class="modal-foot">
-      <button class="btn ghost" onclick="stepBluf(-1)">‹ Previous</button>
-      <button class="btn ghost" onclick="closeBluf()">Close</button>
-      <button class="btn ghost" onclick="stepBluf(1)">Next ›</button>
-    </div>
-  </div>
-</div>
 
 <!-- ============ START BAR (sticky CTA) ============ -->
 <div class="startbar hidden" id="startBar">
@@ -3450,6 +3511,7 @@ const SCREENS=['startScreen','lessonsScreen','cardsScreen','historyScreen','resu
 function setTab(sec){document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-nav')===sec));}
 function goTo(sec){
   if(state && !state.finished) return;               // never leave a live exam via nav
+  if(session) session=null;
   SCREENS.forEach(id=>document.getElementById(id).classList.add('hidden'));
   const target = sec==='lessons' ? 'lessonsScreen' : sec==='cards' ? 'cardsScreen' : sec==='history' ? 'historyScreen' : (state&&state.finished ? 'resultsScreen' : 'startScreen');
   document.getElementById(target).classList.remove('hidden');
@@ -3467,12 +3529,12 @@ function updateStartSummary(){
   m.textContent = cfg.mode==='exam' ? 'Exam mode · timed · results at the end' : 'Practice mode · untimed · answers as you go';
 }
 function syncChrome(){
-  const live = !!(state && !state.finished);
+  const live = !!(state && !state.finished) || !!session;
   const onStart = !document.getElementById('startScreen').classList.contains('hidden');
   document.getElementById('startBar').classList.toggle('hidden', !onStart || live);
   document.getElementById('tabBar').classList.toggle('hidden', live);
   document.getElementById('mainNav').classList.toggle('hidden', live);
-  document.getElementById('exitBtn').classList.toggle('hidden', !live);
+  document.getElementById('exitBtn').classList.toggle('hidden', !(state && !state.finished));
   if(onStart) updateStartSummary();
 }
 function exitExam(){
@@ -3494,46 +3556,99 @@ function exitExam(){
   ['startScreen','examScreen','lessonsScreen','cardsScreen','historyScreen','resultsScreen','reviewScreen'].forEach(id=>{const el=document.getElementById(id); if(el) mo.observe(el,{attributes:true,attributeFilter:['class']});});
 })();
 
-/* ---------- Index cards: shared ---------- */
+/* ---------- Index cards: launcher + focused session ---------- */
 const CARD_DOMS={mind:"Mindset",gov:"Governance",risk:"Risk Management",prog:"Security Program",inc:"Incident Management"};
-let cardMode='bluf', cardDom='all';
-function setCardMode(m){
-  cardMode=m;
-  document.getElementById('tabBluf').classList.toggle('on',m==='bluf');
-  document.getElementById('tabFlash').classList.toggle('on',m==='flash');
-  document.getElementById('blufView').classList.toggle('hidden',m!=='bluf');
-  document.getElementById('flashView').classList.toggle('hidden',m!=='flash');
-  renderCards();
-}
+let cardDom='all', session=null;
 function renderCards(){
   const box=document.getElementById('cardDomains'); box.innerHTML='';
   [['all','All']].concat(Object.entries(CARD_DOMS)).forEach(([k,lbl])=>{
     const b=document.createElement('button'); b.className='chip'+(cardDom===k?' on':''); b.textContent=lbl;
     b.onclick=()=>{cardDom=k; renderCards();}; box.appendChild(b);
   });
-  if(cardMode==='bluf') renderBluf(); else rebuildDeck();
+  const bl=BLUF.filter(c=>cardDom==='all'||c.d===cardDom).length;
+  document.getElementById('blufMeta').textContent=bl+' card'+(bl===1?'':'s');
+  const scope=CARDS.map((c,i)=>({...c,i})).filter(c=>cardDom==='all'||c.d===cardDom); const now=Date.now();
+  const due=scope.filter(c=>!SR[c.i]||SR[c.i].due<=now).length, mastered=scope.filter(c=>cardStage(c.i)==='mastered').length;
+  document.getElementById('flashMeta').textContent=scope.length+' cards · '+due+' due · '+mastered+' mastered';
 }
-
-/* ---------- BLUF cards ---------- */
-let blufList=[], blufIdx=0;
-function renderBluf(){
-  blufList=BLUF.map((c,i)=>({...c,i})).filter(c=>cardDom==='all'||c.d===cardDom);
-  const g=document.getElementById('blufGrid'); g.innerHTML='';
-  blufList.forEach((c,pos)=>{
-    const b=document.createElement('button'); b.className='bluf';
-    b.innerHTML=`<span class="bd">${CARD_DOMS[c.d]}</span><span class="bt">${c.t}</span><span class="bh">${c.p.length} points · open</span>`;
-    b.onclick=()=>openBluf(pos); g.appendChild(b);
-  });
+function startCardSession(type){
+  let items;
+  if(type==='bluf') items=BLUF.map((c,i)=>({...c,i})).filter(c=>cardDom==='all'||c.d===cardDom);
+  else { const dueOnly=document.getElementById('hideKnown').checked, now=Date.now();
+    items=shuffle(CARDS.map((c,i)=>({...c,i})).filter(c=>(cardDom==='all'||c.d===cardDom)&&(!dueOnly||!SR[c.i]||SR[c.i].due<=now))); }
+  if(!items.length){ alert(type==='flash'?'Nothing due in this set right now. Untick "due cards only" to review ahead.':'No cards in this set.'); return; }
+  session={type,items,idx:0,reviewed:0,got:0,again:0};
+  document.getElementById('cardLauncher').classList.add('hidden');
+  document.getElementById('cardSession').classList.remove('hidden');
+  document.getElementById('sessName').textContent = type==='bluf' ? 'Bottom line' : 'Flashcards';
+  document.getElementById('sessActionsBluf').classList.toggle('hidden', type!=='bluf');
+  document.getElementById('sessActionsFlash').classList.toggle('hidden', type!=='flash');
+  document.getElementById('sessHint').textContent = type==='bluf' ? 'Swipe or use ← → · Esc closes' : 'Tap or space to flip · G got it · A again · ← → move · Esc closes';
+  syncChrome(); renderSessionCard(); window.scrollTo(0,0);
 }
-function openBluf(pos){
-  blufIdx=pos; const c=blufList[pos];
-  document.getElementById('mDom').textContent=CARD_DOMS[c.d];
-  document.getElementById('mTitle').textContent=c.t;
-  document.getElementById('mPoints').innerHTML=c.p.map(p=>'<li>'+p+'</li>').join('');
-  document.getElementById('blufModal').classList.remove('hidden');
+function restartCardSession(){ if(session) startCardSession(session.type); }
+function endCardSession(){
+  session=null;
+  document.getElementById('cardSession').classList.add('hidden');
+  document.getElementById('cardLauncher').classList.remove('hidden');
+  renderCards(); syncChrome(); window.scrollTo(0,0);
 }
-function stepBluf(n){ openBluf((blufIdx+n+blufList.length)%blufList.length); }
-function closeBluf(){ document.getElementById('blufModal').classList.add('hidden'); }
+function renderSessionCard(){
+  if(!session) return;
+  const n=session.items.length, done=session.idx>=n;
+  document.getElementById('sessPos').textContent = done ? n+' / '+n : (session.idx+1)+' / '+n;
+  document.getElementById('sessBar').style.width = Math.round(Math.min(session.idx,n)/n*100)+'%';
+  document.getElementById('blufCard').classList.add('hidden'); document.getElementById('flashCard').classList.add('hidden'); document.getElementById('sessDone').classList.add('hidden');
+  document.getElementById('sessActionsBluf').classList.toggle('hidden', done||session.type!=='bluf');
+  document.getElementById('sessActionsFlash').classList.toggle('hidden', done||session.type!=='flash');
+  if(done){
+    document.getElementById('sessDone').classList.remove('hidden');
+    document.getElementById('doneTitle').textContent = n+' card'+(n===1?'':'s')+' reviewed';
+    document.getElementById('doneSub').textContent = session.type==='flash' ? ('Got it: '+session.got+' · Again: '+session.again+'. Cards you knew come back in 1–30 days; "again" cards are due now.') : 'Take the flashcards next, or switch domain and go again.';
+    document.getElementById('sessDom').textContent='';
+    return;
+  }
+  const c=session.items[session.idx];
+  document.getElementById('sessDom').textContent=CARD_DOMS[c.d];
+  if(session.type==='bluf'){
+    const el=document.getElementById('blufCard'); el.classList.remove('hidden');
+    document.getElementById('bcDom').textContent=CARD_DOMS[c.d];
+    document.getElementById('bcTitle').textContent=c.t;
+    document.getElementById('bcPoints').innerHTML=c.p.map(p=>'<li>'+p+'</li>').join('');
+  } else {
+    const fc=document.getElementById('flashCard'); fc.classList.remove('hidden'); fc.classList.remove('flipped');
+    document.getElementById('fType').textContent = c.k==='tf' ? 'True or false?' : 'Short answer';
+    document.getElementById('fQ').textContent=c.q;
+    const fa=document.getElementById('fA'); fa.textContent=c.a; fa.className='fa'+(c.k==='tf'?(c.a==='True'?' tf-true':' tf-false'):'');
+    document.getElementById('fW').textContent=c.w||'';
+    const s=SR[c.i]; document.getElementById('fSched').textContent = s ? 'Box '+s.b+' · '+(s.due>Date.now()?'next '+new Date(s.due).toLocaleDateString():'due now') : 'New card';
+  }
+}
+function sessionStep(n){ if(!session) return; if(session.idx>=session.items.length && n>0) return; session.idx=Math.max(0,session.idx+n); if(n>0) session.reviewed++; renderSessionCard(); window.scrollTo(0,0); }
+function flipCard(){ const fc=document.getElementById('flashCard'); if(!fc.classList.contains('hidden')) fc.classList.toggle('flipped'); }
+function markCard(got){
+  if(!session||session.type!=='flash'||session.idx>=session.items.length) return;
+  const c=session.items[session.idx]; const s=SR[c.i]||{b:0,due:0};
+  if(got){ s.b=Math.min(s.b+1,SR_DAYS.length-1); s.due=Date.now()+SR_DAYS[s.b]*86400000; session.got++; }
+  else { s.b=0; s.due=Date.now(); session.again++; }
+  SR[c.i]=s; saveSR(); session.idx++; renderSessionCard();
+}
+/* swipe */
+(function(){ let x0=null; const st=document.getElementById('sessStage'); if(!st) return;
+  st.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+  st.addEventListener('touchend',e=>{ if(x0===null||!session) return; const dx=e.changedTouches[0].clientX-x0; x0=null; if(Math.abs(dx)<50) return; if(session.type==='bluf') sessionStep(dx<0?1:-1); else if(dx<0) markCard(true); else markCard(false); },{passive:true});
+})();
+/* keyboard for cards */
+document.addEventListener('keydown',e=>{
+  if(!session) return;
+  if(e.key==='Escape'){ endCardSession(); return; }
+  if(session.type==='bluf'){ if(e.key==='ArrowRight') sessionStep(1); if(e.key==='ArrowLeft') sessionStep(-1); return; }
+  if(e.key===' '){ e.preventDefault(); flipCard(); }
+  if(e.key==='ArrowRight') sessionStep(1);
+  if(e.key==='ArrowLeft') sessionStep(-1);
+  if(e.key.toLowerCase()==='g') markCard(true);
+  if(e.key.toLowerCase()==='a') markCard(false);
+});
 
 /* ---------- Confidence, timing, flags ---------- */
 let LUCKY={}, FLAGS={};
@@ -3565,62 +3680,16 @@ function exportFlags(){
 }
 function shakyCount(){ return BANK.filter(q=>WEAK[q.id]||LUCKY[q.id]).length; }
 
-/* ---------- Flashcards with spaced repetition ---------- */
+/* ---------- Spaced repetition state (used by the flashcard session) ---------- */
 const SR_DAYS=[1,3,7,14,30];
-let deck=[], deckIdx=0, SR={};
+let SR={};
 (function loadSR(){
   try{ const s=safeStore.get('cism.sr'); if(s) SR=JSON.parse(s)||{}; }catch(e){}
   try{ const k=safeStore.get('cism.known'); if(k && !Object.keys(SR).length){ JSON.parse(k).forEach(i=>{SR[i]={b:1,due:Date.now()+86400000};}); saveSR(); } }catch(e){}
 })();
 function saveSR(){ safeStore.set('cism.sr',JSON.stringify(SR)); }
 function cardStage(i){ const s=SR[i]; if(!s) return 'new'; return s.b>=3?'mastered':'learning'; }
-function rebuildDeck(){
-  const dueOnly=document.getElementById('hideKnown').checked; const now=Date.now();
-  deck=CARDS.map((c,i)=>({...c,i})).filter(c=>(cardDom==='all'||c.d===cardDom)&&(!dueOnly||!SR[c.i]||SR[c.i].due<=now));
-  deckIdx=0; showCard();
-}
-function showCard(){
-  const empty=document.getElementById('deckEmpty'), fc=document.getElementById('flashCard');
-  fc.classList.remove('flipped');
-  const scope=CARDS.map((c,i)=>({...c,i})).filter(c=>cardDom==='all'||c.d===cardDom);
-  const now=Date.now(); const due=scope.filter(c=>!SR[c.i]||SR[c.i].due<=now).length, mastered=scope.filter(c=>cardStage(c.i)==='mastered').length, learning=scope.filter(c=>cardStage(c.i)==='learning').length;
-  document.getElementById('deckKnown').textContent=due+' due · '+learning+' learning · '+mastered+' mastered';
-  if(!deck.length){ empty.classList.remove('hidden'); fc.classList.add('hidden'); document.getElementById('deckPos').textContent='0 / 0'; document.getElementById('deckDom').textContent=''; return; }
-  empty.classList.add('hidden'); fc.classList.remove('hidden');
-  const c=deck[deckIdx];
-  document.getElementById('fType').textContent = c.k==='tf' ? 'True or false?' : 'Short answer';
-  document.getElementById('fQ').textContent=c.q;
-  const fa=document.getElementById('fA'); fa.textContent=c.a; fa.className='fa'+(c.k==='tf'?(c.a==='True'?' tf-true':' tf-false'):'');
-  document.getElementById('fW').textContent=c.w||'';
-  document.getElementById('deckPos').textContent=(deckIdx+1)+' / '+deck.length;
-  const s=SR[c.i]; document.getElementById('deckDom').textContent=CARD_DOMS[c.d]+' · '+(s?('box '+s.b+(s.due>now?' · next '+new Date(s.due).toLocaleDateString():' · due')):'new');
-}
-function flipCard(){ document.getElementById('flashCard').classList.toggle('flipped'); }
-function deckStep(n){ if(!deck.length) return; deckIdx=(deckIdx+n+deck.length)%deck.length; showCard(); }
-function markCard(got){
-  if(!deck.length) return;
-  const c=deck[deckIdx]; const s=SR[c.i]||{b:0,due:0};
-  if(got){ s.b=Math.min(s.b+1,SR_DAYS.length-1); s.due=Date.now()+SR_DAYS[s.b]*86400000; }
-  else { s.b=0; s.due=Date.now(); }
-  SR[c.i]=s; saveSR();
-  if(document.getElementById('hideKnown').checked && got){ deck.splice(deckIdx,1); if(deckIdx>=deck.length) deckIdx=0; showCard(); }
-  else deckStep(1);
-}
-function shuffleDeck(){ deck=shuffle(deck); deckIdx=0; showCard(); }
-function resetKnown(){ if(confirm('Clear all flashcard progress?')){ SR={}; saveSR(); rebuildDeck(); } }
-
-/* keyboard for cards */
-document.addEventListener('keydown',e=>{
-  if(!document.getElementById('blufModal').classList.contains('hidden')){
-    if(e.key==='Escape') closeBluf(); if(e.key==='ArrowRight') stepBluf(1); if(e.key==='ArrowLeft') stepBluf(-1); return;
-  }
-  if(document.getElementById('cardsScreen').classList.contains('hidden') || cardMode!=='flash') return;
-  if(e.key===' '){ e.preventDefault(); flipCard(); }
-  if(e.key==='ArrowRight') deckStep(1);
-  if(e.key==='ArrowLeft') deckStep(-1);
-  if(e.key.toLowerCase()==='g') markCard(true);
-  if(e.key.toLowerCase()==='a') markCard(false);
-});
+function resetKnown(){ if(confirm('Clear all flashcard progress?')){ SR={}; saveSR(); renderCards(); } }
 
 /* ---------- Progress: ids, autosave, history, weak set ---------- */
 function hashId(s){let h=5381;for(let i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))|0;}return 'q'+(h>>>0).toString(36);}
@@ -3771,14 +3840,20 @@ function importProgress(input){
 }
 function clearHistory(){ if(confirm('Delete all saved attempts and the retry list? Flashcard progress and flags are kept.')){ HISTORY=[]; WEAK={}; LUCKY={}; saveProgress(); saveExtra(); renderHistory(); } }
 
-/* ---------- Per-option rationales ---------- */
+/* ---------- Explanation renderer: credited answer first, then each distractor, then ISACA context ---------- */
 function rationaleHtml(q){
   if(!q.r) return '';
-  return '<div class="rat">'+q.o.map((o,i)=>'<div class="rl'+(i===q.a?' ok':'')+'"><b>'+String.fromCharCode(65+i)+'</b><span>'+q.r[i]+'</span></div>').join('')+'</div>';
+  const L=i=>String.fromCharCode(65+i);
+  let h='<div class="rat">';
+  h+='<div class="rl ok"><b>'+L(q.a)+'</b><span><em class="ot">'+q.o[q.a]+'</em>'+q.r[q.a]+'</span></div>';
+  q.o.forEach((o,i)=>{ if(i===q.a) return; h+='<div class="rl"><b>'+L(i)+'</b><span><em class="ot">'+o+'</em>'+q.r[i]+'</span></div>'; });
+  h+='</div>';
+  if(q.x) h+='<div class="ctx"><span class="cl">ISACA context</span>'+q.x+'</div>';
+  return h;
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION="8.1", APP_BUILD="2026-09-10";
+const APP_VERSION="8.3", APP_BUILD="2026-09-10";
 function initVersion(){
   const pages=document.querySelectorAll('.lesson-page').length;
   document.getElementById('verNum').textContent=APP_VERSION;
@@ -3807,7 +3882,7 @@ document.addEventListener('keydown',e=>{
 
 /* ---------- Test hook (read-only accessors; used by test.js) ---------- */
 window.__cism={get BANK(){return BANK},get BLUF(){return BLUF},get CARDS(){return CARDS},get state(){return state},get cfg(){return cfg},
-  get HISTORY(){return HISTORY},get WEAK(){return WEAK},get LUCKY(){return LUCKY},get FLAGS(){return FLAGS},get SR(){return SR},get deck(){return deck}};
+  get HISTORY(){return HISTORY},get WEAK(){return WEAK},get LUCKY(){return LUCKY},get FLAGS(){return FLAGS},get SR(){return SR},get session(){return session}};
 </script>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}</script>
 </body>
