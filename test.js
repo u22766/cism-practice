@@ -117,6 +117,36 @@ const secondId=w.__cism.deck[0].i; w.markCard(false); check('again resets to box
 w.goTo('lessons'); check('lessons screen shows', visible(d,'lessonsScreen')); w.showLesson(6); check('lesson 6 selectable', d.getElementById('lesson-6').classList.contains('on'));
 check('no script errors during flows', errs.length===0, errs[0]);
 
+console.log('\n[8] v8.1: start bar, tab bar, save & exit, review collapse, practice marks, lesson footer');
+w.restart(); w.goTo('exam');
+check('start bar visible on exam setup', visible(d,'startBar'));
+d.querySelector('[data-set="full"]').click();
+check('start summary reflects selection', /Full simulation/.test(d.getElementById('startSumSet').textContent));
+d.querySelector('[data-set="B"]').click(); check('mock chip updates summary', /Mock B/.test(d.getElementById('startSumSet').textContent));
+d.querySelector('[data-mode="practice"]').click(); check('mode updates summary', /Practice/.test(d.getElementById('startSumMode').textContent));
+w.startExam();
+check('during exam: start bar, tab bar, nav hidden; exit visible', !visible(d,'startBar') && d.getElementById('tabBar').classList.contains('hidden') && d.getElementById('mainNav').classList.contains('hidden') && visible(d,'exitBtn'));
+w.choose(w.__cism.state.qs[0].a);
+check('practice mode shows ✓ mark on correct option', d.querySelector('#options .option.correct .mark')!==null);
+w.nextQ(); w.choose((w.__cism.state.qs[1].a+1)%4);
+check('practice mode shows ✗ on wrong pick', d.querySelector('#options .option.incorrect .mark')!==null);
+w.exitExam();
+check('save & exit returns to start with progress kept', visible(d,'startScreen') && w.__cism.state===null && !!w.localStorage.getItem('cism.inprogress') && visible(d,'resumeBanner'));
+check('after exit: tab bar and start bar back, exit hidden', !d.getElementById('tabBar').classList.contains('hidden') && visible(d,'startBar') && !visible(d,'exitBtn'));
+w.resumeExam(); check('resume after exit restores 2 answers', w.__cism.state.answers.filter(a=>a!==null).length===2);
+for(let i=2;i<w.__cism.state.qs.length;i++){ w.__cism.state.idx=i; w.choose(w.__cism.state.qs[i].a); }
+w.finish(false); w.showReview('all');
+const items=[...d.querySelectorAll('#reviewList .rev-item')];
+check('review collapses correct items by default', items.some(x=>x.classList.contains('collapsed')) && items.filter(x=>!x.classList.contains('collapsed')).length>=1);
+items.find(x=>x.classList.contains('collapsed')).querySelector('.rq').click();
+check('tapping a collapsed stem expands it', items.some(x=>!x.classList.contains('collapsed')&&x.querySelector('.rq')));
+w.goTo('lessons'); w.showLesson(0); check('lesson footer: prev disabled on first', d.getElementById('lfPrev').disabled===true);
+w.stepLesson(1); check('lesson footer: next moves to lesson 1', d.getElementById('lesson-1').classList.contains('on'));
+w.showLesson(6); check('lesson footer: next disabled on last', d.getElementById('lfNext').disabled===true);
+w.goTo('history'); check('history show-all hidden under 20 attempts', d.getElementById('histMore').classList.contains('hidden'));
+check('tab bar highlights current section', d.querySelector('#tabBar [data-nav="history"]').classList.contains('on'));
+check('no script errors in v8.1 flows', errs.length===0, errs[0]);
+
 console.log('\n'+passed+' passed, '+failed+' failed');
 process.exit(failed?1:0);
 })().catch(e=>{ console.error('TEST CRASH', e); process.exit(2); });
