@@ -19,7 +19,7 @@
 <header class="bar" id="topbar">
   <div class="bar-inner">
     <div class="brand">
-      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v8.1</span>
+      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v8.3</span>
     </div>
     <nav class="tabs" id="mainNav" aria-label="Sections">
       <button class="tab on" data-nav="exam" onclick="goTo('exam')">Exam</button>
@@ -116,9 +116,11 @@
       </div>
       <p class="disclaimer">Unofficial, independent study aid — not affiliated with, endorsed by, or sourced from ISACA. All questions are original and are not real exam items. CISM is a registered trademark of ISACA. The real CISM uses a scaled 200–800 score (450 to pass), so the percentage here is a study signal, not an official score. Aim for ~70%+ overall and in every domain before test day.</p>
       <div class="verfoot">
-        <div class="verline"><b>Version <span id="verNum">8.1</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
+        <div class="verline"><b>Version <span id="verNum">8.3</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
         <button class="linkbtn" onclick="toggleChangelog()">Version history</button>
         <div id="changelog" class="changelog hidden">
+          <div><b>v8.3 — September 10, 2026</b>ISACA-context explanations completed for all 363 questions. Every item now explains the credited answer and all three distractors in terms of the CISM framework, alongside the per-option rationales.</div>
+          <div><b>v8.2 — September 10, 2026</b>Index cards redesigned as focused sessions: pick a deck and domain, and the card takes over the screen one at a time with a progress bar, swipe and keyboard navigation, and an end-of-session summary. The grid, pop-up, and "points · open" labels are gone. Practice and review explanations restructured — the credited option first with its reasoning, then each distractor, then a new ISACA-context paragraph that explains the credited answer and the three distractors in terms of the CISM framework (first batch of ~90 questions; the rest follow).</div>
           <div><b>v8.1 — September 10, 2026</b>Design pass. Start screen shortened — fact tiles removed, mocks collapsed to a row, sets grouped into Simulate / Mocks / Practice, and Start moved to a sticky bar that's always reachable. Phones get a bottom tab bar. Safe-area padding for installed use on iPhone. Save &amp; exit during any exam (progress kept; resume later). Flashcards grow to fit long answers. Review collapses correct answers to one line and keeps filters pinned. Practice mode marks ✓/✗, not color alone. Lessons get previous/next at the bottom. History shows the latest 20 with show-all. Type sizes normalized to a scale.</div>
           <div><b>v8.0 — September 10, 2026</b>Bank extended to 363. Mocks and the simulation are now built concept-aware, so a set never contains two questions on the same idea. New per question: an "I'm guessing" toggle (right-while-guessing answers join the retry set as lucky guesses) and timing (average seconds by domain, slow-question filter in review). Flag any question for author review and export the list. Flashcards move to spaced repetition — boxes at 1, 3, 7, 14, 30 days with a due-only default. Installable as an app and works offline.</div>
           <div><b>v7.1 — September 9, 2026</b>Progress is now remembered. An interrupted exam autosaves (answers, flags, position, clock) and offers Resume on return. Every finished attempt is logged to a new History section with a score trend chart (overall or per domain), a target line, and per-attempt domain bars. Questions you miss accumulate in a "Retry missed" set until you get them right. Export and import progress as a file. All stored in the browser only.</div>
@@ -564,54 +566,85 @@
 
     <!-- ============ CARDS SCREEN ============ -->
   <section id="cardsScreen" class="hidden">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px">
-        <h2 style="margin:0;font-family:var(--serif);font-weight:600;font-size:1.4rem">Index cards</h2>
-        <div class="cards-tabs" style="margin:0">
-          <button class="chip on" id="tabBluf" onclick="setCardMode('bluf')">Bottom line</button>
-          <button class="chip" id="tabFlash" onclick="setCardMode('flash')">Flashcards</button>
-        </div>
-      </div>
+    <div class="card" id="cardLauncher">
+      <div class="lesson-head" style="margin-top:0"><h2>Index cards</h2><span class="wpill">Focused sessions</span></div>
+      <p style="color:var(--muted);margin:6px 0 16px;font-size:.875rem">Pick a deck and a domain. A session takes over the screen, one card at a time, until you've been through the set.</p>
+
+      <h3 style="font-size:.75rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 8px">Domain</h3>
       <div class="filters" id="cardDomains"></div>
 
-      <div id="blufView">
-        <div class="bluf-grid" id="blufGrid"></div>
+      <div class="deck-pick">
+        <button class="deckcard" onclick="startCardSession('bluf')">
+          <span class="dk">Bottom line</span>
+          <span class="dt">Read-through cards — the essentials of each topic, three to five points a card.</span>
+          <span class="dm" id="blufMeta">31 cards</span>
+          <span class="dgo">Start session ›</span>
+        </button>
+        <button class="deckcard" onclick="startCardSession('flash')">
+          <span class="dk">Flashcards</span>
+          <span class="dt">Short answer and true/false. Flip to reveal, then mark it — spaced repetition schedules the return.</span>
+          <span class="dm" id="flashMeta">90 cards</span>
+          <span class="dgo">Start session ›</span>
+        </button>
       </div>
+      <label class="deck-opt" style="justify-content:flex-start;margin-top:14px"><input type="checkbox" id="hideKnown" checked onchange="renderCards()"> Flashcards: due cards only</label>
+      <div style="margin-top:10px"><button class="linkbtn" onclick="resetKnown()">Reset flashcard progress</button></div>
+    </div>
 
-      <div id="flashView" class="hidden">
-        <div class="deck">
-          <div class="deck-meta"><span id="deckPos">1 / 90</span><span id="deckDom"></span><span id="deckKnown">Known 0</span></div>
-          <div class="flash" id="flashCard" onclick="flipCard()">
-            <div class="flash-inner">
-              <div class="flash-face front">
-                <span class="ftype" id="fType">Short answer</span>
-                <div class="fq" id="fQ"></div>
-                <span class="fhint">Tap to flip · space</span>
-              </div>
-              <div class="flash-face back">
-                <span class="ftype">Answer</span>
-                <div class="fa" id="fA"></div>
-                <div class="fw" id="fW"></div>
-                <span class="fhint">Tap to flip back</span>
-              </div>
+    <!-- focused session -->
+    <div id="cardSession" class="hidden">
+      <div class="sess-top">
+        <button class="icbtn" onclick="endCardSession()">✕ Close</button>
+        <div class="sess-title"><b id="sessName">Bottom line</b><span id="sessPos">1 / 31</span></div>
+        <span class="sess-dom" id="sessDom"></span>
+      </div>
+      <div class="sess-prog"><i id="sessBar"></i></div>
+
+      <div class="sess-stage" id="sessStage">
+        <!-- bottom-line card -->
+        <div class="bigcard hidden" id="blufCard">
+          <span class="bd" id="bcDom"></span>
+          <h3 id="bcTitle"></h3>
+          <ul id="bcPoints"></ul>
+        </div>
+        <!-- flashcard -->
+        <div class="flash hidden" id="flashCard" onclick="flipCard()">
+          <div class="flash-inner">
+            <div class="flash-face front">
+              <span class="ftype" id="fType">Short answer</span>
+              <div class="fq" id="fQ"></div>
+              <span class="fhint">Tap to flip</span>
+            </div>
+            <div class="flash-face back">
+              <span class="ftype">Answer</span>
+              <div class="fa" id="fA"></div>
+              <div class="fw" id="fW"></div>
+              <span class="fhint" id="fSched"></span>
             </div>
           </div>
-          <div class="deck-actions">
-            <button class="btn warn" onclick="markCard(false)">Again (back to box 1)</button>
-            <button class="btn ok" onclick="markCard(true)">Got it</button>
-          </div>
-          <div class="deck-nav">
-            <button class="icbtn" onclick="deckStep(-1)">‹ Prev</button>
-            <button class="icbtn" onclick="shuffleDeck()">Shuffle</button>
-            <button class="icbtn" onclick="resetKnown()">Reset progress</button>
-            <button class="icbtn" onclick="deckStep(1)">Next ›</button>
-          </div>
-          <label class="deck-opt"><input type="checkbox" id="hideKnown" checked onchange="rebuildDeck()"> Due cards only (spaced repetition)</label>
-          <div class="deck-empty hidden" id="deckEmpty">Nothing due in this set right now. Uncheck "due cards only" to review ahead, or come back tomorrow.</div>
+        </div>
+        <!-- end of session -->
+        <div class="bigcard sess-done hidden" id="sessDone">
+          <span class="bd">Session complete</span>
+          <h3 id="doneTitle">31 cards reviewed</h3>
+          <p id="doneSub" style="color:var(--muted)"></p>
+          <div class="deck-actions"><button class="btn ghost" onclick="endCardSession()">Back to decks</button><button class="btn" onclick="restartCardSession()">Go again</button></div>
         </div>
       </div>
+
+      <div class="sess-actions" id="sessActionsBluf">
+        <button class="btn ghost" onclick="sessionStep(-1)">‹ Previous</button>
+        <button class="btn" onclick="sessionStep(1)">Next ›</button>
+      </div>
+      <div class="sess-actions hidden" id="sessActionsFlash">
+        <button class="btn warn" onclick="markCard(false)">Again</button>
+        <button class="btn ok" onclick="markCard(true)">Got it</button>
+      </div>
+      <div class="sess-hint" id="sessHint">Swipe or use ← → · space flips · G got it · A again · Esc closes</div>
     </div>
   </section>
+
+  <!-- ============ HISTORY SCREEN ============ -->
 
   <!-- ============ HISTORY SCREEN ============ -->
   <section id="historyScreen" class="hidden">
@@ -683,19 +716,6 @@
 
 </div>
 </main>
-
-<div id="blufModal" class="modal-scrim hidden" onclick="if(event.target===this)closeBluf()">
-  <div class="modal-card">
-    <div class="bd" id="mDom"></div>
-    <h3 id="mTitle"></h3>
-    <ul id="mPoints"></ul>
-    <div class="modal-foot">
-      <button class="btn ghost" onclick="stepBluf(-1)">‹ Previous</button>
-      <button class="btn ghost" onclick="closeBluf()">Close</button>
-      <button class="btn ghost" onclick="stepBluf(1)">Next ›</button>
-    </div>
-  </div>
-</div>
 
 <!-- ============ START BAR (sticky CTA) ============ -->
 <div class="startbar hidden" id="startBar">

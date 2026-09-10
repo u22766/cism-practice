@@ -467,6 +467,7 @@ const SCREENS=['startScreen','lessonsScreen','cardsScreen','historyScreen','resu
 function setTab(sec){document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-nav')===sec));}
 function goTo(sec){
   if(state && !state.finished) return;               // never leave a live exam via nav
+  if(session) session=null;
   SCREENS.forEach(id=>document.getElementById(id).classList.add('hidden'));
   const target = sec==='lessons' ? 'lessonsScreen' : sec==='cards' ? 'cardsScreen' : sec==='history' ? 'historyScreen' : (state&&state.finished ? 'resultsScreen' : 'startScreen');
   document.getElementById(target).classList.remove('hidden');
@@ -484,12 +485,12 @@ function updateStartSummary(){
   m.textContent = cfg.mode==='exam' ? 'Exam mode · timed · results at the end' : 'Practice mode · untimed · answers as you go';
 }
 function syncChrome(){
-  const live = !!(state && !state.finished);
+  const live = !!(state && !state.finished) || !!session;
   const onStart = !document.getElementById('startScreen').classList.contains('hidden');
   document.getElementById('startBar').classList.toggle('hidden', !onStart || live);
   document.getElementById('tabBar').classList.toggle('hidden', live);
   document.getElementById('mainNav').classList.toggle('hidden', live);
-  document.getElementById('exitBtn').classList.toggle('hidden', !live);
+  document.getElementById('exitBtn').classList.toggle('hidden', !(state && !state.finished));
   if(onStart) updateStartSummary();
 }
 function exitExam(){
@@ -511,46 +512,99 @@ function exitExam(){
   ['startScreen','examScreen','lessonsScreen','cardsScreen','historyScreen','resultsScreen','reviewScreen'].forEach(id=>{const el=document.getElementById(id); if(el) mo.observe(el,{attributes:true,attributeFilter:['class']});});
 })();
 
-/* ---------- Index cards: shared ---------- */
+/* ---------- Index cards: launcher + focused session ---------- */
 const CARD_DOMS={mind:"Mindset",gov:"Governance",risk:"Risk Management",prog:"Security Program",inc:"Incident Management"};
-let cardMode='bluf', cardDom='all';
-function setCardMode(m){
-  cardMode=m;
-  document.getElementById('tabBluf').classList.toggle('on',m==='bluf');
-  document.getElementById('tabFlash').classList.toggle('on',m==='flash');
-  document.getElementById('blufView').classList.toggle('hidden',m!=='bluf');
-  document.getElementById('flashView').classList.toggle('hidden',m!=='flash');
-  renderCards();
-}
+let cardDom='all', session=null;
 function renderCards(){
   const box=document.getElementById('cardDomains'); box.innerHTML='';
   [['all','All']].concat(Object.entries(CARD_DOMS)).forEach(([k,lbl])=>{
     const b=document.createElement('button'); b.className='chip'+(cardDom===k?' on':''); b.textContent=lbl;
     b.onclick=()=>{cardDom=k; renderCards();}; box.appendChild(b);
   });
-  if(cardMode==='bluf') renderBluf(); else rebuildDeck();
+  const bl=BLUF.filter(c=>cardDom==='all'||c.d===cardDom).length;
+  document.getElementById('blufMeta').textContent=bl+' card'+(bl===1?'':'s');
+  const scope=CARDS.map((c,i)=>({...c,i})).filter(c=>cardDom==='all'||c.d===cardDom); const now=Date.now();
+  const due=scope.filter(c=>!SR[c.i]||SR[c.i].due<=now).length, mastered=scope.filter(c=>cardStage(c.i)==='mastered').length;
+  document.getElementById('flashMeta').textContent=scope.length+' cards · '+due+' due · '+mastered+' mastered';
 }
-
-/* ---------- BLUF cards ---------- */
-let blufList=[], blufIdx=0;
-function renderBluf(){
-  blufList=BLUF.map((c,i)=>({...c,i})).filter(c=>cardDom==='all'||c.d===cardDom);
-  const g=document.getElementById('blufGrid'); g.innerHTML='';
-  blufList.forEach((c,pos)=>{
-    const b=document.createElement('button'); b.className='bluf';
-    b.innerHTML=`<span class="bd">${CARD_DOMS[c.d]}</span><span class="bt">${c.t}</span><span class="bh">${c.p.length} points · open</span>`;
-    b.onclick=()=>openBluf(pos); g.appendChild(b);
-  });
+function startCardSession(type){
+  let items;
+  if(type==='bluf') items=BLUF.map((c,i)=>({...c,i})).filter(c=>cardDom==='all'||c.d===cardDom);
+  else { const dueOnly=document.getElementById('hideKnown').checked, now=Date.now();
+    items=shuffle(CARDS.map((c,i)=>({...c,i})).filter(c=>(cardDom==='all'||c.d===cardDom)&&(!dueOnly||!SR[c.i]||SR[c.i].due<=now))); }
+  if(!items.length){ alert(type==='flash'?'Nothing due in this set right now. Untick "due cards only" to review ahead.':'No cards in this set.'); return; }
+  session={type,items,idx:0,reviewed:0,got:0,again:0};
+  document.getElementById('cardLauncher').classList.add('hidden');
+  document.getElementById('cardSession').classList.remove('hidden');
+  document.getElementById('sessName').textContent = type==='bluf' ? 'Bottom line' : 'Flashcards';
+  document.getElementById('sessActionsBluf').classList.toggle('hidden', type!=='bluf');
+  document.getElementById('sessActionsFlash').classList.toggle('hidden', type!=='flash');
+  document.getElementById('sessHint').textContent = type==='bluf' ? 'Swipe or use ← → · Esc closes' : 'Tap or space to flip · G got it · A again · ← → move · Esc closes';
+  syncChrome(); renderSessionCard(); window.scrollTo(0,0);
 }
-function openBluf(pos){
-  blufIdx=pos; const c=blufList[pos];
-  document.getElementById('mDom').textContent=CARD_DOMS[c.d];
-  document.getElementById('mTitle').textContent=c.t;
-  document.getElementById('mPoints').innerHTML=c.p.map(p=>'<li>'+p+'</li>').join('');
-  document.getElementById('blufModal').classList.remove('hidden');
+function restartCardSession(){ if(session) startCardSession(session.type); }
+function endCardSession(){
+  session=null;
+  document.getElementById('cardSession').classList.add('hidden');
+  document.getElementById('cardLauncher').classList.remove('hidden');
+  renderCards(); syncChrome(); window.scrollTo(0,0);
 }
-function stepBluf(n){ openBluf((blufIdx+n+blufList.length)%blufList.length); }
-function closeBluf(){ document.getElementById('blufModal').classList.add('hidden'); }
+function renderSessionCard(){
+  if(!session) return;
+  const n=session.items.length, done=session.idx>=n;
+  document.getElementById('sessPos').textContent = done ? n+' / '+n : (session.idx+1)+' / '+n;
+  document.getElementById('sessBar').style.width = Math.round(Math.min(session.idx,n)/n*100)+'%';
+  document.getElementById('blufCard').classList.add('hidden'); document.getElementById('flashCard').classList.add('hidden'); document.getElementById('sessDone').classList.add('hidden');
+  document.getElementById('sessActionsBluf').classList.toggle('hidden', done||session.type!=='bluf');
+  document.getElementById('sessActionsFlash').classList.toggle('hidden', done||session.type!=='flash');
+  if(done){
+    document.getElementById('sessDone').classList.remove('hidden');
+    document.getElementById('doneTitle').textContent = n+' card'+(n===1?'':'s')+' reviewed';
+    document.getElementById('doneSub').textContent = session.type==='flash' ? ('Got it: '+session.got+' · Again: '+session.again+'. Cards you knew come back in 1–30 days; "again" cards are due now.') : 'Take the flashcards next, or switch domain and go again.';
+    document.getElementById('sessDom').textContent='';
+    return;
+  }
+  const c=session.items[session.idx];
+  document.getElementById('sessDom').textContent=CARD_DOMS[c.d];
+  if(session.type==='bluf'){
+    const el=document.getElementById('blufCard'); el.classList.remove('hidden');
+    document.getElementById('bcDom').textContent=CARD_DOMS[c.d];
+    document.getElementById('bcTitle').textContent=c.t;
+    document.getElementById('bcPoints').innerHTML=c.p.map(p=>'<li>'+p+'</li>').join('');
+  } else {
+    const fc=document.getElementById('flashCard'); fc.classList.remove('hidden'); fc.classList.remove('flipped');
+    document.getElementById('fType').textContent = c.k==='tf' ? 'True or false?' : 'Short answer';
+    document.getElementById('fQ').textContent=c.q;
+    const fa=document.getElementById('fA'); fa.textContent=c.a; fa.className='fa'+(c.k==='tf'?(c.a==='True'?' tf-true':' tf-false'):'');
+    document.getElementById('fW').textContent=c.w||'';
+    const s=SR[c.i]; document.getElementById('fSched').textContent = s ? 'Box '+s.b+' · '+(s.due>Date.now()?'next '+new Date(s.due).toLocaleDateString():'due now') : 'New card';
+  }
+}
+function sessionStep(n){ if(!session) return; if(session.idx>=session.items.length && n>0) return; session.idx=Math.max(0,session.idx+n); if(n>0) session.reviewed++; renderSessionCard(); window.scrollTo(0,0); }
+function flipCard(){ const fc=document.getElementById('flashCard'); if(!fc.classList.contains('hidden')) fc.classList.toggle('flipped'); }
+function markCard(got){
+  if(!session||session.type!=='flash'||session.idx>=session.items.length) return;
+  const c=session.items[session.idx]; const s=SR[c.i]||{b:0,due:0};
+  if(got){ s.b=Math.min(s.b+1,SR_DAYS.length-1); s.due=Date.now()+SR_DAYS[s.b]*86400000; session.got++; }
+  else { s.b=0; s.due=Date.now(); session.again++; }
+  SR[c.i]=s; saveSR(); session.idx++; renderSessionCard();
+}
+/* swipe */
+(function(){ let x0=null; const st=document.getElementById('sessStage'); if(!st) return;
+  st.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+  st.addEventListener('touchend',e=>{ if(x0===null||!session) return; const dx=e.changedTouches[0].clientX-x0; x0=null; if(Math.abs(dx)<50) return; if(session.type==='bluf') sessionStep(dx<0?1:-1); else if(dx<0) markCard(true); else markCard(false); },{passive:true});
+})();
+/* keyboard for cards */
+document.addEventListener('keydown',e=>{
+  if(!session) return;
+  if(e.key==='Escape'){ endCardSession(); return; }
+  if(session.type==='bluf'){ if(e.key==='ArrowRight') sessionStep(1); if(e.key==='ArrowLeft') sessionStep(-1); return; }
+  if(e.key===' '){ e.preventDefault(); flipCard(); }
+  if(e.key==='ArrowRight') sessionStep(1);
+  if(e.key==='ArrowLeft') sessionStep(-1);
+  if(e.key.toLowerCase()==='g') markCard(true);
+  if(e.key.toLowerCase()==='a') markCard(false);
+});
 
 /* ---------- Confidence, timing, flags ---------- */
 let LUCKY={}, FLAGS={};
@@ -582,62 +636,16 @@ function exportFlags(){
 }
 function shakyCount(){ return BANK.filter(q=>WEAK[q.id]||LUCKY[q.id]).length; }
 
-/* ---------- Flashcards with spaced repetition ---------- */
+/* ---------- Spaced repetition state (used by the flashcard session) ---------- */
 const SR_DAYS=[1,3,7,14,30];
-let deck=[], deckIdx=0, SR={};
+let SR={};
 (function loadSR(){
   try{ const s=safeStore.get('cism.sr'); if(s) SR=JSON.parse(s)||{}; }catch(e){}
   try{ const k=safeStore.get('cism.known'); if(k && !Object.keys(SR).length){ JSON.parse(k).forEach(i=>{SR[i]={b:1,due:Date.now()+86400000};}); saveSR(); } }catch(e){}
 })();
 function saveSR(){ safeStore.set('cism.sr',JSON.stringify(SR)); }
 function cardStage(i){ const s=SR[i]; if(!s) return 'new'; return s.b>=3?'mastered':'learning'; }
-function rebuildDeck(){
-  const dueOnly=document.getElementById('hideKnown').checked; const now=Date.now();
-  deck=CARDS.map((c,i)=>({...c,i})).filter(c=>(cardDom==='all'||c.d===cardDom)&&(!dueOnly||!SR[c.i]||SR[c.i].due<=now));
-  deckIdx=0; showCard();
-}
-function showCard(){
-  const empty=document.getElementById('deckEmpty'), fc=document.getElementById('flashCard');
-  fc.classList.remove('flipped');
-  const scope=CARDS.map((c,i)=>({...c,i})).filter(c=>cardDom==='all'||c.d===cardDom);
-  const now=Date.now(); const due=scope.filter(c=>!SR[c.i]||SR[c.i].due<=now).length, mastered=scope.filter(c=>cardStage(c.i)==='mastered').length, learning=scope.filter(c=>cardStage(c.i)==='learning').length;
-  document.getElementById('deckKnown').textContent=due+' due · '+learning+' learning · '+mastered+' mastered';
-  if(!deck.length){ empty.classList.remove('hidden'); fc.classList.add('hidden'); document.getElementById('deckPos').textContent='0 / 0'; document.getElementById('deckDom').textContent=''; return; }
-  empty.classList.add('hidden'); fc.classList.remove('hidden');
-  const c=deck[deckIdx];
-  document.getElementById('fType').textContent = c.k==='tf' ? 'True or false?' : 'Short answer';
-  document.getElementById('fQ').textContent=c.q;
-  const fa=document.getElementById('fA'); fa.textContent=c.a; fa.className='fa'+(c.k==='tf'?(c.a==='True'?' tf-true':' tf-false'):'');
-  document.getElementById('fW').textContent=c.w||'';
-  document.getElementById('deckPos').textContent=(deckIdx+1)+' / '+deck.length;
-  const s=SR[c.i]; document.getElementById('deckDom').textContent=CARD_DOMS[c.d]+' · '+(s?('box '+s.b+(s.due>now?' · next '+new Date(s.due).toLocaleDateString():' · due')):'new');
-}
-function flipCard(){ document.getElementById('flashCard').classList.toggle('flipped'); }
-function deckStep(n){ if(!deck.length) return; deckIdx=(deckIdx+n+deck.length)%deck.length; showCard(); }
-function markCard(got){
-  if(!deck.length) return;
-  const c=deck[deckIdx]; const s=SR[c.i]||{b:0,due:0};
-  if(got){ s.b=Math.min(s.b+1,SR_DAYS.length-1); s.due=Date.now()+SR_DAYS[s.b]*86400000; }
-  else { s.b=0; s.due=Date.now(); }
-  SR[c.i]=s; saveSR();
-  if(document.getElementById('hideKnown').checked && got){ deck.splice(deckIdx,1); if(deckIdx>=deck.length) deckIdx=0; showCard(); }
-  else deckStep(1);
-}
-function shuffleDeck(){ deck=shuffle(deck); deckIdx=0; showCard(); }
-function resetKnown(){ if(confirm('Clear all flashcard progress?')){ SR={}; saveSR(); rebuildDeck(); } }
-
-/* keyboard for cards */
-document.addEventListener('keydown',e=>{
-  if(!document.getElementById('blufModal').classList.contains('hidden')){
-    if(e.key==='Escape') closeBluf(); if(e.key==='ArrowRight') stepBluf(1); if(e.key==='ArrowLeft') stepBluf(-1); return;
-  }
-  if(document.getElementById('cardsScreen').classList.contains('hidden') || cardMode!=='flash') return;
-  if(e.key===' '){ e.preventDefault(); flipCard(); }
-  if(e.key==='ArrowRight') deckStep(1);
-  if(e.key==='ArrowLeft') deckStep(-1);
-  if(e.key.toLowerCase()==='g') markCard(true);
-  if(e.key.toLowerCase()==='a') markCard(false);
-});
+function resetKnown(){ if(confirm('Clear all flashcard progress?')){ SR={}; saveSR(); renderCards(); } }
 
 /* ---------- Progress: ids, autosave, history, weak set ---------- */
 function hashId(s){let h=5381;for(let i=0;i<s.length;i++){h=((h<<5)+h+s.charCodeAt(i))|0;}return 'q'+(h>>>0).toString(36);}
@@ -788,14 +796,20 @@ function importProgress(input){
 }
 function clearHistory(){ if(confirm('Delete all saved attempts and the retry list? Flashcard progress and flags are kept.')){ HISTORY=[]; WEAK={}; LUCKY={}; saveProgress(); saveExtra(); renderHistory(); } }
 
-/* ---------- Per-option rationales ---------- */
+/* ---------- Explanation renderer: credited answer first, then each distractor, then ISACA context ---------- */
 function rationaleHtml(q){
   if(!q.r) return '';
-  return '<div class="rat">'+q.o.map((o,i)=>'<div class="rl'+(i===q.a?' ok':'')+'"><b>'+String.fromCharCode(65+i)+'</b><span>'+q.r[i]+'</span></div>').join('')+'</div>';
+  const L=i=>String.fromCharCode(65+i);
+  let h='<div class="rat">';
+  h+='<div class="rl ok"><b>'+L(q.a)+'</b><span><em class="ot">'+q.o[q.a]+'</em>'+q.r[q.a]+'</span></div>';
+  q.o.forEach((o,i)=>{ if(i===q.a) return; h+='<div class="rl"><b>'+L(i)+'</b><span><em class="ot">'+o+'</em>'+q.r[i]+'</span></div>'; });
+  h+='</div>';
+  if(q.x) h+='<div class="ctx"><span class="cl">ISACA context</span>'+q.x+'</div>';
+  return h;
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION="8.1", APP_BUILD="2026-09-10";
+const APP_VERSION="8.3", APP_BUILD="2026-09-10";
 function initVersion(){
   const pages=document.querySelectorAll('.lesson-page').length;
   document.getElementById('verNum').textContent=APP_VERSION;
@@ -824,4 +838,4 @@ document.addEventListener('keydown',e=>{
 
 /* ---------- Test hook (read-only accessors; used by test.js) ---------- */
 window.__cism={get BANK(){return BANK},get BLUF(){return BLUF},get CARDS(){return CARDS},get state(){return state},get cfg(){return cfg},
-  get HISTORY(){return HISTORY},get WEAK(){return WEAK},get LUCKY(){return LUCKY},get FLAGS(){return FLAGS},get SR(){return SR},get deck(){return deck}};
+  get HISTORY(){return HISTORY},get WEAK(){return WEAK},get LUCKY(){return LUCKY},get FLAGS(){return FLAGS},get SR(){return SR},get session(){return session}};
