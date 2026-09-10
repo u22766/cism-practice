@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>CISM Practice Exam</title>
 <meta name="description" content="Unofficial CISM practice exam: 363 original scenario questions with per-option rationales, timed simulation, domain drills, lessons, and flip-to-reveal index cards. Dark theme included. Runs entirely in the browser.">
 <meta name="robots" content="noindex">
@@ -19,7 +19,7 @@
 <header class="bar" id="topbar">
   <div class="bar-inner">
     <div class="brand">
-      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v8.0</span>
+      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v8.1</span>
     </div>
     <nav class="tabs" id="mainNav" aria-label="Sections">
       <button class="tab on" data-nav="exam" onclick="goTo('exam')">Exam</button>
@@ -32,6 +32,7 @@
         <span class="counter" id="counter">Question 1 of 50</span>
         <span class="timer" id="timer">240:00</span>
       </div>
+      <button class="exit-btn hidden" id="exitBtn" onclick="exitExam()">Save &amp; exit</button>
       <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle dark theme" title="Toggle dark theme">☾</button>
     </div>
   </div>
@@ -56,66 +57,41 @@
 
       <div class="rule"></div>
 
-      <div class="facts" aria-label="Real exam format">
-        <div class="fact"><b>150</b><span>Real exam Qs</span></div>
-        <div class="fact"><b>4 hrs</b><span>Real time limit</span></div>
-        <div class="fact"><b>450</b><span>Pass (of 800)</span></div>
-        <div class="fact"><b>4</b><span>Domains</span></div>
-      </div>
-
       <div class="setup">
-        <h2>Question set</h2>
-        <div class="opts-row">
+        <h2>Simulate</h2>
+        <div class="opts-row one">
           <button class="choice on" data-set="full" onclick="pickSet(this,'full')">
-            <div class="t">Full simulation — 150 questions</div>
-            <div class="d">The real format on a 4-hour clock; weighted draw from all <span data-banksize>200</span></div>
+            <div class="t">Full simulation — 150 questions · 4-hour clock</div>
+            <div class="d">The real format; weighted draw from all <span data-banksize>0</span></div>
           </button>
+        </div>
+        <h2>Mocks <span class="h2sub">fixed sets · no overlap · <span data-mocksize>0</span> questions each</span></h2>
+        <div class="mock-row">
+          <button class="choice mock" data-set="A" onclick="pickSet(this,'A')">Mock A</button>
+          <button class="choice mock" data-set="B" onclick="pickSet(this,'B')">Mock B</button>
+          <button class="choice mock" data-set="C" onclick="pickSet(this,'C')">Mock C</button>
+          <button class="choice mock" data-set="D" onclick="pickSet(this,'D')">Mock D</button>
+        </div>
+        <h2>Practice</h2>
+        <div class="opts-row three">
           <button class="choice" data-set="quick" onclick="pickSet(this,'quick')">
-            <div class="t">Quick set — 20 questions</div>
-            <div class="d">Random weighted sample from the full bank</div>
-          </button>
-          <button class="choice" data-set="A" onclick="pickSet(this,'A')">
-            <div class="t">Mock A — <span data-mocksize>50</span> questions</div>
-            <div class="d">Fixed set, weighted to the blueprint</div>
-          </button>
-          <button class="choice" data-set="B" onclick="pickSet(this,'B')">
-            <div class="t">Mock B — <span data-mocksize>50</span> questions</div>
-            <div class="d">Fixed set — no overlap with A</div>
-          </button>
-          <button class="choice" data-set="C" onclick="pickSet(this,'C')">
-            <div class="t">Mock C — <span data-mocksize>50</span> questions</div>
-            <div class="d">Fixed set — no overlap with A or B</div>
-          </button>
-          <button class="choice" data-set="D" onclick="pickSet(this,'D')">
-            <div class="t">Mock D — <span data-mocksize>50</span> questions</div>
-            <div class="d">Fixed set — no overlap with A, B, or C</div>
+            <div class="t">Quick 20</div>
+            <div class="d">Weighted random sample</div>
           </button>
           <button class="choice" data-set="missed" id="setMissed" onclick="pickSet(this,'missed')">
-            <div class="t">Retry missed &amp; guessed — <span data-missedcount>0</span></div>
-            <div class="d">Wrong answers and lucky guesses, until you clear them</div>
+            <div class="t">Retry missed &amp; guessed</div>
+            <div class="d"><span data-missedcount>0</span> to clear</div>
           </button>
           <button class="choice" data-set="drill" onclick="pickSet(this,'drill')">
             <div class="t">Domain drill</div>
-            <div class="d">Every question from one domain, back to back</div>
+            <div class="d">One domain, back to back</div>
           </button>
         </div>
-        <div class="opts-row" id="drillRow" style="margin-top:12px;display:none">
-          <button class="choice" data-drill="gov" onclick="pickDrill(this,'gov')">
-            <div class="t">Governance</div>
-            <div class="d"><span data-drillcount="gov">35</span> questions · 17% of the real exam</div>
-          </button>
-          <button class="choice" data-drill="risk" onclick="pickDrill(this,'risk')">
-            <div class="t">Risk Management</div>
-            <div class="d"><span data-drillcount="risk">42</span> questions · 20% of the real exam</div>
-          </button>
-          <button class="choice on" data-drill="prog" onclick="pickDrill(this,'prog')">
-            <div class="t">Security Program</div>
-            <div class="d"><span data-drillcount="prog">64</span> questions · 33% of the real exam</div>
-          </button>
-          <button class="choice" data-drill="inc" onclick="pickDrill(this,'inc')">
-            <div class="t">Incident Management</div>
-            <div class="d"><span data-drillcount="inc">59</span> questions · 30% of the real exam</div>
-          </button>
+        <div class="mock-row" id="drillRow" style="margin-top:10px;display:none">
+          <button class="choice mock" data-drill="gov" onclick="pickDrill(this,'gov')">Governance <small><span data-drillcount="gov">0</span></small></button>
+          <button class="choice mock" data-drill="risk" onclick="pickDrill(this,'risk')">Risk <small><span data-drillcount="risk">0</span></small></button>
+          <button class="choice mock on" data-drill="prog" onclick="pickDrill(this,'prog')">Program <small><span data-drillcount="prog">0</span></small></button>
+          <button class="choice mock" data-drill="inc" onclick="pickDrill(this,'inc')">Incident <small><span data-drillcount="inc">0</span></small></button>
         </div>
 
         <h2>Mode</h2>
@@ -131,8 +107,6 @@
         </div>
       </div>
 
-      <button class="btn wide" onclick="startExam()">Start exam</button>
-      <div class="hero-actions"><button class="btn ghost" onclick="goTo('lessons')">Lessons</button><button class="btn ghost" onclick="goTo('cards')">Index cards</button></div>
 
       <div class="domain-legend">
         <span><b>Governance</b> 17%</span>
@@ -142,9 +116,10 @@
       </div>
       <p class="disclaimer">Unofficial, independent study aid — not affiliated with, endorsed by, or sourced from ISACA. All questions are original and are not real exam items. CISM is a registered trademark of ISACA. The real CISM uses a scaled 200–800 score (450 to pass), so the percentage here is a study signal, not an official score. Aim for ~70%+ overall and in every domain before test day.</p>
       <div class="verfoot">
-        <div class="verline"><b>Version <span id="verNum">8.0</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
+        <div class="verline"><b>Version <span id="verNum">8.1</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
         <button class="linkbtn" onclick="toggleChangelog()">Version history</button>
         <div id="changelog" class="changelog hidden">
+          <div><b>v8.1 — September 10, 2026</b>Design pass. Start screen shortened — fact tiles removed, mocks collapsed to a row, sets grouped into Simulate / Mocks / Practice, and Start moved to a sticky bar that's always reachable. Phones get a bottom tab bar. Safe-area padding for installed use on iPhone. Save &amp; exit during any exam (progress kept; resume later). Flashcards grow to fit long answers. Review collapses correct answers to one line and keeps filters pinned. Practice mode marks ✓/✗, not color alone. Lessons get previous/next at the bottom. History shows the latest 20 with show-all. Type sizes normalized to a scale.</div>
           <div><b>v8.0 — September 10, 2026</b>Bank extended to 363. Mocks and the simulation are now built concept-aware, so a set never contains two questions on the same idea. New per question: an "I'm guessing" toggle (right-while-guessing answers join the retry set as lucky guesses) and timing (average seconds by domain, slow-question filter in review). Flag any question for author review and export the list. Flashcards move to spaced repetition — boxes at 1, 3, 7, 14, 30 days with a due-only default. Installable as an app and works offline.</div>
           <div><b>v7.1 — September 9, 2026</b>Progress is now remembered. An interrupted exam autosaves (answers, flags, position, clock) and offers Resume on return. Every finished attempt is logged to a new History section with a score trend chart (overall or per domain), a target line, and per-attempt domain bars. Questions you miss accumulate in a "Retry missed" set until you get them right. Export and import progress as a file. All stored in the browser only.</div>
           <div><b>v7.0 — September 9, 2026</b>Section navigation (Exam · Lessons · Cards) in the header, hidden during a live exam. Dark theme toggle that follows the device preference and is remembered. New Index Cards section: 31 bottom-line cards that pop open to a quick-read summary, and 90 flip-to-reveal flashcards (short answer and true/false) with got-it tracking, domain filters, shuffle, and hide-known. Keyboard: space flips, arrows navigate, G/A mark.</div>
@@ -583,6 +558,7 @@
         <div class="callout principle"><span class="cl">How to use this</span>Every new topic still answers to the same mindset: assess before acting, keep a human accountable, tie controls to classification and risk, and manage third parties through assessment and contract. If an AI or emerging-tech question appears, do not reach for a technical answer — reach for the governance one.</div>
       </div>
 
+      <div class="lesson-foot" id="lessonFoot"><button class="btn ghost" id="lfPrev" onclick="stepLesson(-1)">‹ Previous</button><button class="btn ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button><button class="btn ghost" id="lfNext" onclick="stepLesson(1)">Next ›</button></div>
     </div>
   </section>
 
@@ -647,6 +623,7 @@
       <div class="hist-summary" id="histSummary"></div>
       <div class="hist-chart" id="histChart"></div>
       <div class="hist-list" id="histList"></div>
+      <div style="text-align:center;margin-top:10px"><button class="btn ghost hidden" id="histMore" onclick="histShowAll=!histShowAll;renderHistory()">Show all</button></div>
       <div class="hist-actions">
         <button class="btn" id="missedBtn" onclick="startMissedDrill()">Retry missed questions</button>
         <button class="btn ghost" onclick="exportProgress()">Export</button>
@@ -699,7 +676,7 @@
         <h2 style="margin:0;font-family:var(--serif);font-weight:600;font-size:1.4rem">Answer review</h2>
         <button class="btn ghost" onclick="backToResults()">Back to results</button>
       </div>
-      <div class="filters" id="filters"></div>
+      <div class="filters sticky" id="filters"></div>
       <div id="reviewList"></div>
     </div>
   </section>
@@ -719,6 +696,21 @@
     </div>
   </div>
 </div>
+
+<!-- ============ START BAR (sticky CTA) ============ -->
+<div class="startbar hidden" id="startBar">
+  <div class="startbar-inner">
+    <div class="startsum"><b id="startSumSet">Full simulation</b><span id="startSumMode">Exam mode · timed</span></div>
+    <button class="btn" onclick="startExam()">Start</button>
+  </div>
+</div>
+<!-- ============ TAB BAR (phones) ============ -->
+<nav class="tabbar" id="tabBar" aria-label="Sections">
+  <button class="tb on" data-nav="exam" onclick="goTo('exam')"><span class="tbi">▤</span>Exam</button>
+  <button class="tb" data-nav="lessons" onclick="goTo('lessons')"><span class="tbi">▮</span>Lessons</button>
+  <button class="tb" data-nav="cards" onclick="goTo('cards')"><span class="tbi">▭</span>Cards</button>
+  <button class="tb" data-nav="history" onclick="goTo('history')"><span class="tbi">▵</span>History</button>
+</nav>
 
 <!-- ============ ACTION BAR ============ -->
 <div class="actionbar hidden" id="actionbar">

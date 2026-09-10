@@ -24,13 +24,15 @@ function pickSet(btn,s){
   btn.classList.add('on');
   cfg.set=s;
   document.getElementById('drillRow').style.display = s==='drill' ? 'grid' : 'none';
+  updateStartSummary();
 }
 function pickDrill(btn,d){
   document.querySelectorAll('[data-drill]').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   cfg.drill=d;
+  updateStartSummary();
 }
-function pickMode(btn,m){document.querySelectorAll('[data-mode]').forEach(b=>b.classList.remove('on'));btn.classList.add('on');cfg.mode=m;}
+function pickMode(btn,m){document.querySelectorAll('[data-mode]').forEach(b=>b.classList.remove('on'));btn.classList.add('on');cfg.mode=m;updateStartSummary();}
 
 function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
@@ -115,6 +117,7 @@ function startExam(){
   document.getElementById('mainNav').classList.add('hidden');
   if(state.mode==="exam"){ startTimer(); } else { document.getElementById('timer').classList.add('hidden'); }
   renderQuestion();
+  syncChrome();
   window.scrollTo(0,0);
 }
 
@@ -159,7 +162,8 @@ function renderQuestion(){
       if(i===q.a) b.classList.add('correct');
       else if(answered===i) b.classList.add('incorrect');
     }
-    b.innerHTML=`<span class="key">${String.fromCharCode(65+i)}</span><span class="body">${opt}</span>`;
+    const mark = revealed ? (i===q.a ? '<span class="mark">✓</span>' : (answered===i ? '<span class="mark">✗</span>' : '')) : '';
+    b.innerHTML=`<span class="key">${String.fromCharCode(65+i)}</span><span class="body">${opt}</span>${mark}`;
     b.onclick=()=>choose(i);
     box.appendChild(b);
   });
@@ -221,6 +225,7 @@ function openNav(){
     <div class="navfoot">
       <div style="font-size:.85rem;color:var(--muted);margin-bottom:10px">${answeredCount} of ${state.qs.length} answered${state.flags.filter(Boolean).length?` · ${state.flags.filter(Boolean).length} flagged`:''}</div>
       <button class="btn" style="width:100%" onclick="${state.mode==='exam'?'confirmFinish()':'finish(false)'}">${state.mode==='exam'?'End exam &amp; see score':'Finish &amp; see results'}</button>
+      <button class="btn ghost" style="width:100%;margin-top:8px" onclick="exitExam()">Save &amp; exit — resume later</button>
     </div>`;
   document.body.appendChild(scrim);document.body.appendChild(panel);
   const g=panel.querySelector('#navGrid');
@@ -267,6 +272,7 @@ function finish(auto){
   document.getElementById('mainNav').classList.remove('hidden');
   setTab('exam');
   document.getElementById('resultsScreen').classList.remove('hidden');
+  syncChrome();
 
   const pct=Math.round(correct/state.qs.length*100);
   document.getElementById('scorePct').textContent=pct+'%';
@@ -367,10 +373,12 @@ function renderReviewList(){
       opts+=`<div class="${c}"><span class="k">${String.fromCharCode(65+oi)}</span><span>${o}${badge}</span></div>`;
     });
 
+    const collapsed = !isWrong && !(state.guess&&state.guess[i]) && !state.flags[i] && reviewFilter!=='slow';
+    if(collapsed) item.classList.add('collapsed');
     item.innerHTML=`<div class="tags">${tags}</div>
-      <p class="rq">Q${i+1}. ${q.q}</p>
+      <p class="rq" onclick="this.parentElement.classList.toggle('collapsed')">Q${i+1}. ${q.q}</p>
       ${opts}
-      <div class="rex">${q.e}${rationaleHtml(q)}</div><div style="margin-top:10px">${flagBtn(q)}</div>`;
+      <div class="rex">${q.e}${rationaleHtml(q)}</div><div class="flagwrap" style="margin-top:10px">${flagBtn(q)}</div>`;
     list.appendChild(item);
   });
   if(shown===0){
@@ -388,7 +396,7 @@ function restart(){
   document.getElementById('timer').classList.remove('hidden');
   state=null;
   setTab('exam');
-  renderResumeBanner(); updateMissedCount();
+  renderResumeBanner(); updateMissedCount(); syncChrome();
   window.scrollTo(0,0);
 }
 
@@ -409,8 +417,11 @@ function showLesson(i){
   document.querySelectorAll('.lesson-page').forEach(p=>p.classList.remove('on'));
   document.getElementById('lesson-'+i).classList.add('on');
   document.querySelectorAll('.lchip').forEach(c=>c.classList.toggle('on', c.getAttribute('data-lesson')===String(i)));
+  const max=document.querySelectorAll('.lesson-page').length-1, p=document.getElementById('lfPrev'), nx=document.getElementById('lfNext');
+  if(p){ p.disabled = i<=0; nx.disabled = i>=max; const chips=document.querySelectorAll('.lchip'); p.textContent = i>0 ? '‹ '+chips[i-1].textContent : '‹ Previous'; nx.textContent = i<max ? chips[i+1].textContent+' ›' : 'Next ›'; }
   window.scrollTo(0,0);
 }
+function stepLesson(n){ const cur=[...document.querySelectorAll('.lesson-page')].findIndex(p=>p.classList.contains('on')); const next=cur+n; const max=document.querySelectorAll('.lesson-page').length-1; if(next<0||next>max) return; showLesson(next); }
 function leaveLessons(){
   document.getElementById('lessonsScreen').classList.add('hidden');
   document.getElementById(lessonsFrom==='results'?'resultsScreen':'startScreen').classList.remove('hidden');
@@ -453,7 +464,7 @@ function toggleTheme(){
 
 /* ---------- Section navigation ---------- */
 const SCREENS=['startScreen','lessonsScreen','cardsScreen','historyScreen','resultsScreen','reviewScreen'];
-function setTab(sec){document.querySelectorAll('#mainNav .tab').forEach(b=>b.classList.toggle('on',b.getAttribute('data-nav')===sec));}
+function setTab(sec){document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-nav')===sec));}
 function goTo(sec){
   if(state && !state.finished) return;               // never leave a live exam via nav
   SCREENS.forEach(id=>document.getElementById(id).classList.add('hidden'));
@@ -463,8 +474,42 @@ function goTo(sec){
   if(sec==='history') renderHistory();
   if(sec==='exam') { renderResumeBanner(); updateMissedCount(); }
   if(sec==='lessons') lessonsFrom='start';
-  setTab(sec); window.scrollTo(0,0);
+  setTab(sec); syncChrome(); window.scrollTo(0,0);
 }
+
+/* ---------- Chrome sync: start bar, tab bar, exit button ---------- */
+function updateStartSummary(){
+  const s=document.getElementById('startSumSet'), m=document.getElementById('startSumMode'); if(!s) return;
+  s.textContent=setLabel(cfg.set,cfg.drill);
+  m.textContent = cfg.mode==='exam' ? 'Exam mode · timed · results at the end' : 'Practice mode · untimed · answers as you go';
+}
+function syncChrome(){
+  const live = !!(state && !state.finished);
+  const onStart = !document.getElementById('startScreen').classList.contains('hidden');
+  document.getElementById('startBar').classList.toggle('hidden', !onStart || live);
+  document.getElementById('tabBar').classList.toggle('hidden', live);
+  document.getElementById('mainNav').classList.toggle('hidden', live);
+  document.getElementById('exitBtn').classList.toggle('hidden', !live);
+  if(onStart) updateStartSummary();
+}
+function exitExam(){
+  if(!state || state.finished) return;
+  if(!confirm('Save progress and exit? You can resume from the Exam screen.')) return;
+  persistProgress();
+  if(state.timer) clearInterval(state.timer);
+  state=null;
+  document.getElementById('examScreen').classList.add('hidden');
+  document.getElementById('actionbar').classList.add('hidden');
+  document.getElementById('barMeta').classList.add('hidden');
+  document.getElementById('timer').classList.remove('hidden');
+  closeNav();
+  document.getElementById('startScreen').classList.remove('hidden');
+  renderResumeBanner(); updateMissedCount(); setTab('exam'); syncChrome(); window.scrollTo(0,0);
+}
+(function watchScreens(){
+  const mo=new MutationObserver(()=>syncChrome());
+  ['startScreen','examScreen','lessonsScreen','cardsScreen','historyScreen','resultsScreen','reviewScreen'].forEach(id=>{const el=document.getElementById(id); if(el) mo.observe(el,{attributes:true,attributeFilter:['class']});});
+})();
 
 /* ---------- Index cards: shared ---------- */
 const CARD_DOMS={mind:"Mindset",gov:"Governance",risk:"Risk Management",prog:"Security Program",inc:"Incident Management"};
@@ -645,7 +690,7 @@ function resumeExam(){
   document.getElementById('mainNav').classList.add('hidden');
   const t=document.getElementById('timer');
   if(state.mode==='exam'){ t.classList.remove('hidden'); startTimer(); } else { t.classList.add('hidden'); }
-  renderQuestion(); window.scrollTo(0,0);
+  renderQuestion(); syncChrome(); window.scrollTo(0,0);
 }
 function discardProgress(){ if(confirm('Discard the saved exam in progress?')){ safeStore.del('cism.inprogress'); renderResumeBanner(); } }
 
@@ -675,7 +720,7 @@ function updateMissedCount(){
 function startMissedDrill(){ if(!missedCount()) return; cfg.set='missed'; cfg.mode='practice'; document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-mode')==='practice')); document.querySelectorAll('[data-set]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-set')==='missed')); goTo('exam'); startExam(); }
 
 /* history screen */
-let histMetric='all';
+let histMetric='all', histShowAll=false;
 function renderHistory(){
   const mbox=document.getElementById('histMetric'); mbox.innerHTML='';
   [['all','Overall'],['gov','Gov'],['risk','Risk'],['prog','Program'],['inc','Incident']].forEach(([k,l])=>{
@@ -705,7 +750,9 @@ function renderHistory(){
   chart.querySelector('.cap span:nth-child(2)').innerHTML='<span style="color:#1d4ed8">●</span> exam &nbsp; <span style="color:#f59e0b">●</span> practice';
   // list
   list.innerHTML='';
-  HISTORY.slice().reverse().forEach(h=>{
+  const more=document.getElementById('histMore'); const rows=HISTORY.slice().reverse(); const shown=histShowAll?rows:rows.slice(0,20);
+  if(more){ more.classList.toggle('hidden', rows.length<=20); more.textContent = histShowAll ? 'Show recent only' : 'Show all '+rows.length; }
+  shown.forEach(h=>{
     const band=h.pct>=70?'g':(h.pct>=60?'m':'l');
     const mini=['gov','risk','prog','inc'].map(d=>{const dd=h.dom&&h.dom[d];const p=dd&&dd.t?Math.round(dd.c/dd.t*100):0;return `<i title="${DOMAINS[d].short} ${p}%"><b style="width:${p}%"></b></i>`;}).join('');
     const row=document.createElement('div'); row.className='hist-row';
@@ -748,7 +795,7 @@ function rationaleHtml(q){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION="8.0", APP_BUILD="2026-09-09";
+const APP_VERSION="8.1", APP_BUILD="2026-09-10";
 function initVersion(){
   const pages=document.querySelectorAll('.lesson-page').length;
   document.getElementById('verNum').textContent=APP_VERSION;
@@ -759,7 +806,7 @@ function initVersion(){
   document.querySelectorAll('[data-mocksize]').forEach(el=>el.textContent=sets.A.length);
   document.querySelectorAll('[data-banksize]').forEach(el=>el.textContent=BANK.length);
   document.querySelectorAll('[data-drillcount]').forEach(el=>{el.textContent=BANK.filter(q=>q.d===el.getAttribute('data-drillcount')).length;});
-  renderResumeBanner(); updateMissedCount();
+  renderResumeBanner(); updateMissedCount(); updateStartSummary(); syncChrome();
 }
 function toggleChangelog(){document.getElementById('changelog').classList.toggle('hidden');}
 initVersion();
