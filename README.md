@@ -6,15 +6,47 @@ An unofficial, self-contained practice exam for the ISACA® Certified Informatio
 
 ## What's inside
 
-- **264 original scenario questions** written to the exam's item conventions: one-sentence stems with a single capitalized qualifier (MOST / BEST / FIRST / PRIMARY), four short parallel options, all-plausible distractors, and a rationale for every option — not just the credited one.
+- **363 original scenario questions** written to the exam's item conventions: one-sentence stems with a single capitalized qualifier (MOST / BEST / FIRST / PRIMARY), four short parallel options, all-plausible distractors, and a rationale for every option — not just the credited one.
 - **Weighted to the current blueprint:** Governance 17%, Risk Management 20%, Security Program 33%, Incident Management 30%.
 - **Modes:** full 150-question simulation on a 4-hour clock at real exam pacing (96 s/question), four non-overlapping fixed mocks (A–D), a 20-question quick set, and per-domain drills. Exam mode scores at the end; practice mode explains each answer immediately.
 - **Results by domain** mapped to exam weight, with one-tap links into the relevant lesson.
 - **Seven lessons:** the management mindset, one per domain, exam technique (including "where the shortcuts fail"), and the 2024 manual updates.
 - **Index cards:** 31 bottom-line cards that pop open to a quick-read summary, and 90 flip-to-reveal flashcards (short answer and true/false) with got-it tracking, domain filters, shuffle, and hide-known.
+- **Confidence and pacing:** mark any question "I'm guessing" — right-while-guessing answers join the retry set; every question is timed, with average seconds by domain and a slow-question filter in review.
+- **Flag for review:** flag questions you think are wrong or arguable and export the list.
+- **Spaced-repetition flashcards:** got-it moves a card out 1, 3, 7, 14, then 30 days; the deck defaults to what's due.
+- **Installable:** add to your home screen; works fully offline after the first visit.
+- **Confidence and pacing:** mark any question "I'm guessing" — right-while-guessing answers join the retry set; every question is timed, with average seconds by domain and a slow-question filter in review.
+- **Flag for review:** flag questions you think are wrong or arguable and export the list.
+- **Spaced-repetition flashcards:** got-it moves a card out 1, 3, 7, 14, then 30 days; the deck defaults to what's due.
+- **Installable:** add to your home screen; works fully offline after the first visit.
+- **Confidence and pacing:** mark any question "I'm guessing" — right-while-guessing answers join the retry set; every question is timed, with average seconds by domain and a slow-question filter in review.
+- **Flag for review:** flag questions you think are wrong or arguable and export the list.
+- **Spaced-repetition flashcards:** got-it moves a card out 1, 3, 7, 14, then 30 days; the deck defaults to what's due.
+- **Installable:** add to your home screen; works fully offline after the first visit.
+- **Confidence and pacing:** mark any question "I'm guessing" — right-while-guessing answers join the retry set; every question is timed, with average seconds by domain and a slow-question filter in review.
+- **Flag for review:** flag questions you think are wrong or arguable and export the list.
+- **Spaced-repetition flashcards:** got-it moves a card out 1, 3, 7, 14, then 30 days; the deck defaults to what's due.
+- **Installable:** add to your home screen; works fully offline after the first visit.
 - **Progress that persists:** an interrupted exam autosaves and offers Resume; every attempt is logged to a History view with a score-trend chart and per-domain bars; missed questions accumulate in a "Retry missed" set until cleared; export/import as JSON.
 - **Dark theme** toggle in the header — follows your device preference and is remembered.
 - Answer options shuffle every run. Keyboard: 1–4 or A–D to answer, ←/→ to navigate, F to flag; on flashcards, space flips, ←/→ move, G/A mark got-it/again.
+
+## Developing
+
+Source lives in `src/` — `questions.json`, `bluf.json`, `flashcards.json`, `app.js`, `styles.css`, and `template.html`. Edit there and run `node build.js` to regenerate `index.html`. `npm test` runs a headless browser smoke test (requires `npm install` once, which pulls in jsdom for the test only).
+
+## Developing
+
+Source lives in `src/` — `questions.json`, `bluf.json`, `flashcards.json`, `app.js`, `styles.css`, and `template.html`. Edit there and run `node build.js` to regenerate `index.html`. `npm test` runs a headless browser smoke test (requires `npm install` once, which pulls in jsdom for the test only).
+
+## Developing
+
+Source lives in `src/` — `questions.json`, `bluf.json`, `flashcards.json`, `app.js`, `styles.css`, and `template.html`. Edit there and run `node build.js` to regenerate `index.html`. `npm test` runs a headless browser smoke test (requires `npm install` once, which pulls in jsdom for the test only).
+
+## Developing
+
+Source lives in `src/` — `questions.json`, `bluf.json`, `flashcards.json`, `app.js`, `styles.css`, and `template.html`. Edit there and run `node build.js` to regenerate `index.html`. `npm test` runs a headless browser smoke test (requires `npm install` once, which pulls in jsdom for the test only).
 
 ## Deploying
 

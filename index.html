@@ -4,9 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CISM Practice Exam</title>
-<meta name="description" content="Unofficial CISM practice exam: 264 original scenario questions with per-option rationales, timed simulation, domain drills, lessons, and flip-to-reveal index cards. Dark theme included. Runs entirely in the browser.">
+<meta name="description" content="Unofficial CISM practice exam: 363 original scenario questions with per-option rationales, timed simulation, domain drills, lessons, and flip-to-reveal index cards. Dark theme included. Runs entirely in the browser.">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#0f172a">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CISM">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230f172a'/%3E%3Ctext x='32' y='41' font-family='Georgia,serif' font-size='26' fill='%23ffffff' text-anchor='middle'%3ECISM%3C/text%3E%3C/svg%3E">
 <style>
   :root{
@@ -374,6 +378,12 @@
   @media (max-width:400px){.ver{display:none}}
   @media (max-width:640px){.tab{padding:6px 7px;font-size:.76rem}.hist-actions .btn{flex:1;min-width:120px}}
 
+  /* ---------- Confidence & flags ---------- */
+  .guess{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:.88rem;color:var(--muted);cursor:pointer}
+  .guess input{width:16px;height:16px}
+  .flagbtn{font-size:.78rem}
+  .flagbtn.on{background:var(--flag-soft);color:var(--flag);border-color:var(--flag)}
+
   /* ---------- Responsive ---------- */
   @media (max-width:640px){
     .facts{grid-template-columns:repeat(2,1fr)}
@@ -395,7 +405,7 @@
 <header class="bar" id="topbar">
   <div class="bar-inner">
     <div class="brand">
-      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v7.1</span>
+      <span class="mark">CISM</span><span class="sub">Practice Exam</span><span class="ver" id="verBadge">v8.0</span>
     </div>
     <nav class="tabs" id="mainNav" aria-label="Sections">
       <button class="tab on" data-nav="exam" onclick="goTo('exam')">Exam</button>
@@ -427,7 +437,7 @@
       <div class="hero">
         <div class="eyebrow">Certified Information Security Manager</div>
         <h1>Practice Exam</h1>
-        <p class="lede">A 264-question bank written to ISACA item conventions — short stems, balanced options, all four choices rationalized — weighted to the real four-domain blueprint and updated for the 2024 manual — four non-overlapping 50-question mocks, domain drills, and a full-length 150-question timed simulation — plus lessons and flip-to-reveal index cards. The goal isn't recall — it's training the manager's judgment over the practitioner's reflex.</p>
+        <p class="lede">A 363-question bank written to ISACA item conventions — short stems, balanced options, all four choices rationalized — weighted to the real four-domain blueprint and updated for the 2024 manual — four non-overlapping 50-question mocks, domain drills, and a full-length 150-question timed simulation — plus lessons and flip-to-reveal index cards. The goal isn't recall — it's training the manager's judgment over the practitioner's reflex.</p>
       </div>
 
       <div class="rule"></div>
@@ -467,8 +477,8 @@
             <div class="d">Fixed set — no overlap with A, B, or C</div>
           </button>
           <button class="choice" data-set="missed" id="setMissed" onclick="pickSet(this,'missed')">
-            <div class="t">Retry missed — <span data-missedcount>0</span> questions</div>
-            <div class="d">Everything you've gotten wrong and not yet cleared</div>
+            <div class="t">Retry missed &amp; guessed — <span data-missedcount>0</span></div>
+            <div class="d">Wrong answers and lucky guesses, until you clear them</div>
           </button>
           <button class="choice" data-set="drill" onclick="pickSet(this,'drill')">
             <div class="t">Domain drill</div>
@@ -518,9 +528,10 @@
       </div>
       <p class="disclaimer">Unofficial, independent study aid — not affiliated with, endorsed by, or sourced from ISACA. All questions are original and are not real exam items. CISM is a registered trademark of ISACA. The real CISM uses a scaled 200–800 score (450 to pass), so the percentage here is a study signal, not an official score. Aim for ~70%+ overall and in every domain before test day.</p>
       <div class="verfoot">
-        <div class="verline"><b>Version <span id="verNum">7.1</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
+        <div class="verline"><b>Version <span id="verNum">8.0</span></b> · built <span id="verDate">2026-09-08</span> · <span id="verStats"></span></div>
         <button class="linkbtn" onclick="toggleChangelog()">Version history</button>
         <div id="changelog" class="changelog hidden">
+          <div><b>v8.0 — September 10, 2026</b>Bank extended to 363. Mocks and the simulation are now built concept-aware, so a set never contains two questions on the same idea. New per question: an "I'm guessing" toggle (right-while-guessing answers join the retry set as lucky guesses) and timing (average seconds by domain, slow-question filter in review). Flag any question for author review and export the list. Flashcards move to spaced repetition — boxes at 1, 3, 7, 14, 30 days with a due-only default. Installable as an app and works offline.</div>
           <div><b>v7.1 — September 9, 2026</b>Progress is now remembered. An interrupted exam autosaves (answers, flags, position, clock) and offers Resume on return. Every finished attempt is logged to a new History section with a score trend chart (overall or per domain), a target line, and per-attempt domain bars. Questions you miss accumulate in a "Retry missed" set until you get them right. Export and import progress as a file. All stored in the browser only.</div>
           <div><b>v7.0 — September 9, 2026</b>Section navigation (Exam · Lessons · Cards) in the header, hidden during a live exam. Dark theme toggle that follows the device preference and is remembered. New Index Cards section: 31 bottom-line cards that pop open to a quick-read summary, and 90 flip-to-reveal flashcards (short answer and true/false) with got-it tracking, domain filters, shuffle, and hide-known. Keyboard: space flips, arrows navigate, G/A mark.</div>
           <div><b>v6.1 — September 9, 2026</b>Deployment release: served as index.html for GitHub Pages, page metadata and favicon added, unofficial-status disclaimer added, version history tidied. No question or lesson changes.</div>
@@ -996,7 +1007,7 @@
             </div>
           </div>
           <div class="deck-actions">
-            <button class="btn warn" onclick="markCard(false)">Again</button>
+            <button class="btn warn" onclick="markCard(false)">Again (back to box 1)</button>
             <button class="btn ok" onclick="markCard(true)">Got it</button>
           </div>
           <div class="deck-nav">
@@ -1005,8 +1016,8 @@
             <button class="icbtn" onclick="resetKnown()">Reset progress</button>
             <button class="icbtn" onclick="deckStep(1)">Next ›</button>
           </div>
-          <label class="deck-opt"><input type="checkbox" id="hideKnown" onchange="rebuildDeck()"> Hide cards I know</label>
-          <div class="deck-empty hidden" id="deckEmpty">Every card in this set is marked known. Uncheck "hide" or reset progress.</div>
+          <label class="deck-opt"><input type="checkbox" id="hideKnown" checked onchange="rebuildDeck()"> Due cards only (spaced repetition)</label>
+          <div class="deck-empty hidden" id="deckEmpty">Nothing due in this set right now. Uncheck "due cards only" to review ahead, or come back tomorrow.</div>
         </div>
       </div>
     </div>
@@ -1025,6 +1036,7 @@
       <div class="hist-actions">
         <button class="btn" id="missedBtn" onclick="startMissedDrill()">Retry missed questions</button>
         <button class="btn ghost" onclick="exportProgress()">Export</button>
+        <button class="btn ghost" onclick="exportFlags()">Flagged (<span id="flagCount">0</span>)</button>
         <label class="btn ghost" style="cursor:pointer;text-align:center">Import<input type="file" accept="application/json,.json" style="display:none" onchange="importProgress(this)"></label>
         <button class="btn ghost" onclick="clearHistory()">Clear history</button>
       </div>
@@ -1038,6 +1050,7 @@
       <div class="qtag" id="qtag">Question 1</div>
       <p class="qtext" id="qtext"></p>
       <div class="options" id="options"></div>
+      <label class="guess" id="guessWrap"><input type="checkbox" id="guessBox" onchange="setGuess(this.checked)"> I'm guessing on this one</label>
       <div class="explain hidden" id="explain"></div>
     </div>
   </section>
@@ -1120,7 +1133,7 @@ const DOMAINS = {
 };
 
 const BANK = [
-/* v6.0: bank extended; all items rationalized per option */
+/* All items original. Every option rationalized. */
 {d:"gov",q:"Which of the following is the FIRST step in developing an information security strategy?",
 o:["Perform a risk assessment","Review the business objectives","Establish a steering committee","Define security metrics"],a:1,
 e:"Strategy exists to support the business, so understanding business objectives comes first.",
@@ -2439,7 +2452,502 @@ r:["Exercises test but do not keep plan information current.","Current plan info
 {d:"inc",q:"Which of the following statements about recovery objectives is correct?",
 o:["The SDO is determined primarily by the RTO.","A change in RPO may make a set RTO unattainable.","The MTO should never exceed the RTO.","The SDO is set to reduce the MTO."],a:1,
 e:"Meeting an RPO requires restoring data, and a more demanding RPO can make the RTO unattainable with existing methods.",
-r:["The SDO helps define the RTO, not the reverse.","Data restoration time links RPO and RTO.","The RTO precedes the MTO chronologically.","The SDO does not reduce the MTO."]}
+r:["The SDO helps define the RTO, not the reverse.","Data restoration time links RPO and RTO.","The RTO precedes the MTO chronologically.","The SDO does not reduce the MTO."]},
+
+{d:"gov",q:"Which of the following is the BEST justification for a security investment presented to senior management?",
+o:["Reduced audit findings","Alignment with a recognized framework","Support for a specific business objective","Adoption by industry peers"],a:2,
+e:"Management funds what advances the business.",
+r:["Fewer findings is a compliance benefit, not a business case.","Framework alignment is a means, not a justification.","Linking the spend to a business objective is the justification.","Peer adoption is not the organization's need."]},
+
+{d:"gov",q:"An information security manager finds that business units routinely bypass security review for new projects. The BEST governance response is to:",
+o:["Escalate each violation to HR","Add a security gate to project approval","Require sign-off after deployment","Publish a memo restating policy"],a:1,
+e:"Building the review into the process that projects already pass through makes bypass impossible rather than punishable.",
+r:["Escalation treats a process gap as a personnel issue.","A mandatory gate embeds security in the workflow.","Post-deployment sign-off is too late to influence design.","Memos do not change process."]},
+
+{d:"gov",q:"The MOST important reason for the information security manager to build relationships with business unit leaders is to:",
+o:["obtain budget for security projects.","learn early of business changes affecting risk.","enforce compliance with security policy.","identify steering committee candidates."],a:1,
+e:"Risk changes with the business; the manager learns about change through the people driving it.",
+r:["Budget is a possible outcome, not the primary reason.","Early awareness of change keeps risk management current.","Enforcement is not the purpose of relationships.","Committee staffing is incidental."]},
+
+{d:"gov",q:"Which of the following BEST demonstrates that the security strategy is aligned with business objectives?",
+o:["Security objectives expressed in business terms","A complete inventory of security controls","Annual certification to a security standard","A fully staffed security department"],a:0,
+e:"Alignment is visible when security objectives are written in the language of the business.",
+r:["Objectives in business terms are the best indicator of alignment.","Control inventories describe capability, not alignment.","Certification shows conformance, not alignment.","Staffing is a resource measure."]},
+
+{d:"gov",q:"An organization's security policies have not been updated in several years. The GREATEST risk of this situation is that policies:",
+o:["exceed current regulatory requirements.","no longer reflect current risk and objectives.","are too detailed for employees to follow.","duplicate existing security standards."],a:1,
+e:"Policy that has drifted from current risk and objectives directs effort at the wrong things.",
+r:["Exceeding requirements is rarely the problem with stale policy.","Misalignment with current risk and objectives is the risk.","Detail level is a drafting issue, not a staleness risk.","Duplication is a housekeeping issue."]},
+
+{d:"gov",q:"Who should own the decision to grant an exception to security policy for a business application?",
+o:["The information security manager","The application's business owner","The IT operations manager","The internal auditor"],a:1,
+e:"An exception is a risk decision that belongs to the owner accountable for the application.",
+r:["The manager assesses and advises on the exception.","The business owner accepts the risk the exception creates.","Operations implements but does not own the risk.","Audit provides assurance, not decisions."]},
+
+{d:"gov",q:"The information security manager is asked to reduce the security budget by 20 percent. The BEST first step is to:",
+o:["cut training, which has the lowest impact.","report the risks accepted at the lower level.","defer all new security projects for a year.","reduce security staff in proportion."],a:1,
+e:"Budget cuts are risk decisions; management needs to see what risk it is accepting.",
+r:["Cutting by cost impact ignores risk.","Reporting the risk consequences enables an informed decision.","Blanket deferral is not risk-based.","Proportional cuts are not risk-based."]},
+
+{d:"gov",q:"Which of the following BEST indicates that a security steering committee is effective?",
+o:["It meets on a fixed monthly schedule.","Its decisions are reflected in business unit priorities.","It is chaired by the information security manager.","It reviews every security incident."],a:1,
+e:"An effective committee changes what the business does.",
+r:["Meeting cadence measures activity, not effect.","Influence on business priorities is the evidence of effectiveness.","The chair's identity does not determine effectiveness.","Incident review is an operational task."]},
+
+{d:"gov",q:"A newly appointed information security manager should FIRST:",
+o:["conduct a comprehensive risk assessment.","understand the business and its objectives.","review the existing security policies.","meet the security vendors."],a:1,
+e:"Everything else — assessment, policy review, tooling — depends on understanding what the business is trying to do.",
+r:["Assessment needs business context to prioritize.","Business understanding comes first.","Policy review is informed by business understanding.","Vendors are not the starting point."]},
+
+{d:"gov",q:"An organization's board asks whether the security program is adequate. The BEST basis for the answer is:",
+o:["the number of incidents in the past year.","an independent assessment against appetite.","the security budget compared with peers.","the maturity of the security tooling."],a:1,
+e:"Adequacy is judged against the organization's own appetite, and independence gives the answer credibility.",
+r:["Incident counts alone do not establish adequacy.","Independent assessment against appetite answers the question.","Peer budget comparison is not a measure of adequacy.","Tool maturity is a narrow indicator."]},
+
+{d:"gov",q:"The PRIMARY purpose of defining information security roles and responsibilities is to:",
+o:["satisfy internal audit requirements.","establish accountability without gaps.","justify current security staffing levels.","support annual performance reviews."],a:1,
+e:"Defined roles make accountability explicit.",
+r:["Audit satisfaction is secondary.","Accountability without gaps or overlaps is the purpose.","Staffing justification is not the purpose.","Performance reviews are an HR use."]},
+
+{d:"gov",q:"Which of the following is the MOST effective way to ensure security requirements are addressed in a merger?",
+o:["Applying the acquirer's policies on day one","Including security in due diligence and planning","Conducting a penetration test after integration","Retaining the target company's security team"],a:1,
+e:"Security influences the deal and the integration only if it is involved before both.",
+r:["Immediate policy imposition ignores assessed differences.","Due diligence and planning involvement is the effective approach.","Post-integration testing is too late.","Team retention does not address requirements."]},
+
+{d:"gov",q:"The MOST important characteristic of security metrics reported to executives is that they are:",
+o:["technically precise.","tied to business outcomes.","collected automatically.","comparable to industry benchmarks."],a:1,
+e:"Executives act on business meaning.",
+r:["Technical precision does not aid executive decisions.","Business outcome linkage is what executives need.","Automation is a collection convenience.","Benchmarks are secondary context."]},
+
+{d:"gov",q:"Which of the following would BEST support a decision to adopt a new security framework?",
+o:["It is the most widely used in the industry.","It maps to the organization's objectives and obligations.","It contains the largest number of controls.","It is recommended by the organization's main vendor."],a:1,
+e:"A framework is adopted because it fits the organization.",
+r:["Popularity does not establish fit.","Fit with objectives and obligations is the basis.","Control count is not a quality.","Vendor recommendation is not the organization's assessment."]},
+
+{d:"gov",q:"What is the PRIMARY risk of an information security function that reports to the chief information officer?",
+o:["Slower response to security incidents","Security subordinated to IT delivery pressures","Higher overall cost of security operations","Reduced access to technical expertise"],a:1,
+e:"When security reports into IT, delivery deadlines and cost can override security concerns.",
+r:["Reporting line does not slow response.","Subordination to IT priorities is the conflict of interest.","Cost is not determined by reporting line.","Expertise is unaffected."]},
+
+{d:"gov",q:"An information security manager learns of a planned business initiative with significant security implications only after contracts are signed. The BEST long-term remedy is to:",
+o:["require the manager's signature on all contracts.","embed security consultation in business planning.","conduct a risk assessment of the initiative.","report the business unit to senior management."],a:1,
+e:"The gap is in the process, not the initiative.",
+r:["Contract signatures come too late in planning.","Consultation during planning fixes the process.","Assessment addresses this initiative, not the next one.","Reporting does not change the process."]},
+
+{d:"risk",q:"Which of the following is the MOST important reason to involve business owners in risk assessment?",
+o:["They approve the assessment budget.","They understand the business impact of loss.","They select the assessment methodology.","They implement the resulting controls."],a:1,
+e:"Impact is a business judgment.",
+r:["Budget approval is not the reason.","Owners know what loss means to the business.","Methodology is the manager's domain.","Implementation is typically IT's."]},
+
+{d:"risk",q:"A risk assessment identifies a threat with high impact but very low likelihood. The MOST appropriate treatment is likely to be:",
+o:["mitigation with preventive controls.","transfer through insurance.","acceptance with monitoring.","avoidance by discontinuing the activity."],a:1,
+e:"High-impact, low-probability events are the classic case for transfer.",
+r:["Preventive controls for rare events are often uneconomic.","Insurance suits high-impact, low-likelihood risk.","Acceptance of high impact is rarely appropriate.","Avoidance sacrifices the activity for a rare event."]},
+
+{d:"risk",q:"The BEST way to ensure that risk assessments remain consistent across the organization is to:",
+o:["have one person perform all assessments.","use a standard methodology and rating criteria.","assess only critical systems.","outsource assessments to a single firm."],a:1,
+e:"Consistency comes from a shared method and scale.",
+r:["One assessor does not scale.","A standard methodology and criteria produce comparable results.","Scope limitation does not create consistency.","A single vendor is not the source of consistency."]},
+
+{d:"risk",q:"Which of the following BEST describes a risk scenario?",
+o:["A list of vulnerabilities in a system","A threat acting on an asset with an impact","The annual loss expectancy of an asset","A control that reduces the likelihood"],a:1,
+e:"A scenario connects threat, asset, and consequence.",
+r:["Vulnerabilities alone are not scenarios.","Threat, asset, and impact together form a scenario.","ALE is an analysis output.","A control is a treatment."]},
+
+{d:"risk",q:"An information security manager notices that risk ratings assigned by different business units for similar risks vary widely. The FIRST step is to:",
+o:["accept the highest rating in each case.","review the criteria and calibrate the raters.","escalate the inconsistency to the board.","re-rate every risk personally."],a:1,
+e:"Inconsistent ratings usually mean unclear criteria.",
+r:["Taking the maximum distorts prioritization.","Clarifying criteria and calibrating raters fixes the cause.","The board is not the venue for methodology issues.","Personal re-rating does not scale."]},
+
+{d:"risk",q:"Which of the following is MOST important when communicating a newly identified critical risk to senior management?",
+o:["The technical root cause of the risk","Treatment options, cost, and residual risk","The team that discovered the risk","The industry frequency of the threat"],a:1,
+e:"Management needs decision-ready options.",
+r:["Root cause is technical detail.","Options with cost and residual risk enable a decision.","Attribution is irrelevant.","Industry frequency is context at best."]},
+
+{d:"risk",q:"A control has been implemented, but the risk register still shows the original risk rating. The MOST likely consequence is:",
+o:["the control will be removed.","resources may go to an already treated risk.","the auditor will reject the register.","the residual risk will increase."],a:1,
+e:"A stale register misdirects effort.",
+r:["Control removal does not follow.","Overstated risk draws resources unnecessarily.","Audit rejection is not the primary consequence.","Residual risk does not change because of documentation."]},
+
+{d:"risk",q:"Which of the following is the BEST indicator that risk management is integrated into business processes?",
+o:["Risk assessments are performed by the security team.","Business decisions routinely reference risk analysis.","A risk register exists.","Risk training is mandatory."],a:1,
+e:"Integration means the business uses risk analysis in its own decisions.",
+r:["Security-led assessment is not integration.","Risk-informed business decisions show integration.","A register can exist without being used.","Training does not prove use."]},
+
+{d:"risk",q:"When evaluating the risk of a proposed cloud migration, which of the following is MOST important to determine FIRST?",
+o:["The provider's security certifications","The classification of the migrated data","The planned migration timeline","The expected cost savings"],a:1,
+e:"What is moving determines what protection and assurance are required.",
+r:["Certifications matter once requirements are known.","Data classification defines the required protection.","Timeline is a project variable.","Savings do not define risk."]},
+
+{d:"risk",q:"A business unit accepts a risk that the information security manager believes is beyond the organization's appetite. The manager should:",
+o:["override the acceptance decision.","document the disagreement and escalate.","implement controls without informing the unit.","remove the risk from the register."],a:1,
+e:"The manager cannot overrule an owner, but can ensure the right authority sees the decision.",
+r:["The manager lacks authority to override.","Escalation with documentation is the correct path.","Covert controls undermine governance.","Removal hides the risk."]},
+
+{d:"risk",q:"The PRIMARY purpose of a risk treatment plan is to:",
+o:["list all identified vulnerabilities.","define actions, owners, and timelines.","calculate the annual loss expectancy.","satisfy regulatory reporting requirements."],a:1,
+e:"A treatment plan turns decisions into assigned, scheduled work.",
+r:["Vulnerability lists are inputs.","Actions, owners, and timelines define the plan.","ALE is analysis, not treatment.","Regulatory reporting is not the purpose."]},
+
+{d:"risk",q:"Which of the following BEST reduces the risk that a critical vendor fails to meet security obligations?",
+o:["Requiring the vendor's ISO certification","Ongoing monitoring against the contract","A one-time onboarding assessment","A large financial penalty clause"],a:1,
+e:"Obligations are met when they are monitored over time.",
+r:["Certification is a point-in-time signal.","Continuous monitoring against the contract is the control.","Onboarding assessment does not cover the relationship's life.","Penalties compensate after failure."]},
+
+{d:"risk",q:"An emerging technology has no established security controls. The information security manager should PRIMARILY:",
+o:["prohibit its use until standards are published.","assess the risk and define compensating controls.","wait for security guidance from the vendor.","allow use only for non-critical business purposes."],a:1,
+e:"Absence of standard controls calls for assessment and compensating measures, not paralysis.",
+r:["Prohibition drives shadow use.","Assessment with compensating controls enables managed adoption.","Waiting leaves current use unmanaged.","Blanket scoping substitutes for assessment."]},
+
+{d:"risk",q:"Which of the following is the BEST measure of risk management program effectiveness?",
+o:["The number of risks in the register","The trend of residual risk against appetite","The number of assessments performed","The size of the risk management team"],a:1,
+e:"Effectiveness shows in whether residual risk is moving toward acceptable levels.",
+r:["Register size measures documentation.","Residual risk trending toward appetite shows effectiveness.","Assessment counts measure activity.","Team size is a resource measure."]},
+
+{d:"risk",q:"A key risk indicator has crossed its threshold. The information security manager should FIRST:",
+o:["implement additional controls.","investigate and reassess the related risk.","raise the indicator's threshold.","notify all employees of the change."],a:1,
+e:"A KRI is a signal to look, not an instruction to act.",
+r:["Controls before understanding may miss the cause.","Investigation and reassessment determine the response.","Raising the threshold hides the signal.","Broad notification is premature."]},
+
+{d:"risk",q:"The MOST important factor in determining the frequency of risk assessments is:",
+o:["the availability of qualified assessment staff.","the rate of change in the business and threats.","the timing of the internal audit schedule.","the assessment tool's annual licensing period."],a:1,
+e:"Assessments must keep pace with change.",
+r:["Staff availability is a constraint, not the driver.","Rate of change determines how quickly assessments go stale.","Audit schedules serve audit.","Licensing is irrelevant."]},
+
+{d:"risk",q:"Which of the following BEST describes inherent risk?",
+o:["Risk after all controls are applied","Risk that cannot be transferred","Risk in the absence of controls","Risk accepted by management"],a:2,
+e:"Inherent risk is the exposure before any treatment.",
+r:["Risk after controls is residual.","Transferability is not the definition.","Absence of controls defines inherent risk.","Accepted risk is a treatment outcome."]},
+
+{d:"risk",q:"A vulnerability affects a system that processes no sensitive data and is isolated from the network. The MOST appropriate response is to:",
+o:["remediate it immediately regardless of cost.","assess exposure and impact, then prioritize.","decommission the affected system entirely.","report the vulnerability to the regulator."],a:1,
+e:"Low exposure and low impact usually mean low priority — but that is determined by assessment, not assumption.",
+r:["Immediate remediation ignores prioritization.","Assessment of exposure and impact sets priority.","Decommissioning is disproportionate.","Regulatory reporting is not indicated."]},
+
+{d:"risk",q:"Which of the following is the MOST effective way to communicate residual risk to the board?",
+o:["A detailed technical report","A heat map with business impact notes","The complete risk register","A list of all open vulnerabilities"],a:1,
+e:"Boards need relative priority in business terms.",
+r:["Technical detail is not board material.","A heat map with impact descriptions communicates priority.","The full register is too granular.","Vulnerability lists are operational."]},
+
+{d:"risk",q:"The information security manager should ensure risk assessments consider third-party relationships PRIMARILY because:",
+o:["vendors are always less secure than the organization.","risk to data and operations does not stop at the boundary.","regulators require lists of vendors.","vendor contracts are expensive to negotiate."],a:1,
+e:"Outsourcing moves the work, not the risk.",
+r:["Vendors are not inherently less secure.","Exposure follows the data and the dependency.","Regulatory lists are not the reason.","Cost is not the reason."]},
+
+{d:"risk",q:"When the cost of a control approaches the value of the asset it protects, the information security manager should:",
+o:["implement the control anyway.","reconsider the treatment option.","increase the asset's valuation.","transfer the asset to a third party."],a:1,
+e:"A control near or above asset value fails cost-benefit.",
+r:["Uneconomic controls waste resources.","Reconsidering treatment is the rational step.","Valuation should not be adjusted to fit a control.","Transferring the asset is not a risk treatment."]},
+
+{d:"prog",q:"Which of the following is the BEST way to ensure that security controls remain effective as the business changes?",
+o:["Annual penetration testing","Control review within change management","More frequent internal audits","Control replacement every three years"],a:1,
+e:"Controls drift when the environment changes; reviewing them at the point of change prevents drift.",
+r:["Annual tests leave long gaps.","Change-triggered review keeps controls aligned.","More audits find drift later rather than prevent it.","Scheduled replacement is arbitrary."]},
+
+{d:"prog",q:"An organization wants to measure the value delivered by its security program. The MOST appropriate approach is to:",
+o:["count the controls implemented.","relate spend to risk reduction and enablement.","survey employee satisfaction with security.","compare the budget to industry averages."],a:1,
+e:"Value is risk reduced and business enabled per unit of spend.",
+r:["Control counts measure activity.","Spend related to risk reduction and enablement measures value.","Satisfaction is not value.","Budget comparison is not value."]},
+
+{d:"prog",q:"Which of the following is MOST important when developing security standards?",
+o:["They are consistent with policy and measurable.","They describe the latest available technology.","They have been approved by the vendor.","They apply identically to every system."],a:0,
+e:"Standards operationalize policy and must be verifiable.",
+r:["Consistency with policy and measurability define a good standard.","Technology currency is not the criterion.","Vendors do not approve standards.","Uniform application ignores differing risk."]},
+
+{d:"prog",q:"A security awareness program has been running for two years. Which of the following BEST indicates it needs redesign?",
+o:["Attendance has plateaued.","Phishing click rates are not improving.","Employees find the content repetitive.","The vendor has released new content."],a:1,
+e:"A program that no longer changes behavior needs a new approach.",
+r:["Attendance is an output.","Flat click rates show behavior is not improving.","Repetitiveness is a symptom to investigate, not the indicator.","Vendor content is not a reason."]},
+
+{d:"prog",q:"The PRIMARY purpose of a security operations center is to:",
+o:["develop security policies and standards.","monitor, detect, and respond to events.","perform enterprise risk assessments.","manage the information security budget."],a:1,
+e:"The SOC is the operational monitoring and response function.",
+r:["Policy is a governance activity.","Monitoring, detection, and response define the SOC.","Assessment is a risk management activity.","Budgeting is a management activity."]},
+
+{d:"prog",q:"Which of the following BEST ensures that a new security control will be accepted by users?",
+o:["Mandating it through security policy","Involving users and explaining its purpose","Penalizing any circumvention","Making it invisible to users"],a:1,
+e:"Controls that users understand and helped shape are circumvented less.",
+r:["Mandates without understanding invite workarounds.","Involvement and explanation build acceptance.","Penalties address symptoms.","Invisibility is not always possible and does not build understanding."]},
+
+{d:"prog",q:"An information security manager is asked to approve a software package that has not been security tested. The BEST response is to:",
+o:["approve it if the vendor is reputable.","require testing proportionate to the risk.","reject the package outright.","approve a limited pilot without testing."],a:1,
+e:"Testing effort should match the risk the software introduces.",
+r:["Reputation is not assurance.","Risk-proportionate testing is the rational requirement.","Outright rejection ignores business need.","An untested pilot still introduces risk."]},
+
+{d:"prog",q:"Which of the following is MOST important to include in a security service level agreement with an internal IT department?",
+o:["Penalties for missed targets","Measurable duties and response times","The names of responsible IT staff","The IT department's annual budget"],a:1,
+e:"An SLA is only useful if its obligations can be measured.",
+r:["Penalties are unusual internally and secondary.","Measurable responsibilities define the agreement.","Names change; roles matter.","Budget is not an SLA element."]},
+
+{d:"prog",q:"The MOST effective way to ensure that security is considered in software development is to:",
+o:["perform penetration testing before release.","set requirements and checkpoints in every phase.","train developers on security annually.","have security review completed code."],a:1,
+e:"Security built into every phase is more effective than any single checkpoint.",
+r:["Pre-release testing is late and narrow.","Life-cycle requirements and checkpoints embed security.","Training helps but does not enforce.","Post-completion review is late."]},
+
+{d:"prog",q:"Which of the following should be the PRIMARY basis for prioritizing security program improvements?",
+o:["Recent internal audit findings","Risk-weighted gap analysis","Recommendations from security vendors","Preferences of the security staff"],a:1,
+e:"Improvements close the gaps that matter most.",
+r:["Audit findings are one input.","Risk-weighted gap analysis sets priorities.","Vendors sell products.","Preferences are not a basis."]},
+
+{d:"prog",q:"An organization's data classification scheme has five levels but employees consistently misclassify information. The BEST remedy is to:",
+o:["add more detailed guidance for each level.","simplify the scheme to fewer, clearer levels.","penalize misclassification of information.","automate classification entirely."],a:1,
+e:"Schemes people cannot apply consistently are too complex.",
+r:["More guidance adds complexity.","Fewer, clearer levels improve consistency.","Penalties do not fix a usability problem.","Automation still needs a workable scheme."]},
+
+{d:"prog",q:"Which of the following is the MOST important control over privileged accounts?",
+o:["Strong password requirements","Monitoring of privileged activity","Shared administrator accounts","Unlimited session duration"],a:1,
+e:"Privilege must be watched, not just protected.",
+r:["Passwords alone do not control use.","Monitoring and review detect misuse.","Shared accounts destroy accountability.","Unlimited sessions increase exposure."]},
+
+{d:"prog",q:"The BEST way to handle a security requirement that conflicts with a critical business process is to:",
+o:["waive the requirement for that process.","find an alternative control meeting the intent.","halt the business process until resolved.","implement the requirement regardless of impact."],a:1,
+e:"The intent of a requirement can usually be met another way.",
+r:["Waiver leaves risk unaddressed.","A compensating control preserves both intent and process.","Halting the process is disproportionate.","Ignoring impact damages the business."]},
+
+{d:"prog",q:"Which of the following BEST indicates that a security program has reached a managed level of maturity?",
+o:["Security tools deployed enterprise-wide","Processes defined, measured, and improved","A fully staffed security team","All employees trained annually"],a:1,
+e:"Maturity is about repeatable, measured process, not deployment.",
+r:["Deployment does not show process maturity.","Defined, measured, improving processes define managed maturity.","Staffing is a resource measure.","Training completion is an output."]},
+
+{d:"prog",q:"A vendor requests remote access to maintain a critical system. The MOST important control is:",
+o:["a signed nondisclosure agreement.","limited, time-bound, monitored access.","the vendor's own security policy.","a dedicated support telephone line."],a:1,
+e:"Vendor access is privileged access and needs the same discipline.",
+r:["NDAs address confidentiality, not access control.","Least privilege, time limits, and monitoring control the access.","The vendor's policy governs the vendor, not your system.","A phone line is unrelated."]},
+
+{d:"prog",q:"The PRIMARY objective of a security awareness program is to:",
+o:["satisfy regulatory training requirements.","change behavior to reduce security risk.","introduce employees to the security team.","document that employees were informed."],a:1,
+e:"Awareness exists to change what people do.",
+r:["Compliance is a by-product.","Behavior change is the objective.","Introductions are incidental.","Documentation is a by-product."]},
+
+{d:"prog",q:"Which of the following is the BEST approach to managing security in a rapidly growing organization?",
+o:["Hire security staff in proportion to headcount.","Build scalable processes with embedded responsibilities.","Centralize all decisions with the security manager.","Delay formal processes until growth stabilizes."],a:1,
+e:"Scale comes from process and distributed responsibility, not headcount.",
+r:["Proportional hiring does not scale economically.","Scalable process with embedded responsibility scales with growth.","Centralization becomes a bottleneck.","Delay creates unmanaged risk."]},
+
+{d:"prog",q:"An organization is selecting a data loss prevention tool. Which of the following is MOST important to evaluate FIRST?",
+o:["The tool's detection features","Whether the data has been classified","The vendor's market position","The tool's reporting dashboards"],a:1,
+e:"A DLP tool enforces classification decisions that must already exist.",
+r:["Features are evaluated once requirements are known.","Classification is the prerequisite.","Market position is not a requirement.","Dashboards are secondary."]},
+
+{d:"prog",q:"Which of the following is the MOST important reason to test business continuity arrangements with third-party providers?",
+o:["To satisfy the terms of the provider's contract","To confirm the provider can meet its commitments","To negotiate lower fees with the provider","To train the provider's own staff"],a:1,
+e:"Commitments on paper are proven only by testing.",
+r:["Contract satisfaction is not the reason.","Testing validates recoverability.","Fees are unrelated.","Provider training is the provider's responsibility."]},
+
+{d:"prog",q:"The information security manager discovers that a critical application is running on unsupported software. The BEST first step is to:",
+o:["migrate the application immediately.","assess the risk and present options to the owner.","disconnect the application from the network.","file a policy exception for the application."],a:1,
+e:"The owner must decide with the risk in front of them.",
+r:["Migration before assessment may not be feasible.","Assessment and options to the owner enable a decision.","Disconnection is disproportionate without assessment.","Exceptions follow a decision, not precede it."]},
+
+{d:"prog",q:"Which of the following BEST supports consistent application of security across multiple cloud providers?",
+o:["Using a single cloud provider","Common security requirements for all providers","Relying on each provider's default settings","Separate security policies for each provider"],a:1,
+e:"Consistency comes from one set of requirements, not one vendor.",
+r:["Single-provider dependency creates other risk.","Common requirements applied everywhere produce consistency.","Defaults vary and favor compatibility.","Separate policies guarantee inconsistency."]},
+
+{d:"prog",q:"A security control is generating a large number of false positives. The MOST appropriate action is to:",
+o:["disable the control.","tune the control to the environment.","ignore the alerts.","replace the control with a different product."],a:1,
+e:"False positives are a tuning problem before they are a product problem.",
+r:["Disabling removes protection.","Tuning aligns the control with the environment.","Ignoring alerts defeats the control.","Replacement is premature."]},
+
+{d:"prog",q:"The MOST important reason to maintain documentation of the security program is to:",
+o:["satisfy internal and external auditors.","let others understand and sustain the program.","make the manager's workload visible.","create a historical archive of decisions."],a:1,
+e:"Documentation makes the program survive changes in people.",
+r:["Audit is a secondary beneficiary.","Continuity and operability are the reasons.","Workload visibility is not the purpose.","Archiving is incidental."]},
+
+{d:"prog",q:"Which of the following is the BEST way to verify that a third-party audit report is relevant to the organization's use of a service?",
+o:["Confirm the report is recent.","Confirm the scope covers the services used.","Confirm the auditor is well known.","Confirm the report has no exceptions."],a:1,
+e:"A clean report on the wrong scope proves nothing.",
+r:["Recency matters but scope matters more.","Scope coverage determines relevance.","Auditor reputation does not determine relevance.","Absence of exceptions is meaningless if scope is wrong."]},
+
+{d:"prog",q:"An organization plans to allow employees to use personal cloud storage for work files. The information security manager's PRIMARY concern should be:",
+o:["the additional storage cost involved.","loss of control over classified information.","the impact on employee productivity.","lock-in to a single storage vendor."],a:1,
+e:"Personal services put organizational data outside organizational control.",
+r:["Cost is not the security concern.","Loss of control over data is the primary concern.","Productivity is a business consideration.","Lock-in is a vendor management concern."]},
+
+{d:"prog",q:"Which of the following is MOST important for the success of a security architecture initiative?",
+o:["Selection of the best technology","Business and IT stakeholder buy-in","A large implementation budget","Vendor partnerships"],a:1,
+e:"Architecture that stakeholders do not adopt is a document.",
+r:["Technology is secondary to adoption.","Stakeholder buy-in determines whether the architecture is used.","Budget does not create adoption.","Vendor partnerships are incidental."]},
+
+{d:"prog",q:"A department requests an exception to the password standard because it hinders a critical workflow. The information security manager should FIRST:",
+o:["deny the exception request.","assess the workflow and the risk.","grant a permanent exception.","escalate the request to the board."],a:1,
+e:"Exceptions are assessed, not reflexively denied or granted.",
+r:["Reflexive denial ignores the business need.","Understanding and assessment enable a sound decision.","Permanent exceptions become unmanaged risk.","The board is not the venue."]},
+
+{d:"prog",q:"Which of the following is the BEST evidence that security controls are operating effectively?",
+o:["Controls are documented in the policy.","Independent testing confirms effectiveness.","Staff confirm the controls are in place.","Management has approved the controls."],a:1,
+e:"Effectiveness is demonstrated, not asserted.",
+r:["Documentation is not evidence of operation.","Independent testing is evidence.","Staff assertion is not independent.","Approval is not evidence of operation."]},
+
+{d:"prog",q:"When integrating a newly acquired company, the information security manager should FIRST:",
+o:["replace the acquired company's security tools.","assess the acquired environment's risk and controls.","merge the two networks as quickly as possible.","apply the acquirer's policies immediately."],a:1,
+e:"You cannot plan integration without knowing what you are integrating.",
+r:["Tool replacement precedes understanding.","Assessment informs the integration plan.","Network merging before assessment spreads risk.","Immediate policy imposition ignores assessed differences."]},
+
+{d:"prog",q:"The PRIMARY reason to log security-relevant events is to:",
+o:["make efficient use of log storage.","support detection and accountability.","meet the logging vendor's requirements.","slow attackers down during an attack."],a:1,
+e:"Logs exist to be used.",
+r:["Storage consumption is a cost, not a purpose.","Detection, investigation, and accountability are the purposes.","Vendors are not the reason.","Logging does not slow attackers."]},
+
+{d:"prog",q:"Which of the following is the BEST approach to securing a legacy system that cannot be patched?",
+o:["Accept the risk without controls.","Isolate the system and apply compensating controls.","Replace the system immediately regardless of cost.","Disable logging to reduce noise."],a:1,
+e:"When the primary control is unavailable, compensate.",
+r:["Acceptance without controls leaves exposure.","Isolation and compensating controls manage the risk.","Immediate replacement ignores cost-benefit.","Disabling logging reduces visibility."]},
+
+{d:"prog",q:"An information security manager wants to reduce the time to remediate critical vulnerabilities. The MOST effective approach is to:",
+o:["hire additional security analysts.","set remediation SLAs with system owners.","scan for vulnerabilities more often.","report the backlog to the board monthly."],a:1,
+e:"Remediation is owned by system owners; SLAs and tracking drive it.",
+r:["Analysts find vulnerabilities; owners fix them.","SLAs with owners and tracking accelerate remediation.","More scanning finds more, not fixes more.","Board reporting alone does not remediate."]},
+
+{d:"prog",q:"Which of the following is the MOST important consideration when decommissioning a system?",
+o:["Recovering the hardware's resale value","Secure data removal and retention compliance","Notifying the equipment vendor","Updating the network diagram"],a:1,
+e:"Decommissioning is a data-handling event.",
+r:["Resale value is a minor concern.","Secure data removal and retention compliance are essential.","Vendor notification is administrative.","Diagram updates are housekeeping."]},
+
+{d:"inc",q:"Which of the following is the MOST important reason to define incident escalation criteria in advance?",
+o:["To reduce the number of incidents reported","To ensure timely involvement of the right decision makers","To limit senior management's exposure to incidents","To simplify incident metrics"],a:1,
+e:"Escalation criteria get the right people involved at the right time.",
+r:["Criteria do not reduce reporting.","Timely involvement of decision makers is the purpose.","Shielding management defeats escalation.","Metrics are not the reason."]},
+
+{d:"inc",q:"An organization detects that customer data was exfiltrated three months ago. The MOST important lesson for the security program is that:",
+o:["the firewall needs replacement.","detection capability must improve.","employees need more training.","the incident should not be reported."],a:1,
+e:"A three-month dwell time is a detection failure.",
+r:["A specific product is not the lesson.","Long dwell time points to detection capability.","Training may help but is not the primary lesson.","Non-reporting is not an option."]},
+
+{d:"inc",q:"Which of the following BEST ensures that an incident response plan remains current?",
+o:["Annual approval by the board","Review after incidents, exercises, and change","Storage in a document management system","Distribution to all staff"],a:1,
+e:"Plans stay current when every use and every change triggers a review.",
+r:["Approval does not update content.","Post-incident, post-exercise, and change-driven review keeps it current.","Storage does not update content.","Distribution does not update content."]},
+
+{d:"inc",q:"During an incident, the information security manager's PRIMARY role is to:",
+o:["perform the forensic analysis personally.","coordinate the response and communications.","rebuild the affected systems personally.","write the final incident report alone."],a:1,
+e:"The manager coordinates; the team executes.",
+r:["Forensics is a specialist task.","Coordination and stakeholder communication is the role.","Rebuilding is an operational task.","The report is a team product."]},
+
+{d:"inc",q:"Which of the following is the BEST way to determine the priority of restoring services after a major incident?",
+o:["Restore the systems that failed first.","Use the criticality rankings from the BIA.","Restore the systems with the most users.","Restore in order of ease of restoration."],a:1,
+e:"The BIA already ranks what the business needs first.",
+r:["Failure order is irrelevant to priority.","BIA criticality defines restoration order.","User count is not criticality.","Ease is not priority."]},
+
+{d:"inc",q:"An incident response exercise reveals that team members were unsure of their roles. The BEST corrective action is to:",
+o:["replace the uncertain team members.","clarify roles and train the team.","reduce the size of the response team.","cancel future response exercises."],a:1,
+e:"Role confusion is a plan and training gap.",
+r:["Replacement does not fix the plan.","Clarified roles and training address the gap.","Team size is unrelated.","Exercises revealed the gap; they are working."]},
+
+{d:"inc",q:"Which of the following is MOST important when communicating with customers after a data breach?",
+o:["Minimizing the description of impact","Accurate, timely information and guidance","Placing blame on the attacker","Waiting until the investigation ends"],a:1,
+e:"Customers need accurate information they can act on.",
+r:["Minimizing impact damages trust when discovered.","Accuracy, timeliness, and guidance are the priorities.","Blame does not help customers.","Delay may breach obligations and harm customers."]},
+
+{d:"inc",q:"An organization's incident response plan has never been tested. The GREATEST risk is that:",
+o:["auditors will issue a finding.","the plan will not work when needed.","staff will not know the plan exists.","the plan is too long."],a:1,
+e:"An untested plan may prove unworkable at the worst moment.",
+r:["Audit findings are a consequence, not the risk.","Unworkability when needed is the risk.","Awareness is a lesser concern.","Length is not the risk."]},
+
+{d:"inc",q:"Which of the following is the BEST indicator that incident management is improving?",
+o:["The number of incidents is increasing.","Detection and containment times are falling.","The response team has grown.","More security tools have been purchased."],a:1,
+e:"Faster detection and containment show the capability is working.",
+r:["Rising counts may reflect better detection, not improvement alone.","Decreasing detection and containment times show improvement.","Team size is a resource measure.","Tool purchases are inputs."]},
+
+{d:"inc",q:"A ransomware note demands payment. Before any decision, the information security manager should ensure that:",
+o:["payment is arranged quickly to limit downtime.","leadership and legal are engaged and backups checked.","the ransom note is deleted from the systems.","the board is not informed until it is resolved."],a:1,
+e:"The decision belongs to leadership, informed by legal and by whether recovery is possible.",
+r:["Quick payment bypasses the decision process.","Leadership, legal, and backup assessment inform the decision.","Deleting the note destroys evidence.","The board must be informed of a major incident."]},
+
+{d:"inc",q:"Which of the following BEST describes the purpose of a warm site?",
+o:["A fully operational duplicate ready in minutes","A partly equipped facility ready in hours or days","An empty facility with power and connectivity","A mobile facility mounted on a trailer"],a:1,
+e:"Warm sites sit between hot and cold in readiness and cost.",
+r:["A fully operational duplicate is a hot or mirrored site.","Partially equipped, hours-to-days readiness defines a warm site.","Power and connectivity only is a cold site.","A trailer is a mobile site."]},
+
+{d:"inc",q:"An incident response team discovers evidence of criminal activity. The MOST important consideration is to:",
+o:["confront the suspect immediately.","preserve evidence and involve legal counsel.","delete the evidence to protect the organization.","post details on the internal network."],a:1,
+e:"Criminal evidence must be preserved and handled under legal guidance.",
+r:["Confrontation can destroy evidence and create liability.","Preservation and legal involvement are essential.","Deletion is destruction of evidence.","Internal posting compromises the investigation."]},
+
+{d:"inc",q:"Which of the following is the MOST effective way to reduce the impact of a denial-of-service attack on a public website?",
+o:["Increasing server memory","Pre-arranged upstream filtering capacity","Changing the website's domain name","Disabling the website's logging"],a:1,
+e:"Volume attacks are mitigated upstream, and arrangements must exist before the attack.",
+r:["Server resources cannot absorb volumetric attacks.","Pre-arranged upstream filtering is the effective control.","Domain changes do not stop attacks.","Disabling logging removes visibility."]},
+
+{d:"inc",q:"The information security manager receives a report of a possible incident from an employee. The FIRST action is to:",
+o:["notify law enforcement of the report.","assess whether it is a genuine incident.","shut down the affected system at once.","inform the media without delay."],a:1,
+e:"Validation precedes response.",
+r:["Law enforcement is not the first step.","Assessing whether it is an incident comes first.","Shutdown before assessment may be unnecessary.","Media contact is not indicated."]},
+
+{d:"inc",q:"Which of the following is MOST important to include in a business continuity plan?",
+o:["The complete IT hardware inventory","Recovery procedures with assigned owners","The current organizational chart","Marketing materials from vendors"],a:1,
+e:"A continuity plan is about restoring critical processes and who does it.",
+r:["Hardware inventory is supporting detail.","Recovery procedures with responsibilities are the core.","Org charts are supporting detail.","Marketing materials are irrelevant."]},
+
+{d:"inc",q:"A post-incident review identifies that a known vulnerability was exploited. The MOST valuable outcome is to:",
+o:["identify who failed to apply the patch.","improve the vulnerability management process.","purchase a new vulnerability scanner.","reduce the patching SLA to zero days."],a:1,
+e:"Process improvement prevents the next incident; blame does not.",
+r:["Blame does not prevent recurrence.","Process improvement is the valuable outcome.","A scanner does not fix process.","Zero-day SLAs are unrealistic."]},
+
+{d:"inc",q:"Which of the following is the BEST reason to include public relations in incident planning?",
+o:["To draft the technical incident reports","To manage external messaging and reputation","To perform the forensic analysis on evidence","To approve the incident response budget"],a:1,
+e:"Reputation is managed through communication, and communication is planned.",
+r:["Technical reports are not a PR function.","External communication and reputation are PR's role.","Forensics is a technical function.","Budget is a management function."]},
+
+{d:"inc",q:"An organization relies on a single backup copy stored on site. The GREATEST risk is that:",
+o:["backups take far too long to complete.","one disaster destroys both data copies.","the backup software licensing is costly.","staff occasionally forget to run backups."],a:1,
+e:"On-site-only backups fail with the site.",
+r:["Duration is not the greatest risk.","Loss of both production and backup in one event is the risk.","Cost is not the risk.","Execution failure is a lesser risk than shared-site loss."]},
+
+{d:"inc",q:"During an incident, conflicting instructions are coming from several managers. The BEST way to resolve this is to:",
+o:["follow the most senior manager present.","invoke the incident command structure.","pause the response until consensus.","let each team follow its own manager."],a:1,
+e:"The plan defines who commands during an incident.",
+r:["Seniority does not equal incident authority.","The incident command structure resolves authority.","Pausing during an incident increases damage.","Fragmented command produces fragmented response."]},
+
+{d:"inc",q:"Which of the following BEST supports rapid incident detection?",
+o:["Annual review of system logs","Centralized logging with alerting","Storing logs on each individual system","Reviewing logs only after an incident"],a:1,
+e:"Detection needs logs brought together and analyzed in near real time.",
+r:["Annual review is far too slow.","Centralized correlation and alerting enable rapid detection.","Distributed logs are hard to correlate.","Post-incident review is not detection."]},
+
+{d:"inc",q:"The recovery point objective for a system is 24 hours. Which backup approach is the MINIMUM required?",
+o:["Continuous replication","Daily backups","Weekly backups","Monthly backups"],a:1,
+e:"To lose no more than 24 hours of data, back up at least daily.",
+r:["Continuous replication exceeds the requirement.","Daily backups meet a 24-hour RPO.","Weekly backups risk up to a week of loss.","Monthly backups far exceed the RPO."]},
+
+{d:"inc",q:"An incident affects a system shared with a business partner. The MOST important step is to:",
+o:["assign blame to the partner.","notify the partner and coordinate the response.","disconnect the partner permanently.","withhold information to limit liability."],a:1,
+e:"Shared systems require coordinated response under agreed procedures.",
+r:["Blame does not resolve the incident.","Notification and coordination per agreement is the step.","Permanent disconnection is disproportionate.","Withholding information breaches trust and possibly contract."]},
+
+{d:"inc",q:"Which of the following is the MOST important consideration when selecting an incident management system?",
+o:["The vendor's brand recognition in the market","Integration with monitoring and ticketing","The number of available report templates","The color scheme of the user interface"],a:1,
+e:"An incident system must fit into the existing operational environment.",
+r:["Brand is not a requirement.","Integration determines usefulness.","Templates are secondary.","Aesthetics are irrelevant."]},
+
+{d:"inc",q:"The information security manager should ensure that incident response procedures address which of the following FIRST?",
+o:["Recovery of the most complex systems","Protection of human life and safety","Public relations messaging","Insurance claims"],a:1,
+e:"Safety precedes every other response consideration.",
+r:["System complexity is not first priority.","Life and safety come first.","Messaging follows safety.","Insurance follows safety."]},
+
+{d:"inc",q:"Which of the following is the BEST way to ensure lessons from incidents are applied?",
+o:["File the review report in the repository","Assign owned corrective actions and track them","Discuss the lessons informally with the team","Add the lessons to next year's training"],a:1,
+e:"Lessons become improvements only when they become tracked work.",
+r:["Filing does not apply lessons.","Owned, tracked actions apply lessons.","Informal discussion is not applied.","Training is one possible action, not the mechanism."]},
+
+{d:"inc",q:"A critical vendor experiences an outage that affects the organization's operations. The BEST preparation would have been:",
+o:["choosing a larger and better-known vendor.","planning a workaround for the known dependency.","requiring the vendor to carry insurance.","disregarding the vendor's outage history."],a:1,
+e:"Dependencies must be known and planned for before they fail.",
+r:["Size does not prevent outages.","BIA-identified dependency with a workaround is the preparation.","Insurance compensates; it does not restore operations.","Ignoring outages is not preparation."]},
+
+{d:"inc",q:"Which of the following is MOST important to test in a disaster recovery exercise?",
+o:["That backup tapes can be located","That critical processes run at the recovery site","That the recovery site has adequate parking","That the exercise finishes on schedule"],a:1,
+e:"Recovery is successful when the business can function.",
+r:["Locating backups is a step, not the objective.","Operable critical processes is the test objective.","Parking is irrelevant.","Timing is not the objective."]},
+
+{d:"inc",q:"After a major incident, senior management asks for assurance that it will not recur. The information security manager should:",
+o:["guarantee that it will not recur.","explain the corrective actions and residual risk.","attribute the incident to bad luck.","recommend dismissing the responsible staff."],a:1,
+e:"Honest assurance describes what was done and what risk remains.",
+r:["No one can guarantee non-recurrence.","Corrective actions plus residual risk is the honest answer.","Attribution to luck is not assurance.","Firing staff is not assurance."]},
+
+{d:"inc",q:"Which of the following is the MOST important reason to maintain an incident log during response?",
+o:["To bill accurately for the time spent responding","To provide a record for analysis and legal needs","To satisfy the ticketing system's required fields","To create content for the organization's annual report"],a:1,
+e:"The log is the incident's memory.",
+r:["Billing is not the reason.","Analysis, legal, and handover depend on the record.","Ticketing is a tool, not a reason.","Annual reports are incidental."]}
 ];
 
 /* ============================================================
@@ -2465,28 +2973,31 @@ function pickMode(btn,m){document.querySelectorAll('[data-mode]').forEach(b=>b.c
 
 function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
-/* Deterministic, non-overlapping mock sets A/B/C/D, stratified by domain and balanced to equal size */
+/* Concept-aware dealing: similar items are kept out of the same mock */
+const STOP=new Set('the a an of to in for and or is are be which following most best first primary greatest should would with that this on by from into as at it its when what who information security manager organization enterprise'.split(' '));
+function tokens(q){ return new Set((q.q+' '+q.o[q.a]).toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(w=>w.length>3&&!STOP.has(w))); }
+function similar(a,b){ const A=a._t||(a._t=tokens(a)), B=b._t||(b._t=tokens(b)); let inter=0; A.forEach(w=>{if(B.has(w))inter++;}); const union=A.size+B.size-inter; return union? inter/union>=0.45 : false; }
 function buildSets(){
   if(SETS) return SETS;
   const byDom={};
   BANK.forEach(q=>{(byDom[q.d]=byDom[q.d]||[]).push(q);});
-  const sets={};
-  SET_KEYS.forEach(k=>sets[k]=[]);
+  const sets={}; SET_KEYS.forEach(k=>sets[k]=[]);
   Object.keys(byDom).forEach(d=>{
-    byDom[d].forEach((q,i)=>{ sets[SET_KEYS[i%SET_KEYS.length]].push(q); });
+    byDom[d].forEach((q,i)=>{
+      const order=SET_KEYS.map((_,j)=>SET_KEYS[(i+j)%SET_KEYS.length]);
+      const k=order.find(k=>!sets[k].some(x=>x.d===d&&similar(x,q))) || order[0];
+      sets[k].push(q);
+    });
   });
   let guard=0;
-  while(guard++<20){
+  while(guard++<40){
     const sorted=SET_KEYS.slice().sort((a,b)=>sets[b].length-sets[a].length);
     const big=sorted[0], small=sorted[sorted.length-1];
     if(sets[big].length - sets[small].length <= 1) break;
     sets[small].push(sets[big].pop());
   }
-  SETS=sets;
-  return sets;
+  SETS=sets; return sets;
 }
-
-/* Weighted sample matching the real exam blueprint */
 function weightedSample(n){
   const byDom={};
   BANK.forEach(q=>{(byDom[q.d]=byDom[q.d]||[]).push(q);});
@@ -2496,12 +3007,13 @@ function weightedSample(n){
   order.forEach((d,idx)=>{
     let take = idx===order.length-1 ? (n-used) : Math.round(n*DOMAINS[d].weight/totalW);
     take=Math.min(take, byDom[d].length);
-    picked=picked.concat(shuffle(byDom[d]).slice(0,take));
-    used+=take;
+    const pool=shuffle(byDom[d]); const chosen=[];
+    for(const q of pool){ if(chosen.length>=take) break; if(!chosen.some(x=>similar(x,q))) chosen.push(q); }
+    for(const q of pool){ if(chosen.length>=take) break; if(!chosen.includes(q)) chosen.push(q); }
+    picked=picked.concat(chosen); used+=chosen.length;
   });
   return shuffle(picked).slice(0,n);
 }
-
 /* Shuffle each question's answer options so the correct letter varies every run */
 function prep(q){
   const idx=shuffle([0,1,2,3]);
@@ -2511,7 +3023,7 @@ function prep(q){
 function buildSelection(){
   if(cfg.set==='full')  return weightedSample(150).map(prep);   // real exam: 150 items, blueprint-weighted
   if(cfg.set==='quick') return weightedSample(20).map(prep);
-  if(cfg.set==='missed') return shuffle(BANK.filter(q=>WEAK[q.id])).map(prep);
+  if(cfg.set==='missed') return shuffle(BANK.filter(q=>WEAK[q.id]||LUCKY[q.id])).map(prep);
   if(cfg.set==='drill') return shuffle(BANK.filter(q=>q.d===cfg.drill)).map(prep);
   return shuffle(buildSets()[cfg.set]).map(prep);
 }
@@ -2532,7 +3044,8 @@ function startExam(){
     timeLeft: cfg.mode==="exam" ? examSeconds(qs.length) : null, // 96s/question = real exam pace; full set = 4:00:00
     timer:null,
     startedAt:Date.now(),
-    set:cfg.set, drill:cfg.drill
+    set:cfg.set, drill:cfg.drill,
+    guess:[], times:[], lastIdx:null, lastAt:Date.now()
   };
   document.getElementById('startScreen').classList.add('hidden');
   document.getElementById('examScreen').classList.remove('hidden');
@@ -2561,8 +3074,10 @@ function updateTimer(){
 }
 
 function renderQuestion(){
+  trackTime();
   const q=state.qs[state.idx];
   const total=state.qs.length;
+  const gb=document.getElementById('guessBox'); if(gb) gb.checked=!!state.guess[state.idx];
   document.getElementById('counter').textContent=`Question ${state.idx+1} of ${total}`;
   document.getElementById('progbar').style.width=`${((state.idx+1)/total)*100}%`;
   document.getElementById('qtag').textContent=`Question ${state.idx+1}`;
@@ -2594,7 +3109,7 @@ function renderQuestion(){
     const correct=answered===q.a;
     ex.classList.remove('hidden');
     ex.innerHTML=`<div class="verdict ${correct?'ok':'no'}">${correct?'Correct':'Not quite'}</div>
-      <div>${q.e}</div>${rationaleHtml(q)}
+      <div>${q.e}</div>${rationaleHtml(q)}<div style="margin-top:10px">${flagBtn(q)}</div>
       <div class="dom">${DOMAINS[q.d].name}</div>`;
   } else {
     ex.classList.add('hidden');
@@ -2670,6 +3185,7 @@ function confirmFinish(){
 function finish(auto){
   closeNav();
   if(state.timer) clearInterval(state.timer);
+  trackTime();
   state.finished=true;
   state.elapsed = Math.round((Date.now()-state.startedAt)/1000);
 
@@ -2722,7 +3238,7 @@ function finish(auto){
 
   const mm=Math.floor(state.elapsed/60), ss=state.elapsed%60;
   document.getElementById('metaLine').innerHTML=
-    `<span>Time used: ${mm}m ${ss}s</span><span>Mode: ${state.mode==='exam'?'Exam (timed)':'Practice'}</span><span>v${APP_VERSION}</span>${auto?'<span style="color:var(--wrong)">Time expired</span>':''}<span><a href="#" class="lessonlink" onclick="goTo('history');return false">Saved to history →</a></span>`;
+    `<span>Time used: ${mm}m ${ss}s</span><span>Mode: ${state.mode==='exam'?'Exam (timed)':'Practice'}</span><span>v${APP_VERSION}</span>${auto?'<span style="color:var(--wrong)">Time expired</span>':''}<span>Avg ${state.pace?state.pace.avg:0}s/question · ${state.pace?state.pace.slow:0} over 2 min</span><span>Lucky guesses: ${state.luckyN||0}</span><span><a href="#" class="lessonlink" onclick="goTo('history');return false">Saved to history →</a></span>`;
 
   window.scrollTo(0,0);
 }
@@ -2746,6 +3262,8 @@ function renderFilters(){
   const wrongN=state.qs.filter((q,i)=>state.answers[i]!==q.a).length;
   const flagN=state.flags.filter(Boolean).length;
   const defs=[["all",`All (${state.qs.length})`],["incorrect",`Incorrect (${wrongN})`],["flagged",`Flagged (${flagN})`]];
+  const gN=state.qs.filter((q,i)=>state.guess&&state.guess[i]).length, sN=state.qs.filter((q,i)=>(state.times[i]||0)>120).length;
+  if(gN) defs.push(["guessed","Guessed ("+gN+")"]); if(sN) defs.push(["slow","Slow >2m ("+sN+")"]);
   ["gov","risk","prog","inc"].forEach(d=>{const n=state.qs.filter(q=>q.d===d).length;if(n)defs.push(["d:"+d,DOMAINS[d].short+" ("+n+")"]);});
   const box=document.getElementById('filters');
   box.innerHTML='';
@@ -2767,10 +3285,13 @@ function renderReviewList(){
     if(reviewFilter==='incorrect' && !isWrong) return;
     if(reviewFilter==='flagged' && !state.flags[i]) return;
     if(reviewFilter.indexOf('d:')===0 && q.d!==reviewFilter.slice(2)) return;
+    if(reviewFilter==='guessed' && !(state.guess&&state.guess[i])) return;
+    if(reviewFilter==='slow' && !((state.times[i]||0)>120)) return;
     shown++;
     const item=document.createElement('div');
     item.className='rev-item';
-    let tags=`<span class="tg dom">${DOMAINS[q.d].short}</span>`;
+    let tags=`<span class="tg dom">${DOMAINS[q.d].short}</span><span class="tg dom">${Math.round(state.times[i]||0)}s</span>`;
+    if(state.guess&&state.guess[i]) tags+=`<span class="tg skip">Guessed</span>`;
     if(ans===null) tags+=`<span class="tg skip">Skipped</span>`;
     else if(isWrong) tags+=`<span class="tg no">Your answer wrong</span>`;
     else tags+=`<span class="tg ok">Correct</span>`;
@@ -2788,7 +3309,7 @@ function renderReviewList(){
     item.innerHTML=`<div class="tags">${tags}</div>
       <p class="rq">Q${i+1}. ${q.q}</p>
       ${opts}
-      <div class="rex">${q.e}${rationaleHtml(q)}</div>`;
+      <div class="rex">${q.e}${rationaleHtml(q)}</div><div style="margin-top:10px">${flagBtn(q)}</div>`;
     list.appendChild(item);
   });
   if(shown===0){
@@ -2927,43 +3448,79 @@ function openBluf(pos){
 function stepBluf(n){ openBluf((blufIdx+n+blufList.length)%blufList.length); }
 function closeBluf(){ document.getElementById('blufModal').classList.add('hidden'); }
 
-/* ---------- Flashcards ---------- */
-let deck=[], deckIdx=0, known=new Set();
-(function loadKnown(){ try{ const s=safeStore.get('cism.known'); if(s) known=new Set(JSON.parse(s)); }catch(e){} })();
-function saveKnown(){ safeStore.set('cism.known', JSON.stringify([...known])); }
+/* ---------- Confidence, timing, flags ---------- */
+let LUCKY={}, FLAGS={};
+(function loadExtra(){ try{const l=safeStore.get('cism.lucky'); if(l) LUCKY=JSON.parse(l)||{};}catch(e){} try{const f=safeStore.get('cism.flags'); if(f) FLAGS=JSON.parse(f)||{};}catch(e){} })();
+function saveExtra(){ safeStore.set('cism.lucky',JSON.stringify(LUCKY)); safeStore.set('cism.flags',JSON.stringify(FLAGS)); }
+function setGuess(v){ if(!state) return; state.guess[state.idx]=!!v; persistProgress(); }
+function trackTime(){
+  if(!state) return; const now=Date.now();
+  if(state.lastIdx!==undefined && state.lastIdx!==null) state.times[state.lastIdx]=(state.times[state.lastIdx]||0)+(now-state.lastAt)/1000;
+  state.lastIdx=state.idx; state.lastAt=now;
+}
+function pacing(){
+  const per={gov:[],risk:[],prog:[],inc:[]}; let all=[], slow=0;
+  state.qs.forEach((q,i)=>{const t=state.times[i]||0; if(t>0){per[q.d].push(t); all.push(t);} if(t>120) slow++;});
+  const avg=a=>a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length):0;
+  return {avg:avg(all),dom:{gov:avg(per.gov),risk:avg(per.risk),prog:avg(per.prog),inc:avg(per.inc)},slow};
+}
+function toggleFlagAuthor(id,stem){
+  if(FLAGS[id]) delete FLAGS[id]; else FLAGS[id]={q:stem,ts:Date.now()};
+  saveExtra(); document.querySelectorAll('[data-flagid="'+id+'"]').forEach(b=>{b.textContent=FLAGS[id]?'⚑ Flagged for review':'⚐ Flag this question'; b.classList.toggle('on',!!FLAGS[id]);});
+  const c=document.getElementById('flagCount'); if(c) c.textContent=Object.keys(FLAGS).length;
+}
+function flagBtn(q){ return '<button type="button" class="chip flagbtn'+(FLAGS[q.id]?' on':'')+'" data-flagid="'+q.id+'" onclick="toggleFlagAuthor(\''+q.id+'\',this.getAttribute(\'data-stem\'))" data-stem="'+q.q.replace(/"/g,'&quot;')+'">'+(FLAGS[q.id]?'⚑ Flagged for review':'⚐ Flag this question')+'</button>'; }
+function exportFlags(){
+  const rows=Object.entries(FLAGS).map(([id,f])=>{const q=BANK.find(x=>x.id===id); return '- '+(q?q.q:f.q)+(q?'\n    credited: '+q.o[q.a]:'')+'\n';});
+  if(!rows.length){ alert('No flagged questions yet.'); return; }
+  const blob=new Blob(['Flagged questions — '+new Date().toISOString().slice(0,10)+'\n\n'+rows.join('\n')],{type:'text/plain'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cism-flagged-questions.txt'; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+}
+function shakyCount(){ return BANK.filter(q=>WEAK[q.id]||LUCKY[q.id]).length; }
+
+/* ---------- Flashcards with spaced repetition ---------- */
+const SR_DAYS=[1,3,7,14,30];
+let deck=[], deckIdx=0, SR={};
+(function loadSR(){
+  try{ const s=safeStore.get('cism.sr'); if(s) SR=JSON.parse(s)||{}; }catch(e){}
+  try{ const k=safeStore.get('cism.known'); if(k && !Object.keys(SR).length){ JSON.parse(k).forEach(i=>{SR[i]={b:1,due:Date.now()+86400000};}); saveSR(); } }catch(e){}
+})();
+function saveSR(){ safeStore.set('cism.sr',JSON.stringify(SR)); }
+function cardStage(i){ const s=SR[i]; if(!s) return 'new'; return s.b>=3?'mastered':'learning'; }
 function rebuildDeck(){
-  const hide=document.getElementById('hideKnown').checked;
-  deck=CARDS.map((c,i)=>({...c,i})).filter(c=>(cardDom==='all'||c.d===cardDom)&&(!hide||!known.has(c.i)));
+  const dueOnly=document.getElementById('hideKnown').checked; const now=Date.now();
+  deck=CARDS.map((c,i)=>({...c,i})).filter(c=>(cardDom==='all'||c.d===cardDom)&&(!dueOnly||!SR[c.i]||SR[c.i].due<=now));
   deckIdx=0; showCard();
 }
 function showCard(){
   const empty=document.getElementById('deckEmpty'), fc=document.getElementById('flashCard');
   fc.classList.remove('flipped');
-  if(!deck.length){ empty.classList.remove('hidden'); fc.classList.add('hidden'); document.getElementById('deckPos').textContent='0 / 0'; return; }
+  const scope=CARDS.map((c,i)=>({...c,i})).filter(c=>cardDom==='all'||c.d===cardDom);
+  const now=Date.now(); const due=scope.filter(c=>!SR[c.i]||SR[c.i].due<=now).length, mastered=scope.filter(c=>cardStage(c.i)==='mastered').length, learning=scope.filter(c=>cardStage(c.i)==='learning').length;
+  document.getElementById('deckKnown').textContent=due+' due · '+learning+' learning · '+mastered+' mastered';
+  if(!deck.length){ empty.classList.remove('hidden'); fc.classList.add('hidden'); document.getElementById('deckPos').textContent='0 / 0'; document.getElementById('deckDom').textContent=''; return; }
   empty.classList.add('hidden'); fc.classList.remove('hidden');
   const c=deck[deckIdx];
   document.getElementById('fType').textContent = c.k==='tf' ? 'True or false?' : 'Short answer';
   document.getElementById('fQ').textContent=c.q;
-  const fa=document.getElementById('fA'); fa.textContent=c.a;
-  fa.className='fa'+(c.k==='tf'?(c.a==='True'?' tf-true':' tf-false'):'');
+  const fa=document.getElementById('fA'); fa.textContent=c.a; fa.className='fa'+(c.k==='tf'?(c.a==='True'?' tf-true':' tf-false'):'');
   document.getElementById('fW').textContent=c.w||'';
   document.getElementById('deckPos').textContent=(deckIdx+1)+' / '+deck.length;
-  document.getElementById('deckDom').textContent=CARD_DOMS[c.d]+(known.has(c.i)?' · known':'');
-  const scope=CARDS.filter(c=>cardDom==='all'||c.d===cardDom);
-  document.getElementById('deckKnown').textContent='Known '+scope.filter(c=>known.has(CARDS.indexOf(c))).length+' / '+scope.length;
+  const s=SR[c.i]; document.getElementById('deckDom').textContent=CARD_DOMS[c.d]+' · '+(s?('box '+s.b+(s.due>now?' · next '+new Date(s.due).toLocaleDateString():' · due')):'new');
 }
 function flipCard(){ document.getElementById('flashCard').classList.toggle('flipped'); }
 function deckStep(n){ if(!deck.length) return; deckIdx=(deckIdx+n+deck.length)%deck.length; showCard(); }
 function markCard(got){
   if(!deck.length) return;
-  const c=deck[deckIdx];
-  if(got) known.add(c.i); else known.delete(c.i);
-  saveKnown();
-  if(document.getElementById('hideKnown').checked && got){ rebuildDeck(); deckIdx=Math.min(deckIdx,Math.max(0,deck.length-1)); showCard(); }
+  const c=deck[deckIdx]; const s=SR[c.i]||{b:0,due:0};
+  if(got){ s.b=Math.min(s.b+1,SR_DAYS.length-1); s.due=Date.now()+SR_DAYS[s.b]*86400000; }
+  else { s.b=0; s.due=Date.now(); }
+  SR[c.i]=s; saveSR();
+  if(document.getElementById('hideKnown').checked && got){ deck.splice(deckIdx,1); if(deckIdx>=deck.length) deckIdx=0; showCard(); }
   else deckStep(1);
 }
 function shuffleDeck(){ deck=shuffle(deck); deckIdx=0; showCard(); }
-function resetKnown(){ if(confirm('Clear all "got it" marks for flashcards?')){ known=new Set(); saveKnown(); rebuildDeck(); } }
+function resetKnown(){ if(confirm('Clear all flashcard progress?')){ SR={}; saveSR(); rebuildDeck(); } }
 
 /* keyboard for cards */
 document.addEventListener('keydown',e=>{
@@ -2992,7 +3549,7 @@ function saveProgress(){ safeStore.set('cism.history',JSON.stringify(HISTORY)); 
 function setLabel(set,drill){
   if(set==='full') return 'Full simulation';
   if(set==='quick') return 'Quick 20';
-  if(set==='missed') return 'Retry missed';
+  if(set==='missed') return 'Retry missed & guessed';
   if(set==='drill') return 'Drill: '+(DOMAINS[drill]?DOMAINS[drill].short:drill);
   return 'Mock '+set;
 }
@@ -3004,7 +3561,7 @@ function persistProgress(){
   if(!state||state.finished) return;
   try{
     safeStore.set('cism.inprogress',JSON.stringify({qs:state.qs,idx:state.idx,answers:state.answers,flags:state.flags,mode:state.mode,
-      timeLeft:state.timeLeft,elapsed:Date.now()-state.startedAt,set:state.set,drill:state.drill,saved:Date.now()}));
+      timeLeft:state.timeLeft,elapsed:Date.now()-state.startedAt,guess:state.guess,times:state.times,set:state.set,drill:state.drill,saved:Date.now()}));
   }catch(e){}
 }
 function renderResumeBanner(){
@@ -3021,7 +3578,7 @@ function resumeExam(){
   const raw=safeStore.get('cism.inprogress'); if(!raw) return;
   let s; try{s=JSON.parse(raw);}catch(e){return;}
   state={qs:s.qs,idx:Math.min(s.idx,s.qs.length-1),answers:s.answers,flags:s.flags,mode:s.mode,finished:false,
-    timeLeft:s.mode==='exam'?Math.max(1,s.timeLeft):null,timer:null,startedAt:Date.now()-(s.elapsed||0),set:s.set,drill:s.drill};
+    timeLeft:s.mode==='exam'?Math.max(1,s.timeLeft):null,timer:null,guess:s.guess||[],times:s.times||[],lastIdx:null,lastAt:Date.now(),startedAt:Date.now()-(s.elapsed||0),set:s.set,drill:s.drill};
   SCREENS.forEach(id=>document.getElementById(id).classList.add('hidden'));
   document.getElementById('examScreen').classList.remove('hidden');
   document.getElementById('actionbar').classList.remove('hidden');
@@ -3035,22 +3592,26 @@ function discardProgress(){ if(confirm('Discard the saved exam in progress?')){ 
 
 /* record a finished attempt */
 function recordAttempt(auto){
-  const missed=[];
+  const missed=[], lucky=[];
   state.qs.forEach((q,i)=>{
-    if(state.answers[i]!==q.a){ missed.push(q.id); WEAK[q.id]=(WEAK[q.id]||0)+1; }
-    else if(WEAK[q.id]) delete WEAK[q.id];
+    const correct=state.answers[i]===q.a, guessed=!!(state.guess&&state.guess[i]);
+    if(!correct){ missed.push(q.id); WEAK[q.id]=(WEAK[q.id]||0)+1; }
+    else if(guessed){ lucky.push(q.id); LUCKY[q.id]=(LUCKY[q.id]||0)+1; }
+    else { if(WEAK[q.id]) delete WEAK[q.id]; if(LUCKY[q.id]) delete LUCKY[q.id]; }
   });
+  const pace=pacing(); state.pace=pace; state.luckyN=lucky.length; saveExtra();
   HISTORY.push({ts:Date.now(),set:state.set,drill:state.drill,label:setLabel(state.set,state.drill),mode:state.mode,n:state.qs.length,
-    correct:state.correct,pct:Math.round(state.correct/state.qs.length*100),dom:state.dom,missed,elapsed:state.elapsed,expired:!!auto,v:APP_VERSION});
+    correct:state.correct,pct:Math.round(state.correct/state.qs.length*100),dom:state.dom,missed,lucky,pace,elapsed:state.elapsed,expired:!!auto,v:APP_VERSION});
   if(HISTORY.length>300) HISTORY=HISTORY.slice(-300);
   saveProgress(); safeStore.del('cism.inprogress'); updateMissedCount();
 }
-function missedCount(){ return BANK.filter(q=>WEAK[q.id]).length; }
+function missedCount(){ return shakyCount(); }
 function updateMissedCount(){
   const n=missedCount();
   document.querySelectorAll('[data-missedcount]').forEach(el=>el.textContent=n);
   const btn=document.getElementById('setMissed'); if(btn){ btn.disabled = n===0; if(n===0 && cfg.set==='missed'){ cfg.set='full'; document.querySelectorAll('[data-set]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-set')==='full')); } }
-  const mb=document.getElementById('missedBtn'); if(mb){ mb.textContent='Retry missed questions ('+n+')'; mb.disabled = n===0; }
+  const fc=document.getElementById('flagCount'); if(fc) fc.textContent=Object.keys(FLAGS).length;
+  const mb=document.getElementById('missedBtn'); if(mb){ mb.textContent='Retry missed & guessed ('+n+')'; mb.disabled = n===0; }
 }
 function startMissedDrill(){ if(!missedCount()) return; cfg.set='missed'; cfg.mode='practice'; document.querySelectorAll('[data-mode]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-mode')==='practice')); document.querySelectorAll('[data-set]').forEach(b=>b.classList.toggle('on',b.getAttribute('data-set')==='missed')); goTo('exam'); startExam(); }
 
@@ -3089,13 +3650,13 @@ function renderHistory(){
     const band=h.pct>=70?'g':(h.pct>=60?'m':'l');
     const mini=['gov','risk','prog','inc'].map(d=>{const dd=h.dom&&h.dom[d];const p=dd&&dd.t?Math.round(dd.c/dd.t*100):0;return `<i title="${DOMAINS[d].short} ${p}%"><b style="width:${p}%"></b></i>`;}).join('');
     const row=document.createElement('div'); row.className='hist-row';
-    row.innerHTML=`<div><div>${h.label} · ${h.mode==='exam'?'Exam':'Practice'}${h.expired?' · time expired':''}</div><span class="hl">${fmtDate(h.ts)} · ${h.correct}/${h.n} · missed ${h.missed?h.missed.length:0}</span><div class="mini">${mini}</div></div><div class="hp ${band}">${h.pct}%</div>`;
+    row.innerHTML=`<div><div>${h.label} · ${h.mode==='exam'?'Exam':'Practice'}${h.expired?' · time expired':''}</div><span class="hl">${fmtDate(h.ts)} · ${h.correct}/${h.n} · missed ${h.missed?h.missed.length:0} · guessed-right ${h.lucky?h.lucky.length:0}${h.pace?' · '+h.pace.avg+'s/q':''}</span><div class="mini">${mini}</div></div><div class="hp ${band}">${h.pct}%</div>`;
     list.appendChild(row);
   });
   updateMissedCount();
 }
 function exportProgress(){
-  const payload={app:'cism-practice',version:APP_VERSION,exported:new Date().toISOString(),history:HISTORY,weak:WEAK,known:[...known],theme:document.documentElement.getAttribute('data-theme')};
+  const payload={app:'cism-practice',version:APP_VERSION,exported:new Date().toISOString(),history:HISTORY,weak:WEAK,lucky:LUCKY,flags:FLAGS,sr:SR,theme:document.documentElement.getAttribute('data-theme')};
   const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cism-progress-'+new Date().toISOString().slice(0,10)+'.json'; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
 }
@@ -3109,14 +3670,17 @@ function importProgress(input){
       (p.history||[]).forEach(h=>{ if(!seen.has(h.ts)){HISTORY.push(h);added++;} });
       HISTORY.sort((a,b)=>a.ts-b.ts);
       Object.entries(p.weak||{}).forEach(([k,v])=>{WEAK[k]=Math.max(WEAK[k]||0,v);});
-      (p.known||[]).forEach(i=>known.add(i)); saveKnown();
-      saveProgress(); renderHistory(); alert('Imported: '+added+' new attempts merged.');
+      Object.entries(p.lucky||{}).forEach(([k,v])=>{LUCKY[k]=Math.max(LUCKY[k]||0,v);});
+      Object.assign(FLAGS,p.flags||{});
+      Object.entries(p.sr||{}).forEach(([k,v])=>{ if(!SR[k]||v.b>SR[k].b) SR[k]=v; });
+      (p.known||[]).forEach(i=>{ if(!SR[i]) SR[i]={b:1,due:Date.now()}; });
+      saveSR(); saveExtra(); saveProgress(); renderHistory(); alert('Imported: '+added+' new attempts merged.');
     }catch(e){ alert('Could not import that file.'); }
     input.value='';
   };
   rd.readAsText(f);
 }
-function clearHistory(){ if(confirm('Delete all saved attempts and the missed-questions list? Flashcard marks are kept.')){ HISTORY=[]; WEAK={}; saveProgress(); renderHistory(); } }
+function clearHistory(){ if(confirm('Delete all saved attempts and the retry list? Flashcard progress and flags are kept.')){ HISTORY=[]; WEAK={}; LUCKY={}; saveProgress(); saveExtra(); renderHistory(); } }
 
 /* ---------- Per-option rationales ---------- */
 function rationaleHtml(q){
@@ -3125,7 +3689,7 @@ function rationaleHtml(q){
 }
 
 /* ---------- Version ---------- */
-const APP_VERSION="7.1", APP_BUILD="2026-09-09";
+const APP_VERSION="8.0", APP_BUILD="2026-09-09";
 function initVersion(){
   const pages=document.querySelectorAll('.lesson-page').length;
   document.getElementById('verNum').textContent=APP_VERSION;
@@ -3151,6 +3715,11 @@ document.addEventListener('keydown',e=>{
   if(e.key==='ArrowLeft') prevQ();
   if(e.key.toLowerCase()==='f') toggleFlag();
 });
+
+/* ---------- Test hook (read-only accessors; used by test.js) ---------- */
+window.__cism={get BANK(){return BANK},get BLUF(){return BLUF},get CARDS(){return CARDS},get state(){return state},get cfg(){return cfg},
+  get HISTORY(){return HISTORY},get WEAK(){return WEAK},get LUCKY(){return LUCKY},get FLAGS(){return FLAGS},get SR(){return SR},get deck(){return deck}};
 </script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});}</script>
 </body>
 </html>
